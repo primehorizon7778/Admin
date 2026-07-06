@@ -1,1 +1,2431 @@
-inde
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Horizon • Admin Panel v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap');
+        
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        
+        .glass {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+        }
+        
+        .section { display: none; }
+        .section.active { display: block; animation: fadeInUp 0.4s ease; }
+        
+        .nav-active {
+            background: #1e2937;
+            border-left: 4px solid #06b6d4;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .user-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .modern-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+        }
+        
+        .skeleton {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .section-header {
+            font-size: 1.65rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        
+        .chat-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .admin-chat-bubble {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+        
+        .user-chat-bubble {
+            background: #334155;
+            color: #e2e8f0;
+            border-bottom-left-radius: 6px;
+        }
+        
+        .metric-value {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .mobile-drawer {
+            box-shadow: 10px 0 30px -15px rgb(0 0 0 / 0.5);
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 20px;
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+    <!-- ==================== LOGIN SCREEN (NEW) ==================== -->
+    <div id="login-screen" class="fixed inset-0 z-[999] flex items-center justify-center login-container">
+        <div class="w-full max-w-md mx-4">
+            <!-- Logo -->
+            <div class="flex justify-center mb-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 via-cyan-400 to-emerald-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-cyan-500/40">
+                        <i class="fa-solid fa-shield-halved text-white text-4xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-black tracking-tighter">PRIME HORIZON</h1>
+                        <p class="text-emerald-400 text-sm font-bold tracking-[3px]">ADMIN PANEL v2.0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass rounded-3xl p-8 border border-slate-700/60 shadow-2xl">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-extrabold">Admin Login</h2>
+                    <p class="text-slate-400 text-sm mt-1">Sign in to access the control panel</p>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 tracking-wider block mb-1.5">USERNAME</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-4 top-4 text-slate-500"></i>
+                            <input id="login-username" type="text" value="Nazim@007" 
+                                   class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-2xl pl-11 pr-4 py-3.5 text-sm outline-none transition-colors">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 tracking-wider block mb-1.5">PASSWORD</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-4 text-slate-500"></i>
+                            <input id="login-password" type="password" value="12345" 
+                                   class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-2xl pl-11 pr-4 py-3.5 text-sm outline-none transition-colors">
+                            <button onclick="toggleLoginPassword()" class="absolute right-4 top-4 text-slate-500 hover:text-white">
+                                <i class="fa-solid fa-eye" id="login-eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="performAdminLogin()" 
+                            class="w-full py-4 bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 active:from-cyan-700 active:to-emerald-700 rounded-2xl font-extrabold text-lg shadow-lg shadow-cyan-600/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-sign-in-alt"></i>
+                        <span>LOGIN TO DASHBOARD</span>
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <button onclick="showChangePasswordModal()" 
+                            class="text-xs text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-center gap-1 mx-auto">
+                        <i class="fa-solid fa-key"></i>
+                        <span>Change Admin Password</span>
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-center text-[10px] text-slate-500 mt-6">Secure access for authorized personnel only</p>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" onclick="closeMobileSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden"></div>
+    
+    <div class="flex h-screen overflow-hidden">
+        <!-- SIDEBAR -->
+        <div id="sidebar" class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out mobile-drawer">
+            
+            <!-- Logo -->
+            <div class="p-6 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-cyan-500 via-cyan-400 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                        <i class="fa-solid fa-shield-halved text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tighter">PRIME HORIZON</h1>
+                        <p class="text-[10px] text-emerald-400 font-semibold tracking-[2px]">ADMIN PANEL v2.0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="p-3 flex-1 overflow-y-auto text-sm custom-scroll">
+                <div onclick="showSection('dashboard'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer nav-active nav-item" id="nav-dashboard">
+                    <i class="fa-solid fa-chart-line w-5 text-cyan-400"></i>
+                    <span class="font-semibold">Dashboard</span>
+                </div>
+                
+                <div onclick="showSection('users'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-users">
+                    <i class="fa-solid fa-users w-5 text-slate-400"></i>
+                    <span class="font-semibold">Users Directory</span>
+                </div>
+                
+                <div onclick="showSection('deposits'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-deposits">
+                    <i class="fa-solid fa-wallet w-5 text-emerald-400"></i>
+                    <span class="font-semibold">Deposits</span>
+                    <span id="badge-deposits" class="ml-auto px-2.5 py-0.5 text-[10px] bg-amber-500 text-black font-extrabold rounded-full hidden">0</span>
+                </div>
+                
+                <div onclick="showSection('withdrawals'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-withdrawals">
+                    <i class="fa-solid fa-hand-holding-dollar w-5 text-purple-400"></i>
+                    <span class="font-semibold">Withdrawals</span>
+                    <span id="badge-withdrawals" class="ml-auto px-2.5 py-0.5 text-[10px] bg-purple-500 text-white font-extrabold rounded-full hidden">0</span>
+                </div>
+                
+                <div onclick="showSection('plans'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-plans">
+                    <i class="fa-solid fa-seedling w-5 text-emerald-400"></i>
+                    <span class="font-semibold">Investment Plans</span>
+                </div>
+                
+                <div onclick="showSection('tasks'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-tasks">
+                    <i class="fa-solid fa-list-check w-5 text-purple-400"></i>
+                    <span class="font-semibold">Daily Tasks</span>
+                </div>
+                
+                <div onclick="showSection('social'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-social">
+                    <i class="fa-solid fa-share-alt w-5 text-pink-400"></i>
+                    <span class="font-semibold">Social Channels</span>
+                </div>
+                
+                <div onclick="showSection('support'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-support">
+                    <i class="fa-solid fa-headset w-5 text-indigo-400"></i>
+                    <span class="font-semibold">Support &amp; Chat</span>
+                    <span id="badge-support" class="ml-auto px-2.5 py-0.5 text-[10px] bg-indigo-500 text-white font-extrabold rounded-full hidden">0</span>
+                </div>
+                
+                <div onclick="showSection('feedback'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-feedback">
+                    <i class="fa-solid fa-comments w-5 text-amber-400"></i>
+                    <span class="font-semibold">Feedbacks &amp; Appeals</span>
+                </div>
+                
+                <div onclick="showSection('complaints'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-complaints">
+                    <i class="fa-solid fa-exclamation-triangle w-5 text-orange-400"></i>
+                    <span class="font-semibold">Complaints</span>
+                    <span id="badge-complaints" class="ml-auto px-2.5 py-0.5 text-[10px] bg-orange-500 text-white font-extrabold rounded-full hidden">0</span>
+                </div>
+                
+                <div onclick="showSection('settings'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-settings">
+                    <i class="fa-solid fa-cog w-5 text-slate-400"></i>
+                    <span class="font-semibold">System Settings</span>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-800 text-xs text-slate-500 flex items-center gap-2">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span class="font-medium">Super Admin • Live</span>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col overflow-hidden w-full">
+            <!-- Top Bar -->
+            <div class="bg-slate-900 border-b border-slate-800 px-5 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-40">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-2xl transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    
+                    <h2 id="section-title" class="text-2xl lg:text-3xl font-extrabold tracking-tight">Dashboard</h2>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <div class="hidden sm:flex items-center px-4 py-2 bg-slate-800 rounded-2xl text-sm">
+                        <div class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse mr-2"></div>
+                        <span class="font-medium">Live • <span id="live-users-count" class="font-bold">0</span> Users</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 bg-slate-800 rounded-2xl px-1 py-1">
+                        <button onclick="showChangePasswordModal()" class="px-3 py-2 text-xs hover:bg-slate-700 rounded-xl flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors">
+                            <i class="fa-solid fa-key text-xs"></i>
+                            <span class="hidden sm:inline text-xs">Change Pass</span>
+                        </button>
+                        
+                        <button onclick="logoutAdmin()" class="px-4 lg:px-5 py-2 bg-red-600 hover:bg-red-500 active:bg-red-700 transition-all text-white text-sm rounded-2xl flex items-center gap-2 font-semibold shadow-lg shadow-red-600/30">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            <span class="hidden sm:inline">Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT AREA -->
+            <div class="flex-1 overflow-auto p-5 lg:p-8 bg-slate-950 custom-scroll">
+                
+                <!-- DASHBOARD -->
+                <div id="section-dashboard" class="section active">
+                    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+                        <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs lg:text-sm font-medium tracking-wider">TOTAL USERS</p>
+                                    <p id="dash-total-users" class="text-4xl lg:text-5xl font-black mt-3 metric-value">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-users text-3xl text-cyan-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs lg:text-sm font-medium tracking-wider">TOTAL BALANCE</p>
+                                    <p id="dash-total-balance" class="text-4xl lg:text-5xl font-black mt-3 metric-value">Rs. 0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-wallet text-3xl text-emerald-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs lg:text-sm font-medium tracking-wider">PENDING DEPOSITS</p>
+                                    <p id="dash-pending-deposit" class="text-4xl lg:text-5xl font-black mt-3 text-amber-400 metric-value">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-upload text-3xl text-amber-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs lg:text-sm font-medium tracking-wider">PENDING WITHDRAWALS</p>
+                                    <p id="dash-pending-withdraw" class="text-4xl lg:text-5xl font-black mt-3 text-purple-400 metric-value">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-clock text-3xl text-purple-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- NEW STATS ROW -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-5 mb-8">
+                        <div class="glass p-5 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs font-medium tracking-wider">TOTAL DEPOSITS</p>
+                                    <p id="dash-total-deposits" class="text-3xl font-black mt-2 text-emerald-400 metric-value">Rs. 0</p>
+                                </div>
+                                <i class="fa-solid fa-arrow-down text-2xl text-emerald-400"></i>
+                            </div>
+                        </div>
+                        <div class="glass p-5 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs font-medium tracking-wider">TOTAL WITHDRAWALS</p>
+                                    <p id="dash-total-withdrawals" class="text-3xl font-black mt-2 text-purple-400 metric-value">Rs. 0</p>
+                                </div>
+                                <i class="fa-solid fa-arrow-up text-2xl text-purple-400"></i>
+                            </div>
+                        </div>
+                        <div class="glass p-5 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs font-medium tracking-wider">TOTAL COMPLAINTS</p>
+                                    <p id="dash-total-complaints" class="text-3xl font-black mt-2 text-orange-400 metric-value">0</p>
+                                </div>
+                                <i class="fa-solid fa-exclamation-triangle text-2xl text-orange-400"></i>
+                            </div>
+                        </div>
+                        <div class="glass p-5 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs font-medium tracking-wider">TOTAL FEEDBACKS</p>
+                                    <p id="dash-total-feedbacks" class="text-3xl font-black mt-2 text-amber-400 metric-value">0</p>
+                                </div>
+                                <i class="fa-solid fa-comments text-2xl text-amber-400"></i>
+                            </div>
+                        </div>
+                        <div class="glass p-5 rounded-3xl stat-card border border-slate-700/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-xs font-medium tracking-wider">TOTAL APPEALS</p>
+                                    <p id="dash-total-appeals" class="text-3xl font-black mt-2 text-red-400 metric-value">0</p>
+                                </div>
+                                <i class="fa-solid fa-gavel text-2xl text-red-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass p-7 rounded-3xl border border-slate-700/50">
+                        <h3 class="font-extrabold mb-6 flex items-center gap-3 text-lg">
+                            <i class="fa-solid fa-bolt text-cyan-400"></i> 
+                            <span>Quick Actions</span>
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <button onclick="showSection('deposits')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-wallet text-2xl mb-4 block text-emerald-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Approve Deposits</span>
+                            </button>
+                            <button onclick="showSection('withdrawals')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-hand-holding-dollar text-2xl mb-4 block text-purple-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Process Withdrawals</span>
+                            </button>
+                            <button onclick="showSection('users')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-user-plus text-2xl mb-4 block text-cyan-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Manage Users</span>
+                            </button>
+                            <button onclick="showSection('support')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-headset text-2xl mb-4 block text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Live Support</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USERS SECTION -->
+                <div id="section-users" class="section">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="section-header">Users Directory</h3>
+                            <p class="text-slate-400 text-sm mt-1">Full control over all user accounts</p>
+                        </div>
+                        <button onclick="showAddUserModal()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-emerald-600/30 modern-btn w-full sm:w-auto justify-center">
+                            <i class="fa-solid fa-user-plus"></i> 
+                            <span>Add New User</span>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-4" id="users-directory-feed"></div>
+                </div>
+
+                <!-- DEPOSITS -->
+                <div id="section-deposits" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="section-header">Pending Deposits</h3>
+                            <p class="text-slate-400 text-sm">Review and approve incoming deposits</p>
+                        </div>
+                    </div>
+                    <div id="deposit-requests-feed" class="space-y-4"></div>
+                </div>
+
+                <!-- WITHDRAWALS -->
+                <div id="section-withdrawals" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="section-header">Pending Withdrawals</h3>
+                            <p class="text-slate-400 text-sm">Process user withdrawal requests</p>
+                        </div>
+                    </div>
+                    <div id="withdrawal-requests-feed" class="space-y-4"></div>
+                </div>
+
+                <!-- PLANS -->
+                <div id="section-plans" class="section">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="section-header">Investment Plans</h3>
+                            <p class="text-slate-400 text-sm">Manage available investment packages</p>
+                        </div>
+                        <button onclick="showAddPlanModal()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-emerald-600/30 modern-btn w-full sm:w-auto justify-center">
+                            <i class="fa-solid fa-plus"></i> Add Plan
+                        </button>
+                    </div>
+                    <div class="glass rounded-3xl p-2 border border-slate-700/50" id="plans-list"></div>
+                </div>
+
+                <!-- TASKS -->
+                <div id="section-tasks" class="section">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="section-header">Daily Tasks (Coin Rewards)</h3>
+                            <p class="text-slate-400 text-sm">Create and manage daily earning tasks</p>
+                        </div>
+                        <button onclick="showAddTaskModal()" class="px-6 py-3 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 rounded-2xl text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-purple-600/30 modern-btn w-full sm:w-auto justify-center">
+                            <i class="fa-solid fa-plus"></i> Add Task
+                        </button>
+                    </div>
+                    <div class="glass rounded-3xl p-2 border border-slate-700/50" id="tasks-list"></div>
+                </div>
+
+                <!-- SOCIAL -->
+                <div id="section-social" class="section">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="section-header">Social Channels</h3>
+                            <p class="text-slate-400 text-sm">Manage community &amp; social links</p>
+                        </div>
+                        <button onclick="showAddSocialModal()" class="px-6 py-3 bg-pink-600 hover:bg-pink-500 active:bg-pink-700 rounded-2xl text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-pink-600/30 modern-btn w-full sm:w-auto justify-center">
+                            <i class="fa-solid fa-plus"></i> Add Channel
+                        </button>
+                    </div>
+                    <div class="glass rounded-3xl p-2 border border-slate-700/50" id="social-list"></div>
+                </div>
+
+                <!-- SUPPORT & LIVE CHAT -->
+                <div id="section-support" class="section">
+                    <h3 class="section-header mb-6">Support &amp; Live Chat Hub</h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Channels List -->
+                        <div class="lg:col-span-4 glass rounded-3xl p-4 border border-slate-700/50">
+                            <div class="flex items-center justify-between mb-4 px-1">
+                                <h4 class="font-extrabold text-sm tracking-wider">ACTIVE CHANNELS</h4>
+                                <span id="support-channel-count" class="text-xs px-3 py-1 bg-slate-800 rounded-full font-mono">0</span>
+                            </div>
+                            <div id="support-active-channels-list" class="space-y-1.5 max-h-[420px] overflow-auto pr-1 custom-scroll"></div>
+                        </div>
+                        
+                        <!-- Chat Window -->
+                        <div class="lg:col-span-8 glass rounded-3xl flex flex-col h-[520px] border border-slate-700/50 overflow-hidden">
+                            <div class="p-4 border-b border-slate-700 flex items-center gap-3 bg-slate-900/50">
+                                <img id="chat-header-avatar" src="https://i.pravatar.cc/36" class="w-9 h-9 rounded-2xl object-cover border border-slate-600 hidden">
+                                <div class="flex-1 min-w-0">
+                                    <div id="chat-header-user-title" class="font-extrabold truncate">Select a user to chat</div>
+                                    <div id="chat-header-user-phone" class="text-xs text-slate-400 font-mono truncate"></div>
+                                </div>
+                                <div id="chat-status-dot" class="w-3 h-3 bg-emerald-400 rounded-full hidden"></div>
+                            </div>
+                            
+                            <div id="admin-chat-messages-viewport" class="flex-1 p-4 overflow-auto space-y-4 bg-slate-900 custom-scroll"></div>
+                            
+                            <div class="p-4 border-t border-slate-700 flex gap-2 bg-slate-900/70">
+                                <input type="file" id="admin-chat-image-file-input" accept="image/*" class="hidden" onchange="handleAdminChatImageFileSelectionEvent(event)">
+                                <button onclick="document.getElementById('admin-chat-image-file-input').click()" class="w-12 h-11 flex-shrink-0 flex items-center justify-center bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl transition-colors border border-slate-700">
+                                    <i class="fa-solid fa-paperclip text-lg"></i>
+                                </button>
+                                <input id="admin-chat-message-field" type="text" placeholder="Type your message..." class="flex-1 bg-slate-800 border border-slate-700 focus:border-cyan-500 rounded-2xl px-5 text-sm outline-none transition-colors" onkeypress="if (event.key === 'Enter') transmitAdminLiveChatMessage()">
+                                <button onclick="transmitAdminLiveChatMessage()" class="px-7 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 rounded-2xl font-extrabold text-sm transition-all">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEEDBACK & APPEALS -->
+                <div id="section-feedback" class="section">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="section-header mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-comments text-amber-400"></i>
+                                <span>User Feedbacks</span>
+                            </h3>
+                            <div class="glass rounded-3xl p-4 max-h-[520px] overflow-auto border border-slate-700/50 custom-scroll" id="feedback-list"></div>
+                        </div>
+                        <div>
+                            <h3 class="section-header mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-gavel text-purple-400"></i>
+                                <span>Suspension Appeals</span>
+                            </h3>
+                            <div class="glass rounded-3xl p-4 max-h-[520px] overflow-auto border border-slate-700/50 custom-scroll" id="appeals-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPLAINTS -->
+                <div id="section-complaints" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="section-header">User Complaints</h3>
+                            <p class="text-slate-400 text-sm">Review, reply, resolve or delete user complaints</p>
+                        </div>
+                    </div>
+                    <div id="complaints-feed" class="space-y-4"></div>
+                </div>
+
+                <!-- SETTINGS -->
+                <div id="section-settings" class="section">
+                    <h3 class="section-header mb-6">System Settings</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Maintenance -->
+                        <div class="glass p-6 rounded-3xl border border-slate-700/50">
+                            <h4 class="font-extrabold mb-5 flex items-center gap-3 text-base">
+                                <i class="fa-solid fa-tools text-orange-400"></i> 
+                                Maintenance Mode
+                            </h4>
+                            <div class="flex gap-3">
+                                <button onclick="toggleMaintenance(true)" class="flex-1 py-3 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-sm font-extrabold transition-all">Enable</button>
+                                <button onclick="toggleMaintenance(false)" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all">Disable</button>
+                            </div>
+                            <input id="maintenance-note" placeholder="Maintenance message for users..." class="mt-4 w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-orange-500 rounded-2xl text-sm outline-none transition-colors">
+                            <button onclick="updateMaintenanceNote()" class="mt-3 w-full py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 rounded-2xl text-sm font-bold transition-all">Update Note</button>
+                        </div>
+                        
+                        <!-- Limits -->
+                        <div class="glass p-6 rounded-3xl border border-slate-700/50">
+                            <h4 class="font-extrabold mb-5">Limits &amp; Rates</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-400 tracking-wider">MINIMUM WITHDRAWAL (Rs)</label>
+                                    <input type="number" id="min-withdraw" class="mt-1.5 w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-cyan-500 rounded-2xl text-sm outline-none transition-colors">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-400 tracking-wider">COINS PER RUPEE</label>
+                                    <input type="number" id="coins-per-rupee" step="0.1" class="mt-1.5 w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-cyan-500 rounded-2xl text-sm outline-none transition-colors">
+                                </div>
+                                <button onclick="saveLimits()" class="w-full py-3.5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 rounded-2xl font-extrabold text-sm mt-2 transition-all">Save Limits</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Popup Announcement -->
+                        <div class="glass p-6 rounded-3xl md:col-span-2 border border-slate-700/50">
+                            <h4 class="font-extrabold mb-5 flex items-center gap-2">
+                                <i class="fa-solid fa-bullhorn text-pink-400"></i>
+                                Popup Announcement
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <input id="popup-title" placeholder="Announcement Title" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-pink-500 rounded-2xl mb-3 text-sm outline-none transition-colors">
+                                    <textarea id="popup-desc" placeholder="Announcement description..." rows="3" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-pink-500 rounded-2xl text-sm outline-none transition-colors"></textarea>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5">ANNOUNCEMENT IMAGE</label>
+                                    
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div id="popup-image-preview" class="w-14 h-14 bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden flex-shrink-0 hidden">
+                                            <img id="popup-image-preview-img" class="w-full h-full object-cover">
+                                        </div>
+                                        
+                                        <div class="flex-1">
+                                            <input type="file" id="popup-image-file" accept="image/*" class="hidden" onchange="uploadPopupImage(event)">
+                                            <button onclick="document.getElementById('popup-image-file').click()" class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+                                                <i class="fa-solid fa-upload"></i>
+                                                <span>Upload Image</span>
+                                            </button>
+                                            <div id="popup-image-url-display" class="text-[10px] text-emerald-400 mt-1.5 font-mono break-all hidden"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex gap-3 mt-auto">
+                                        <button onclick="savePopupAnnouncement(true)" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all">Activate</button>
+                                        <button onclick="savePopupAnnouncement(false)" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 rounded-2xl text-sm font-extrabold transition-all">Deactivate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- About Us (for user app bottom) -->
+                        <div class="glass p-6 rounded-3xl md:col-span-2 border border-slate-700/50">
+                            <h4 class="font-extrabold mb-5 flex items-center gap-2">
+                                <i class="fa-solid fa-info-circle text-sky-400"></i>
+                                About Us (Shows in User App)
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <textarea id="about-us-text" placeholder="Write about Prime Horizon..." rows="4" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-sky-500 rounded-2xl text-sm outline-none transition-colors"></textarea>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5">ABOUT US IMAGE</label>
+                                    
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div id="about-image-preview" class="w-14 h-14 bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden flex-shrink-0 hidden">
+                                            <img id="about-image-preview-img" class="w-full h-full object-cover">
+                                        </div>
+                                        
+                                        <div class="flex-1">
+                                            <input type="file" id="about-image-file" accept="image/*" class="hidden" onchange="uploadAboutImage(event)">
+                                            <button onclick="document.getElementById('about-image-file').click()" class="w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+                                                <i class="fa-solid fa-upload"></i>
+                                                <span>Upload Image</span>
+                                            </button>
+                                            <div id="about-image-url-display" class="text-[10px] text-emerald-400 mt-1.5 font-mono break-all hidden"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onclick="saveAboutUs()" class="mt-auto py-3 bg-sky-600 hover:bg-sky-500 active:bg-sky-700 rounded-2xl text-sm font-extrabold transition-all">Save About Us</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" onclick="if (event.target.id === 'change-password-modal') hideChangePasswordModal()" class="hidden fixed inset-0 bg-black/70 z-[999] flex items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" class="glass w-full max-w-md mx-4 rounded-3xl p-7 border border-slate-700">
+            <h3 class="font-extrabold text-xl mb-5 flex items-center gap-3">
+                <i class="fa-solid fa-key text-cyan-400"></i>
+                Change Admin Password
+            </h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-400 tracking-wider">CURRENT PASSWORD</label>
+                    <input id="current-password" type="password" class="mt-1.5 w-full px-5 py-3 bg-slate-900 border border-slate-700 focus:border-cyan-500 rounded-2xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-400 tracking-wider">NEW PASSWORD</label>
+                    <input id="new-password" type="password" class="mt-1.5 w-full px-5 py-3 bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-2xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-400 tracking-wider">CONFIRM NEW PASSWORD</label>
+                    <input id="confirm-password" type="password" class="mt-1.5 w-full px-5 py-3 bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-2xl text-sm outline-none">
+                </div>
+            </div>
+            
+            <div class="flex gap-3 mt-6">
+                <button onclick="hideChangePasswordModal()" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 rounded-2xl font-bold text-sm">Cancel</button>
+                <button onclick="changeAdminPassword()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-extrabold text-sm">Update Password</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[999] flex flex-col gap-2"></div>
+
+    <!-- SYSTEM LOCK SCREEN (Admin 2 OFF) - FIXED: Now properly scrollable -->
+    <div id="system-lock-screen" class="hidden fixed inset-0 bg-slate-950 z-[999] overflow-y-auto">
+        <div class="min-h-full flex items-center justify-center p-4">
+            <div class="max-w-lg w-full">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-3xl mb-4">
+                        <i class="fa-solid fa-lock text-red-400 text-4xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-white">Admin 2 Currently OFF</h2>
+                    <p class="text-red-400 mt-1">Admin 1 is temporarily locked</p>
+                </div>
+
+                <div class="glass rounded-3xl p-7 border border-red-500/20">
+                    <div class="text-center mb-6">
+                        <div class="text-sm text-red-300">CURRENT BILL</div>
+                        <div id="system-lock-bill-amount" class="text-6xl font-black text-white mt-1">Rs. 10,000</div>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-2xl p-5 mb-6 border border-slate-700">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fa-solid fa-university text-emerald-400 text-2xl"></i>
+                            <div>
+                                <div class="font-extrabold text-lg">Meezan Bank</div>
+                                <div class="text-xs text-emerald-400">Official Payment Account</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Account Number</span>
+                                <span class="font-mono font-bold">00300111855522</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Account Title</span>
+                                <span class="font-bold">Muhammad Naeem</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-6">
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            براہ مہربانی بل ادا کریں تاکہ ایڈمن 1 دوبارہ فعال ہو سکے۔<br>
+                            ادائیگی کے بعد ایڈمن 2 منظور کرے گا۔
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-400 tracking-wider">TRX ID / Reference</label>
+                            <input id="system-trx-id" type="text" placeholder="Enter TRX ID" class="mt-1.5 w-full px-5 py-3.5 bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-2xl text-lg outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="text-xs font-bold text-slate-400 tracking-wider">SCREENSHOT (Proof)</label>
+                            <input type="file" id="system-screenshot" accept="image/*" class="hidden" onchange="handleSystemScreenshot(event)">
+                            <button onclick="document.getElementById('system-screenshot').click()" class="mt-1.5 w-full px-5 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-2xl text-sm font-bold flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-upload"></i>
+                                <span>Upload Screenshot</span>
+                            </button>
+                            <div id="system-screenshot-preview" class="mt-3 hidden">
+                                <img id="system-screenshot-img" class="max-h-28 rounded-2xl border border-slate-700 mx-auto">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button onclick="submitSystemBillPayment()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-extrabold text-lg">SUBMIT PAYMENT</button>
+                    </div>
+                    
+                    <p class="text-center text-xs text-slate-500 mt-4">Admin 2 کے منظور کرنے کے بعد Admin 1 خود بخود آن ہو جائے گا</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        // ==================== FIREBASE CONFIG ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-6ZngcQRagHV3MEtTUoYoyfZgT8OqaF4",
+            databaseURL: "https://nazim-8c4cf-default-rtdb.firebaseio.com",
+            projectId: "nazim-8c4cf"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dhib5t6me/image/upload";
+        const CLOUDINARY_PRESET = "Naeeem";
+        
+        let selectedChatPhone = null;
+        let adminChatAttachmentFile = null;
+        let popupUploadedImageUrl = '';
+        
+        // ==================== ADMIN LOGIN SYSTEM (NEW) ====================
+        let currentAdminPassword = localStorage.getItem('admin1_password') || '12345';
+        
+        function performAdminLogin() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            
+            if (username === 'Nazim@007' && password === currentAdminPassword) {
+                localStorage.setItem('admin1_logged_in', 'true');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('login-screen').style.display = 'none';
+                
+                initAdminApp();
+                triggerToast('Welcome back, Nazim!');
+            } else {
+                triggerToast('Invalid username or password', 'error');
+            }
+        }
+        
+        function toggleLoginPassword() {
+            const input = document.getElementById('login-password');
+            const icon = document.getElementById('login-eye-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        function showChangePasswordModal() {
+            const loginScreen = document.getElementById('login-screen');
+            if (!loginScreen.classList.contains('hidden') && loginScreen.style.display !== 'none') {
+                // allow change from login too
+            }
+            document.getElementById('change-password-modal').classList.remove('hidden');
+            document.getElementById('change-password-modal').classList.add('flex');
+        }
+        
+        function hideChangePasswordModal() {
+            const modal = document.getElementById('change-password-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+        }
+        
+        function changeAdminPassword() {
+            const current = document.getElementById('current-password').value.trim();
+            const newPass = document.getElementById('new-password').value.trim();
+            const confirm = document.getElementById('confirm-password').value.trim();
+            
+            if (!current || !newPass || !confirm) {
+                triggerToast('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (current !== currentAdminPassword) {
+                triggerToast('Current password is incorrect', 'error');
+                return;
+            }
+            
+            if (newPass.length < 4) {
+                triggerToast('New password must be at least 4 characters', 'error');
+                return;
+            }
+            
+            if (newPass !== confirm) {
+                triggerToast('New passwords do not match', 'error');
+                return;
+            }
+            
+            currentAdminPassword = newPass;
+            localStorage.setItem('admin1_password', newPass);
+            
+            hideChangePasswordModal();
+            triggerToast('Password changed successfully!');
+        }
+        
+        function checkAdminLogin() {
+            const isLoggedIn = localStorage.getItem('admin1_logged_in') === 'true';
+            const loginScreen = document.getElementById('login-screen');
+            
+            if (isLoggedIn) {
+                loginScreen.style.display = 'none';
+                loginScreen.classList.add('hidden');
+                initAdminApp();
+            } else {
+                loginScreen.style.display = 'flex';
+                loginScreen.classList.remove('hidden');
+            }
+        }
+        
+        function initAdminApp() {
+            showSection('dashboard');
+            loadDashboardStats();
+            
+            listenAdmin2SystemLock();
+            
+            db.ref('admin_settings/min_withdraw').once('value', s => {
+                const el = document.getElementById('min-withdraw');
+                if (el && s.exists()) el.value = s.val();
+            });
+            
+            db.ref('admin_settings/coins_per_rupee').once('value', s => {
+                const el = document.getElementById('coins-per-rupee');
+                if (el && s.exists()) el.value = s.val();
+            });
+            
+            db.ref('admin_settings/about_us').once('value', s => {
+                if (s.exists()) {
+                    const data = s.val();
+                    const textEl = document.getElementById('about-us-text');
+                    if (textEl) textEl.value = data.text || '';
+                    
+                    if (data.image) {
+                        aboutUploadedImageUrl = data.image;
+                        const previewContainer = document.getElementById('about-image-preview');
+                        const previewImg = document.getElementById('about-image-preview-img');
+                        const urlDisplay = document.getElementById('about-image-url-display');
+                        
+                        if (previewContainer && previewImg) {
+                            previewImg.src = data.image;
+                            previewContainer.classList.remove('hidden');
+                        }
+                        if (urlDisplay) {
+                            urlDisplay.innerText = data.image;
+                            urlDisplay.classList.remove('hidden');
+                        }
+                    }
+                }
+            });
+            
+            console.log('%c[Prime Horizon] Admin Panel initialized after login', 'color:#64748b');
+        }
+        
+        // Admin 2 System Lock Listener
+        let systemLockListener = null;
+        
+        function listenAdmin2SystemLock() {
+            if (systemLockListener) systemLockListener.off();
+            
+            systemLockListener = db.ref('admin2_status').on('value', snap => {
+                const data = snap.exists() ? snap.val() : { isOffline: false };
+                const isLocked = data.isOffline === true;
+                
+                const lockScreen = document.getElementById('system-lock-screen');
+                
+                if (isLocked && lockScreen) {
+                    lockScreen.classList.remove('hidden');
+                    lockScreen.style.display = 'block'; // changed to block so overflow works properly
+                    
+                    const amountEl = document.getElementById('system-lock-bill-amount');
+                    if (amountEl) amountEl.innerText = 'Rs. ' + (data.billAmount || 10000);
+                    
+                    document.querySelector('.flex.h-screen').style.display = 'none';
+                } else if (lockScreen) {
+                    lockScreen.style.display = 'none';
+                    lockScreen.classList.add('hidden');
+                    
+                    document.querySelector('.flex.h-screen').style.display = 'flex';
+                }
+            });
+        }
+        
+        let systemScreenshotFile = null;
+        
+        function handleSystemScreenshot(e) {
+            systemScreenshotFile = e.target.files[0];
+            if (systemScreenshotFile) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('system-screenshot-img').src = ev.target.result;
+                    document.getElementById('system-screenshot-preview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(systemScreenshotFile);
+            }
+        }
+        
+        async function submitSystemBillPayment() {
+            const trxId = document.getElementById('system-trx-id').value.trim();
+            if (!trxId) {
+                triggerToast('Please enter TRX ID', 'error');
+                return;
+            }
+            
+            let screenshotUrl = '';
+            if (systemScreenshotFile) {
+                const formData = new FormData();
+                formData.append('file', systemScreenshotFile);
+                formData.append('upload_preset', CLOUDINARY_PRESET);
+                
+                try {
+                    const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                    const data = await res.json();
+                    screenshotUrl = data.secure_url || '';
+                } catch (e) {
+                    triggerToast('Screenshot upload failed', 'error');
+                    return;
+                }
+            }
+            
+            const statusSnap = await db.ref('admin2_status').once('value');
+            const billAmount = statusSnap.exists() ? (statusSnap.val().billAmount || 10000) : 10000;
+            
+            const paymentRef = db.ref('admin2_billing/payments').push();
+            await paymentRef.set({
+                amount: billAmount,
+                trxId: trxId,
+                screenshotUrl: screenshotUrl,
+                submittedAt: Date.now(),
+                status: 'Pending',
+                type: 'system_lock',
+                timerCompleted: false
+            });
+            
+            triggerToast('Payment submitted! Waiting for Admin 2 approval...');
+            startSystemPaymentTimer(paymentRef.key);
+        }
+        
+        function startSystemPaymentTimer(paymentId) {
+            let seconds = 30;
+            const timerDiv = document.createElement('div');
+            timerDiv.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 glass px-8 py-3 rounded-2xl border border-emerald-500/30 flex items-center gap-3 z-[999]';
+            timerDiv.innerHTML = `
+                <i class="fa-solid fa-clock text-emerald-400"></i>
+                <span class="font-bold">Processing payment... <span id="sys-timer-seconds" class="font-mono text-xl">${seconds}</span>s</span>
+            `;
+            document.body.appendChild(timerDiv);
+            
+            const interval = setInterval(async () => {
+                seconds--;
+                const el = document.getElementById('sys-timer-seconds');
+                if (el) el.innerText = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    timerDiv.remove();
+                    await db.ref('admin2_billing/payments/' + paymentId).update({ timerCompleted: true });
+                    triggerToast('Timer done. Admin 2 can now approve.');
+                }
+            }, 1000);
+        }
+        
+        function logoutAdmin() {
+            if (confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('admin1_logged_in');
+                window.location.reload();
+            }
+        }
+        
+        // ==================== UTILITY FUNCTIONS ====================
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('section-' + section);
+            if (target) target.classList.add('active');
+            
+            document.querySelectorAll('[id^="nav-"]').forEach(nav => nav.classList.remove('nav-active'));
+            const navEl = document.getElementById('nav-' + section);
+            if (navEl) navEl.classList.add('nav-active');
+            
+            const title = document.getElementById('section-title');
+            if (title) title.innerText = section.charAt(0).toUpperCase() + section.slice(1);
+            
+            if (section === 'users') loadUsersAdvanced();
+            if (section === 'deposits') loadDepositsAdvanced();
+            if (section === 'withdrawals') loadWithdrawalsAdvanced();
+            if (section === 'plans') loadPlans();
+            if (section === 'tasks') loadTasks();
+            if (section === 'social') loadSocialChannels();
+            if (section === 'support') loadSupportChannels();
+            if (section === 'feedback') loadFeedbackAndAppeals();
+            if (section === 'complaints') loadComplaints();
+            if (section === 'dashboard') loadDashboardStats();
+        }
+        
+        function triggerToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-4 rounded-2xl shadow-2xl text-sm mb-2 flex items-center gap-3 max-w-xs ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} text-white`;
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} text-lg"></i>
+                <span class="font-medium">${msg}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+        
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('block');
+            } else {
+                closeMobileSidebar();
+            }
+        }
+        
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.remove('block');
+            overlay.classList.add('hidden');
+        }
+        
+        function showSkeletonLoader(container, type = 'user') {
+            container.innerHTML = '';
+            const count = type === 'user' ? 4 : 3;
+            
+            for (let i = 0; i < count; i++) {
+                const skeleton = document.createElement('div');
+                skeleton.className = 'glass rounded-3xl p-5 skeleton mb-3';
+                
+                if (type === 'user') {
+                    skeleton.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-slate-700 rounded-2xl"></div>
+                                <div class="space-y-2">
+                                    <div class="h-4 bg-slate-700 rounded w-28"></div>
+                                    <div class="h-3 bg-slate-700 rounded w-20"></div>
+                                </div>
+                            </div>
+                            <div class="text-right space-y-1.5">
+                                <div class="h-5 bg-slate-700 rounded w-16 ml-auto"></div>
+                                <div class="h-3 bg-slate-700 rounded w-12 ml-auto"></div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    skeleton.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div class="space-y-2 flex-1">
+                                <div class="h-4 bg-slate-700 rounded w-2/3"></div>
+                                <div class="h-3 bg-slate-700 rounded w-1/2"></div>
+                            </div>
+                            <div class="h-9 w-20 bg-slate-700 rounded-2xl"></div>
+                        </div>
+                    `;
+                }
+                container.appendChild(skeleton);
+            }
+        }
+        
+        function showEmptyState(container, message, icon = 'fa-inbox') {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fa-solid ${icon} text-3xl text-slate-500"></i>
+                    </div>
+                    <p class="text-slate-400 font-medium">${message}</p>
+                </div>
+            `;
+        }
+        
+        // ==================== DASHBOARD ====================
+        function loadDashboardStats() {
+            db.ref('users').on('value', snap => {
+                let total = 0, balance = 0;
+                if (snap.exists()) {
+                    snap.forEach(child => {
+                        total++;
+                        balance += Number(child.val().balance || 0);
+                    });
+                }
+                document.getElementById('dash-total-users').innerText = total;
+                document.getElementById('dash-total-balance').innerText = 'Rs. ' + balance.toFixed(0);
+                document.getElementById('live-users-count').innerText = total;
+            });
+            
+            db.ref('admin_queues/deposits').on('value', snap => {
+                let pending = 0;
+                if (snap.exists()) {
+                    snap.forEach(c => { if (c.val().status === 'Pending') pending++; });
+                }
+                const el = document.getElementById('dash-pending-deposit');
+                if (el) el.innerText = pending;
+                
+                const badge = document.getElementById('badge-deposits');
+                if (badge) {
+                    if (pending > 0) {
+                        badge.innerText = pending;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+            
+            db.ref('admin_queues/withdrawals').on('value', snap => {
+                let pending = 0;
+                if (snap.exists()) {
+                    snap.forEach(c => { if (c.val().status === 'Pending') pending++; });
+                }
+                const el = document.getElementById('dash-pending-withdraw');
+                if (el) el.innerText = pending;
+                
+                const badge = document.getElementById('badge-withdrawals');
+                if (badge) {
+                    if (pending > 0) {
+                        badge.innerText = pending;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+            
+            db.ref('admin_queues/deposits').on('value', snap => {
+                let totalDep = 0;
+                if (snap.exists()) {
+                    snap.forEach(c => {
+                        const d = c.val();
+                        if (d.status === 'Approved') totalDep += Number(d.amount || 0);
+                    });
+                }
+                const el = document.getElementById('dash-total-deposits');
+                if (el) el.innerText = 'Rs. ' + totalDep.toFixed(0);
+            });
+            
+            db.ref('admin_queues/withdrawals').on('value', snap => {
+                let totalW = 0;
+                if (snap.exists()) {
+                    snap.forEach(c => {
+                        const w = c.val();
+                        if (w.status === 'Approved') totalW += Number(w.amount || 0);
+                    });
+                }
+                const el = document.getElementById('dash-total-withdrawals');
+                if (el) el.innerText = 'Rs. ' + totalW.toFixed(0);
+            });
+            
+            db.ref('admin_queues/complaints').on('value', snap => {
+                let count = 0;
+                if (snap.exists()) count = snap.numChildren();
+                const el = document.getElementById('dash-total-complaints');
+                if (el) el.innerText = count;
+                
+                const badge = document.getElementById('badge-complaints');
+                if (badge) {
+                    if (count > 0) {
+                        badge.innerText = count;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+            
+            db.ref('admin_feedbacks').on('value', snap => {
+                let count = 0;
+                if (snap.exists()) {
+                    snap.forEach(u => { count += u.numChildren(); });
+                }
+                const el = document.getElementById('dash-total-feedbacks');
+                if (el) el.innerText = count;
+            });
+            
+            db.ref('admin_queues/appeals').on('value', snap => {
+                let count = 0;
+                if (snap.exists()) count = snap.numChildren();
+                const el = document.getElementById('dash-total-appeals');
+                if (el) el.innerText = count;
+            });
+        }
+        
+        // ==================== USERS ====================
+        function loadUsersAdvanced() {
+            const container = document.getElementById('users-directory-feed');
+            showSkeletonLoader(container, 'user');
+            
+            db.ref('users').on('value', snapshot => {
+                container.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    showEmptyState(container, 'No users found in the system', 'fa-users');
+                    return;
+                }
+                
+                snapshot.forEach(child => {
+                    const user = child.val();
+                    const phone = child.key;
+                    const coins = parseInt(user.coins || 0);
+                    const balance = Number(user.balance || 0);
+                    const baseLimit = parseInt(user.withdrawalLimit) || 1000;
+                    
+                    const card = document.createElement('div');
+                    card.className = `glass rounded-3xl p-5 user-card border border-slate-700/60`;
+                    
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between cursor-pointer" onclick="toggleUserDetails('${phone}')">
+                            <div class="flex items-center gap-4">
+                                <img src="${user.avatarUrl || 'https://i.pravatar.cc/48'}" class="w-12 h-12 rounded-2xl object-cover border border-slate-600" alt="">
+                                <div>
+                                    <div class="font-extrabold text-lg">${user.username || 'No Name'}</div>
+                                    <div class="text-emerald-400 font-mono text-sm">${phone}</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-extrabold text-xl">Rs. ${balance.toFixed(0)}</div>
+                                <div class="text-indigo-400 text-sm font-semibold">${coins} 🪙</div>
+                            </div>
+                        </div>
+                        
+                        <div id="user-details-${phone}" class="hidden mt-6 pt-5 border-t border-slate-700">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-400 tracking-wider">BALANCE (Rs)</label>
+                                        <div class="flex gap-2 mt-1.5">
+                                            <input type="number" id="bal-input-${phone}" value="${balance}" class="flex-1 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl px-4 py-2.5 text-sm outline-none">
+                                            <button onclick="adjustBalance('${phone}', 'credit')" class="px-4 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold text-lg transition-colors">+</button>
+                                            <button onclick="adjustBalance('${phone}', 'debit')" class="px-4 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold text-lg transition-colors">-</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-400 tracking-wider">COINS</label>
+                                        <div class="flex gap-2 mt-1.5">
+                                            <input type="number" id="coins-input-${phone}" value="${coins}" class="flex-1 bg-slate-800 border border-slate-700 focus:border-indigo-500 rounded-2xl px-4 py-2.5 text-sm outline-none">
+                                            <button onclick="adjustCoins('${phone}', 'credit')" class="px-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-2xl font-extrabold text-lg transition-colors">+</button>
+                                            <button onclick="adjustCoins('${phone}', 'debit')" class="px-4 bg-indigo-800 hover:bg-indigo-700 rounded-2xl font-extrabold text-lg transition-colors">-</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-400 tracking-wider">WARNING MESSAGE</label>
+                                        <div class="flex gap-2 mt-1.5">
+                                            <input type="text" id="warning-input-${phone}" value="${user.warningMessage || ''}" placeholder="Enter warning..." class="flex-1 bg-slate-800 border border-slate-700 focus:border-amber-500 rounded-2xl px-4 py-2.5 text-sm outline-none">
+                                            <button onclick="setWarning('${phone}')" class="px-5 bg-amber-600 hover:bg-amber-500 active:bg-amber-700 rounded-2xl text-xs font-extrabold">SET</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-400 tracking-wider">WITHDRAWAL LIMIT (Rs)</label>
+                                        <div class="flex gap-2 mt-1.5">
+                                            <input type="number" id="limit-input-${phone}" value="${baseLimit}" class="flex-1 bg-slate-800 border border-slate-700 focus:border-cyan-500 rounded-2xl px-4 py-2.5 text-sm outline-none">
+                                            <button onclick="saveUserLimit('${phone}')" class="px-5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 rounded-2xl text-xs font-extrabold">Save</button>
+                                        </div>
+                                        <div class="flex gap-2 mt-2">
+                                            <button onclick="quickSetLimit('${phone}', 1000)" class="flex-1 py-2 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold">Unlock (1000)</button>
+                                            <button onclick="quickSetLimit('${phone}', 0)" class="flex-1 py-2 text-xs bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold">Lock (0)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col gap-2.5 justify-end">
+                                    <div class="flex gap-2">
+                                        <button onclick="verifyUser('${phone}')" class="flex-1 py-2.5 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold transition-colors">VERIFY</button>
+                                        <button onclick="suspendUser('${phone}', '${user.verificationStatus || ''}')" class="flex-1 py-2.5 text-xs ${user.verificationStatus === 'suspended' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-red-600 hover:bg-red-500'} active:bg-red-700 rounded-2xl font-extrabold transition-colors">
+                                            ${user.verificationStatus === 'suspended' ? 'UNSUSPEND' : 'SUSPEND'}
+                                        </button>
+                                    </div>
+                                    <button onclick="deleteUser('${phone}')" class="py-2.5 text-xs bg-red-900 hover:bg-red-800 active:bg-red-950 rounded-2xl font-extrabold transition-colors">DELETE USER</button>
+                                    <button onclick="downloadUserPDF('${phone}')" class="py-2.5 text-xs bg-slate-700 hover:bg-slate-600 active:bg-slate-500 rounded-2xl font-extrabold flex items-center justify-center gap-2 transition-colors">
+                                        <i class="fa-solid fa-file-pdf"></i> 
+                                        <span>DOWNLOAD PDF REPORT</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+        
+        function toggleUserDetails(phone) {
+            const el = document.getElementById('user-details-' + phone);
+            if (el) el.classList.toggle('hidden');
+        }
+        
+        function adjustBalance(phone, type) {
+            const input = document.getElementById('bal-input-' + phone);
+            if (!input) return;
+            const value = parseFloat(input.value) || 0;
+            if (!value) { triggerToast('Please enter a valid amount', 'error'); return; }
+            
+            db.ref('users/' + phone).transaction(u => {
+                if (u) {
+                    if (type === 'credit') u.balance = Number(u.balance || 0) + value;
+                    else u.balance = Math.max(0, Number(u.balance || 0) - value);
+                }
+                return u;
+            });
+            triggerToast('Balance updated successfully');
+        }
+        
+        function adjustCoins(phone, type) {
+            const input = document.getElementById('coins-input-' + phone);
+            if (!input) return;
+            const value = parseInt(input.value) || 0;
+            if (!value) { triggerToast('Please enter a valid amount', 'error'); return; }
+            
+            db.ref('users/' + phone).transaction(u => {
+                if (u) {
+                    if (type === 'credit') u.coins = Number(u.coins || 0) + value;
+                    else u.coins = Math.max(0, Number(u.coins || 0) - value);
+                }
+                return u;
+            });
+            triggerToast('Coins updated successfully');
+        }
+        
+        function setWarning(phone) {
+            const input = document.getElementById('warning-input-' + phone);
+            if (!input) return;
+            db.ref('users/' + phone + '/warningMessage').set(input.value.trim());
+            triggerToast('Warning message updated');
+        }
+        
+        function saveUserLimit(phone) {
+            const input = document.getElementById('limit-input-' + phone);
+            if (!input) return;
+            const newLimit = parseInt(input.value) || 0;
+            
+            db.ref('users/' + phone).update({ withdrawalLimit: newLimit });
+            triggerToast('Withdrawal limit updated to Rs. ' + newLimit);
+        }
+        
+        function quickSetLimit(phone, limit) {
+            db.ref('users/' + phone).update({ withdrawalLimit: limit });
+            triggerToast(limit > 0 ? 'Withdrawals Unlocked!' : 'Withdrawals Locked!');
+        }
+        
+        function verifyUser(phone) {
+            db.ref('users/' + phone).update({ verificationStatus: 'verified' });
+            triggerToast('User verified successfully');
+        }
+        
+        function suspendUser(phone, current) {
+            const newStatus = current === 'suspended' ? 'verified' : 'suspended';
+            db.ref('users/' + phone).update({ verificationStatus: newStatus });
+            triggerToast(newStatus === 'suspended' ? 'User has been suspended' : 'User has been unsuspended');
+        }
+        
+        function deleteUser(phone) {
+            if (!confirm('Are you sure you want to permanently delete this user?')) return;
+            db.ref('users/' + phone).remove();
+            triggerToast('User deleted permanently', 'error');
+        }
+        
+        function downloadUserPDF(phone) {
+            db.ref('users/' + phone).once('value', snap => {
+                const user = snap.exists() ? snap.val() : {};
+                
+                const createdDate = user.userSince ? new Date(user.userSince).toLocaleDateString() + ' ' + new Date(user.userSince).toLocaleTimeString() : 'N/A';
+                const loginCount = user.loginCount || 'N/A (not tracked)';
+                const balanceHistory = user.balanceHistory || [];
+                const transactions = user.transactions || [];
+                
+                const element = document.createElement('div');
+                element.style.padding = '40px';
+                element.style.fontFamily = 'Inter, system-ui, sans-serif';
+                element.innerHTML = `
+                    <div style="max-width: 800px; margin: 0 auto; color: #0f172a;">
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 30px; border-bottom: 3px solid #06b6d4; padding-bottom: 20px;">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #06b6d4, #10b981); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                                <span style="color: white; font-size: 32px;">🛡️</span>
+                            </div>
+                            <div>
+                                <h1 style="margin: 0; font-size: 28px; font-weight: 900;">PRIME HORIZON</h1>
+                                <p style="margin: 4px 0 0; color: #64748b; font-size: 13px; letter-spacing: 2px;">OFFICIAL USER REPORT</p>
+                            </div>
+                        </div>
+                        
+                        <h2 style="font-size: 22px; margin-bottom: 8px;">User Account Summary</h2>
+                        <p style="color: #64748b; margin-bottom: 25px;">Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+                        
+                        <div style="background: #f8fafc; padding: 24px; border-radius: 16px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600; width: 200px;">Phone Number</td>
+                                    <td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${phone}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Username</td>
+                                    <td style="padding: 10px 0; font-weight: 700;">${user.username || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Email / Gmail</td>
+                                    <td style="padding: 10px 0; font-weight: 700;">${user.gmail || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Password</td>
+                                    <td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${user.password || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Account Created</td>
+                                    <td style="padding: 10px 0; font-weight: 700;">${createdDate}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Current Balance</td>
+                                    <td style="padding: 10px 0; font-weight: 700; color: #059669;">Rs. ${(user.balance || 0).toFixed(0)}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Coins</td>
+                                    <td style="padding: 10px 0; font-weight: 700;">${user.coins || 0} 🪙</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Verification Status</td>
+                                    <td style="padding: 10px 0; font-weight: 700; text-transform: uppercase;">${user.verificationStatus || 'unverified'}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Login Count</td>
+                                    <td style="padding: 10px 0; font-weight: 700;">${loginCount}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <h3 style="font-size: 16px; margin: 20px 0 10px; color: #334155;">Balance History &amp; Transactions</h3>
+                        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px; max-height: 220px; overflow-y: auto;">
+                            ${balanceHistory.length > 0 ? balanceHistory.map(h => `
+                                <div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 13px;">
+                                    <span>${new Date(h.timestamp || Date.now()).toLocaleString()}</span>
+                                    <span style="font-weight: 600; color: ${h.type === 'credit' ? '#059669' : '#dc2626'};">${h.type === 'credit' ? '+' : ''}Rs. ${h.amount || 0}</span>
+                                </div>
+                            `).join('') : (transactions.length > 0 ? transactions.map(t => `
+                                <div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 13px;">
+                                    <span>${t.date || 'N/A'} — ${t.type || 'Transaction'}</span>
+                                    <span style="font-weight: 600;">Rs. ${t.amount || 0}</span>
+                                </div>
+                            `).join('') : '<div style="color:#64748b; font-size:13px; padding:10px 0;">No detailed transaction history available in records.</div>')}
+                        </div>
+                        
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0; text-align: center;">
+                            <p style="color: #64748b; font-size: 12px;">
+                                This is a system generated report from Prime Horizon Admin Panel.<br>
+                                For any queries, contact support@primehorizon.app
+                            </p>
+                        </div>
+                    </div>
+                `;
+                
+                html2pdf().from(element).set({
+                    margin: 0,
+                    filename: `prime-horizon-user-report-${phone}.pdf`,
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+                }).save();
+            });
+        }
+        
+        function showAddUserModal() {
+            const username = prompt("Enter Username:");
+            if (!username) return;
+            const phone = prompt("Enter Phone Number:");
+            if (!phone) return;
+            const email = prompt("Enter Email (optional):") || '';
+            const password = prompt("Set Password (default: 123456):") || '123456';
+            
+            const cleanPhone = phone.replace(/\D/g, '');
+            
+            db.ref('users/' + cleanPhone).set({
+                username: username,
+                phone: cleanPhone,
+                gmail: email,
+                password: password,
+                balance: 0,
+                coins: 0,
+                verificationStatus: 'unverified',
+                status: 'active',
+                userSince: new Date().toISOString()
+            });
+            triggerToast('New user created successfully');
+        }
+        
+        // ==================== DEPOSITS ====================
+        function loadDepositsAdvanced() {
+            const container = document.getElementById('deposit-requests-feed');
+            showSkeletonLoader(container, 'list');
+            
+            db.ref('admin_queues/deposits').on('value', snap => {
+                container.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(container, 'No pending deposits at the moment', 'fa-wallet');
+                    return;
+                }
+                
+                let hasPending = false;
+                
+                snap.forEach(child => {
+                    const d = child.val();
+                    if (d.status !== 'Pending') return;
+                    hasPending = true;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'glass p-5 rounded-3xl flex flex-col md:flex-row gap-5 items-center border border-slate-700/60';
+                    div.innerHTML = `
+                        <div class="flex-1 min-w-0">
+                            <div class="font-extrabold text-lg">${d.username || 'Unknown User'}</div>
+                            <div class="text-emerald-400 font-mono text-sm">${d.userPhone}</div>
+                            <div class="mt-3">
+                                <span class="text-xs text-slate-400">AMOUNT</span><br>
+                                <span class="font-black text-3xl">Rs. ${d.amount}</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mt-2">TRX ID: <span class="font-mono">${d.trxId || 'N/A'}</span></div>
+                        </div>
+                        
+                        <div class="flex-shrink-0">
+                            <a href="${d.proofUrl}" target="_blank" class="block">
+                                <img src="${d.proofUrl}" class="w-24 h-24 object-cover rounded-2xl border border-slate-600 shadow-lg" alt="Payment proof">
+                            </a>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row md:flex-col gap-2 w-full md:w-auto">
+                            <button onclick="approveDeposit('${child.key}', '${d.userPhone}', ${d.amount})" class="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all whitespace-nowrap">APPROVE</button>
+                            <button onclick="rejectDeposit('${child.key}')" class="px-8 py-3 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-sm font-extrabold transition-all whitespace-nowrap">REJECT</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                if (!hasPending) {
+                    showEmptyState(container, 'No pending deposits at the moment', 'fa-wallet');
+                }
+            });
+        }
+        
+        function approveDeposit(id, phone, amount) {
+            db.ref('admin_queues/deposits/' + id).update({ status: 'Approved' });
+            db.ref('users/' + phone).transaction(u => {
+                if (u) {
+                    u.balance = Number(u.balance || 0) + amount;
+                    u.totalDeposit = Number(u.totalDeposit || 0) + amount;
+                }
+                return u;
+            });
+            triggerToast('Deposit approved and balance updated');
+        }
+        
+        function rejectDeposit(id) {
+            db.ref('admin_queues/deposits/' + id).update({ status: 'Rejected' });
+            triggerToast('Deposit request rejected');
+        }
+        
+        // ==================== WITHDRAWALS ====================
+        function loadWithdrawalsAdvanced() {
+            const container = document.getElementById('withdrawal-requests-feed');
+            showSkeletonLoader(container, 'list');
+            
+            db.ref('admin_queues/withdrawals').on('value', snap => {
+                container.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(container, 'No pending withdrawals at the moment', 'fa-hand-holding-dollar');
+                    return;
+                }
+                
+                let hasPending = false;
+                
+                snap.forEach(child => {
+                    const w = child.val();
+                    if (w.status !== 'Pending') return;
+                    hasPending = true;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'glass p-5 rounded-3xl border border-slate-700/60';
+                    div.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div class="flex-1">
+                                <div class="font-extrabold text-lg">${w.username || 'Unknown User'}</div>
+                                <div class="text-sm text-purple-400 font-mono">${w.userPhone}</div>
+                                
+                                <div class="mt-4 text-sm">
+                                    <div><strong>Account Title:</strong> ${w.accountTitle || 'N/A'}</div>
+                                    <div class="font-mono text-xs mt-0.5">${w.accountNumber || ''}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-right">
+                                <div>
+                                    <span class="text-xs text-slate-400">AMOUNT</span><br>
+                                    <span class="font-black text-3xl">Rs. ${w.amount}</span>
+                                </div>
+                                <div class="text-xs mt-1 text-slate-400">${w.method || 'Bank Transfer'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="approveWithdrawal('${child.key}', '${w.userPhone}', ${w.amount})" class="flex-1 py-3.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold transition-all">APPROVE</button>
+                            <button onclick="rejectWithdrawal('${child.key}', '${w.userPhone}', ${w.amount})" class="flex-1 py-3.5 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold transition-all">REJECT + REFUND</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                if (!hasPending) {
+                    showEmptyState(container, 'No pending withdrawals at the moment', 'fa-hand-holding-dollar');
+                }
+            });
+        }
+        
+        function approveWithdrawal(id, phone, amount) {
+            db.ref('admin_queues/withdrawals/' + id).update({ status: 'Approved' });
+            triggerToast('Withdrawal approved successfully');
+        }
+        
+        function rejectWithdrawal(id, phone, amount) {
+            if (!confirm('Reject this withdrawal and refund the amount to user balance?')) return;
+            db.ref('admin_queues/withdrawals/' + id).update({ status: 'Rejected' });
+            db.ref('users/' + phone).transaction(u => {
+                if (u) u.balance = Number(u.balance || 0) + amount;
+                return u;
+            });
+            triggerToast('Withdrawal rejected and amount refunded');
+        }
+        
+        // ==================== PLANS ====================
+        function loadPlans() {
+            const container = document.getElementById('plans-list');
+            showSkeletonLoader(container, 'list');
+            
+            db.ref('investment_plans').on('value', snap => {
+                container.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(container, 'No investment plans added yet', 'fa-seedling');
+                    return;
+                }
+                
+                snap.forEach(child => {
+                    const plan = child.val();
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-700 last:border-0 gap-3';
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <span class="font-extrabold text-lg">${plan.name}</span>
+                            <div class="text-sm text-slate-400 mt-1">
+                                Rs.${plan.cost} • ${plan.days} days • ${plan.percentage}% daily return
+                            </div>
+                        </div>
+                        <button onclick="deletePlan('${child.key}')" class="px-6 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-2xl font-bold transition-colors">Delete Plan</button>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+        
+        function showAddPlanModal() {
+            const name = prompt("Plan Name:");
+            if (!name) return;
+            const cost = prompt("Cost (Rs):");
+            if (!cost) return;
+            const days = prompt("Duration (Days):");
+            if (!days) return;
+            const percentage = prompt("Daily Return %:");
+            if (!percentage) return;
+            
+            db.ref('investment_plans/PLAN-' + Date.now()).set({
+                name: name,
+                cost: parseFloat(cost),
+                days: parseInt(days),
+                percentage: parseFloat(percentage)
+            });
+            triggerToast('Investment plan added successfully');
+        }
+        
+        function deletePlan(id) {
+            if (confirm('Delete this investment plan permanently?')) {
+                db.ref('investment_plans/' + id).remove();
+                triggerToast('Plan deleted');
+            }
+        }
+        
+        // ==================== TASKS ====================
+        function loadTasks() {
+            const container = document.getElementById('tasks-list');
+            showSkeletonLoader(container, 'list');
+            
+            db.ref('daily_tasks').on('value', snap => {
+                container.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(container, 'No daily tasks added yet', 'fa-list-check');
+                    return;
+                }
+                
+                snap.forEach(child => {
+                    const task = child.val();
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-700 last:border-0 gap-3';
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <div class="font-extrabold">${task.title || 'Untitled Task'}</div>
+                            <div class="text-sm text-slate-400 mt-1">${task.description || ''}</div>
+                            <div class="mt-2">
+                                <span class="inline-block px-3 py-1 bg-purple-600/20 text-purple-400 text-xs font-extrabold rounded-full">${task.rewardCoins || 0} Coins Reward</span>
+                            </div>
+                        </div>
+                        <button onclick="deleteTask('${child.key}')" class="px-6 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-2xl font-bold transition-colors">Delete</button>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+        
+        function showAddTaskModal() {
+            const title = prompt("Task Title:");
+            if (!title) return;
+            const description = prompt("Task Description:") || '';
+            const reward = prompt("Reward Coins:");
+            if (!reward) return;
+            
+            db.ref('daily_tasks/TASK-' + Date.now()).set({
+                title: title,
+                description: description,
+                rewardCoins: parseInt(reward)
+            });
+            triggerToast('Daily task added successfully');
+        }
+        
+        function deleteTask(id) {
+            if (confirm('Delete this daily task?')) {
+                db.ref('daily_tasks/' + id).remove();
+            }
+        }
+        
+        // ==================== SOCIAL ====================
+        function loadSocialChannels() {
+            const container = document.getElementById('social-list');
+            showSkeletonLoader(container, 'list');
+            
+            db.ref('social_channels').on('value', snap => {
+                container.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(container, 'No social channels added yet', 'fa-share-alt');
+                    return;
+                }
+                
+                snap.forEach(child => {
+                    const channel = child.val();
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-700 last:border-0 gap-3';
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <div class="font-extrabold flex items-center gap-2">
+                                <i class="fa-brands fa-telegram text-xl text-sky-400"></i>
+                                ${channel.name || 'Untitled Channel'}
+                            </div>
+                            <a href="${channel.url}" target="_blank" class="text-sm text-emerald-400 hover:underline break-all">${channel.url}</a>
+                        </div>
+                        <button onclick="deleteSocialChannel('${child.key}')" class="px-6 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-2xl font-bold transition-colors">Delete</button>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+        
+        function showAddSocialModal() {
+            const name = prompt("Channel Name (e.g. Telegram):");
+            if (!name) return;
+            const url = prompt("Channel URL:");
+            if (!url) return;
+            
+            db.ref('social_channels/CH-' + Date.now()).set({
+                name: name,
+                url: url
+            });
+            triggerToast('Social channel added successfully');
+        }
+        
+        function deleteSocialChannel(id) {
+            if (confirm('Delete this social channel?')) {
+                db.ref('social_channels/' + id).remove();
+            }
+        }
+        
+        // ==================== LIVE CHAT ====================
+        function loadSupportChannels() {
+            const container = document.getElementById('support-active-channels-list');
+            const countEl = document.getElementById('support-channel-count');
+            
+            db.ref('support_channels').on('value', snap => {
+                container.innerHTML = '';
+                let count = 0;
+                
+                if (!snap.exists()) {
+                    container.innerHTML = `<div class="text-center text-sm text-slate-400 py-8">No active support chats</div>`;
+                    if (countEl) countEl.innerText = '0';
+                    return;
+                }
+                
+                snap.forEach(child => {
+                    const meta = child.val().meta || {};
+                    const lastMsgTime = child.val().lastMessageAt || 0;
+                    const hasMessages = child.val().messages && Object.keys(child.val().messages).length > 0;
+                    
+                    if (!hasMessages) return;
+                    
+                    count++;
+                    const isNew = lastMsgTime && (Date.now() - lastMsgTime < 1000 * 60 * 15);
+                    
+                    const btn = document.createElement('button');
+                    btn.className = `w-full text-left p-3.5 rounded-2xl flex items-center gap-3 hover:bg-slate-800 transition-colors ${selectedChatPhone === child.key ? 'bg-slate-800 ring-1 ring-cyan-500/30' : ''}`;
+                    btn.innerHTML = `
+                        <img src="${meta.avatarUrl || 'https://i.pravatar.cc/36'}" class="w-9 h-9 rounded-2xl object-cover border border-slate-600 flex-shrink-0" alt="">
+                        <div class="flex-1 min-w-0 text-left">
+                            <div class="font-extrabold truncate flex items-center gap-2">
+                                ${meta.username || child.key}
+                                ${isNew ? '<span class="px-1.5 py-0.5 text-[9px] bg-red-500 text-white font-extrabold rounded">NEW</span>' : ''}
+                            </div>
+                            <div class="text-xs text-slate-400 font-mono truncate">${child.key}</div>
+                        </div>
+                    `;
+                    btn.onclick = () => {
+                        openChat(child.key);
+                        document.querySelectorAll('#support-active-channels-list button').forEach(b => b.classList.remove('bg-slate-800', 'ring-1', 'ring-cyan-500/30'));
+                        btn.classList.add('bg-slate-800', 'ring-1', 'ring-cyan-500/30');
+                    };
+                    container.appendChild(btn);
+                });
+                
+                if (countEl) countEl.innerText = count;
+            });
+        }
+        
+        function openChat(phone) {
+            selectedChatPhone = phone;
+            const titleEl = document.getElementById('chat-header-user-title');
+            const phoneEl = document.getElementById('chat-header-user-phone');
+            const avatarEl = document.getElementById('chat-header-avatar');
+            const statusDot = document.getElementById('chat-status-dot');
+            
+            titleEl.innerText = phone;
+            phoneEl.innerText = phone;
+            avatarEl.classList.remove('hidden');
+            if (statusDot) statusDot.classList.remove('hidden');
+            
+            const viewport = document.getElementById('admin-chat-messages-viewport');
+            viewport.innerHTML = '';
+            
+            db.ref('support_channels/' + phone + '/messages').on('value', snap => {
+                viewport.innerHTML = '';
+                if (!snap.exists()) {
+                    const empty = document.createElement('div');
+                    empty.className = 'flex items-center justify-center h-full text-slate-400 text-sm';
+                    empty.innerHTML = 'No messages yet. Start the conversation!';
+                    viewport.appendChild(empty);
+                    return;
+                }
+                
+                snap.forEach(msg => {
+                    const m = msg.val();
+                    const isAdmin = m.sender === 'admin';
+                    const div = document.createElement('div');
+                    div.className = `flex ${isAdmin ? 'justify-end' : 'justify-start'}`;
+                    
+                    let content = m.text || '';
+                    if (m.imageUrl) {
+                        content += `<img src="${m.imageUrl}" class="mt-2 rounded-xl max-w-[220px] border border-slate-600">`;
+                    }
+                    
+                    let actionsHtml = '';
+                    if (isAdmin) {
+                        actionsHtml = `
+                            <div class="flex gap-1 mt-1 justify-end">
+                                <button onclick="editAdminMessage('${phone}', '${msg.key}', '${(m.text || '').replace(/'/g, "\\'")}')" class="text-[10px] px-1.5 py-0.5 bg-white/20 hover:bg-white/30 rounded text-white">Edit</button>
+                                <button onclick="deleteAdminMessage('${phone}', '${msg.key}')" class="text-[10px] px-1.5 py-0.5 bg-white/20 hover:bg-white/30 rounded text-white">Del</button>
+                            </div>
+                        `;
+                    }
+                    
+                    div.innerHTML = `
+                        <div class="chat-bubble ${isAdmin ? 'admin-chat-bubble' : 'user-chat-bubble'}">
+                            ${content}
+                            <div class="text-[10px] mt-1.5 opacity-60 text-right">${new Date(m.timestamp || Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+                            ${actionsHtml}
+                        </div>
+                    `;
+                    viewport.appendChild(div);
+                });
+                viewport.scrollTop = viewport.scrollHeight;
+            });
+        }
+        
+        async function transmitAdminLiveChatMessage() {
+            if (!selectedChatPhone) {
+                triggerToast('Please select a chat first', 'error');
+                return;
+            }
+            
+            const input = document.getElementById('admin-chat-message-field');
+            const text = input.value.trim();
+            
+            if (!text && !adminChatAttachmentFile) return;
+            
+            let imageUrl = '';
+            if (adminChatAttachmentFile) {
+                const formData = new FormData();
+                formData.append('file', adminChatAttachmentFile);
+                formData.append('upload_preset', CLOUDINARY_PRESET);
+                
+                try {
+                    const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                    const data = await res.json();
+                    imageUrl = data.secure_url || '';
+                } catch (e) {
+                    triggerToast('Failed to upload image', 'error');
+                }
+            }
+            
+            await db.ref('support_channels/' + selectedChatPhone + '/messages').push({
+                sender: 'admin',
+                text: text,
+                imageUrl: imageUrl,
+                timestamp: Date.now()
+            });
+            
+            input.value = '';
+            adminChatAttachmentFile = null;
+        }
+        
+        function handleAdminChatImageFileSelectionEvent(e) {
+            adminChatAttachmentFile = e.target.files[0];
+            if (adminChatAttachmentFile) {
+                triggerToast('Image attached. Send message to upload.');
+            }
+        }
+        
+        function editAdminMessage(phone, msgId, currentText) {
+            const newText = prompt('Edit your message:', currentText);
+            if (newText === null || newText.trim() === '') return;
+            
+            db.ref(`support_channels/${phone}/messages/${msgId}`).update({
+                text: newText.trim(),
+                edited: true,
+                editedAt: Date.now()
+            });
+            triggerToast('Message updated');
+        }
+        
+        function deleteAdminMessage(phone, msgId) {
+            if (!confirm('Delete this message permanently?')) return;
+            db.ref(`support_channels/${phone}/messages/${msgId}`).remove();
+            triggerToast('Message deleted', 'error');
+        }
+        
+        // ==================== FEEDBACK & APPEALS ====================
+        function loadFeedbackAndAppeals() {
+            const fbContainer = document.getElementById('feedback-list');
+            showSkeletonLoader(fbContainer, 'list');
+            
+            db.ref('admin_feedbacks').on('value', snap => {
+                fbContainer.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(fbContainer, 'No user feedback yet', 'fa-comments');
+                    return;
+                }
+                
+                snap.forEach(userFb => {
+                    userFb.forEach(fb => {
+                        const data = fb.val();
+                        const div = document.createElement('div');
+                        div.className = 'p-4 border-b border-slate-700 last:border-0';
+                        div.innerHTML = `
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="font-extrabold">${data.username || 'Anonymous'}</div>
+                                    <div class="text-xs text-slate-400 font-mono">${userFb.key}</div>
+                                </div>
+                            </div>
+                            <p class="text-sm mt-3 leading-relaxed">${data.text || ''}</p>
+                            
+                            ${data.adminReply ? 
+                                `<div class="mt-3 p-3 bg-slate-800 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${data.adminReply}</div>` : 
+                                `<div class="mt-3">
+                                    <input placeholder="Write reply..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl w-full outline-none" onblur="replyToFeedback('${userFb.key}', '${fb.key}', this.value)">
+                                </div>`
+                            }
+                        `;
+                        fbContainer.appendChild(div);
+                    });
+                });
+            });
+            
+            const apContainer = document.getElementById('appeals-list');
+            showSkeletonLoader(apContainer, 'list');
+            
+            db.ref('admin_queues/appeals').on('value', snap => {
+                apContainer.innerHTML = '';
+                
+                if (!snap.exists()) {
+                    showEmptyState(apContainer, 'No suspension appeals', 'fa-gavel');
+                    return;
+                }
+                
+                snap.forEach(child => {
+                    const a = child.val();
+                    const div = document.createElement('div');
+                    div.className = 'p-4 border-b border-slate-700 last:border-0';
+                    div.innerHTML = `
+                        <div class="font-extrabold">${a.username || 'User'} <span class="font-mono text-xs text-slate-400">(${a.phone || ''})</span></div>
+                        <p class="text-sm mt-2 leading-relaxed">${a.message || ''}</p>
+                        
+                        ${a.adminReply ? 
+                            `<div class="mt-3 p-3 bg-emerald-900/30 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${a.adminReply}</div>` : 
+                            `<div class="mt-3">
+                                <input placeholder="Write reply..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-purple-500 rounded-2xl w-full outline-none" onblur="replyToAppeal('${child.key}', this.value)">
+                            </div>`
+                        }
+                        
+                        <div class="flex gap-2 mt-3">
+                            <button onclick="resolveAppeal('${child.key}')" class="flex-1 py-2 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold">RESOLVE / APPROVE</button>
+                            <button onclick="deleteAppeal('${child.key}')" class="flex-1 py-2 text-xs bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold">DELETE</button>
+                        </div>
+                    `;
+                    apContainer.appendChild(div);
+                });
+            });
+        }
+        
+        function replyToFeedback(userPhone, fbId, reply) {
+            if (!reply || !reply.trim()) return;
+            db.ref(`admin_feedbacks/${userPhone}/${fbId}`).update({ adminReply: reply.trim() });
+            triggerToast('Reply sent to user');
+        }
+        
+        function replyToAppeal(id, reply) {
+            if (!reply || !reply.trim()) return;
+            db.ref('admin_queues/appeals/' + id).update({ adminReply: reply.trim() });
+            triggerToast('Reply sent for appeal');
+        }
+        
+        function resolveAppeal(id) {
+            if (!confirm('Resolve this suspension appeal?')) return;
+            db.ref('admin_queues/appeals/' + id).update({ status: 'Resolved', resolvedAt: Date.now() });
+            triggerToast('Appeal resolved');
+        }
+        
+        function deleteAppeal(id) {
+            if (!confirm('Permanently delete this appeal?')) return;
+            db.ref('admin_queues/appeals/' + id).remove();
+            triggerToast('Appeal deleted', 'error');
+        }
+        
+        // ==================== COMPLAINTS ====================
+        function loadComplaints() {
+            const container = document.getElementById('complaints-feed');
+            showSkeletonLoader(container, 'list');
+            
+            db.ref('support_channels').on('value', rootSnap => {
+                container.innerHTML = '';
+                let allTickets = [];
+                
+                if (!rootSnap.exists()) {
+                    showEmptyState(container, 'No complaints/tickets from users yet', 'fa-exclamation-triangle');
+                    return;
+                }
+                
+                rootSnap.forEach(phoneSnap => {
+                    const phone = phoneSnap.key;
+                    const ticketsSnap = phoneSnap.child('tickets');
+                    
+                    if (ticketsSnap.exists()) {
+                        ticketsSnap.forEach(ticketChild => {
+                            const ticket = ticketChild.val();
+                            allTickets.push({
+                                id: ticketChild.key,
+                                userPhone: phone,
+                                username: ticket.username || phone,
+                                message: ticket.description || ticket.message || 'No description provided',
+                                category: ticket.category || 'General Issue',
+                                proofUrl: ticket.proofUrl || null,
+                                createdAt: ticket.timestamp || Date.now(),
+                                adminReply: ticket.adminReply || '',
+                                status: ticket.status || 'Pending'
+                            });
+                        });
+                    }
+                });
+                
+                if (allTickets.length === 0) {
+                    showEmptyState(container, 'No complaints/tickets from users yet', 'fa-exclamation-triangle');
+                    return;
+                }
+                
+                allTickets.sort((a, b) => b.createdAt - a.createdAt);
+                
+                allTickets.forEach(c => {
+                    const div = document.createElement('div');
+                    div.className = 'glass p-5 rounded-3xl border border-slate-700/60';
+                    
+                    const isNew = (Date.now() - c.createdAt) < (1000 * 60 * 30);
+                    
+                    let proofHtml = '';
+                    if (c.proofUrl && c.proofUrl !== 'NONE') {
+                        proofHtml = `<a href="${c.proofUrl}" target="_blank" class="inline-block mt-2"><img src="${c.proofUrl}" class="w-16 h-16 object-cover rounded-xl border border-slate-600"></a>`;
+                    }
+                    
+                    div.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 flex-wrap mb-1">
+                                    <div class="font-extrabold text-lg">${c.username}</div>
+                                    <span class="px-2 py-0.5 text-[9px] bg-orange-500/20 text-orange-400 rounded-full font-bold">${c.category}</span>
+                                    ${isNew ? '<span class="px-2.5 py-0.5 text-[10px] bg-orange-500 text-white font-extrabold rounded-full animate-pulse">NEW</span>' : ''}
+                                </div>
+                                <div class="text-sm text-orange-400 font-mono">${c.userPhone}</div>
+                                
+                                <div class="mt-3 text-sm leading-relaxed bg-slate-900/60 p-3 rounded-2xl">
+                                    ${c.message}
+                                </div>
+                                
+                                ${proofHtml}
+                                
+                                ${c.adminReply ? 
+                                    `<div class="mt-3 p-3 bg-emerald-900/30 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${c.adminReply}</div>` : 
+                                    `<div class="mt-3">
+                                        <input placeholder="Write reply to user..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-orange-500 rounded-2xl w-full outline-none" onblur="replyToComplaint('${c.id}', this.value, '${c.userPhone}')">
+                                    </div>`
+                                }
+                            </div>
+                            
+                            <div class="flex flex-col gap-2 w-full md:w-auto pt-2">
+                                <button onclick="resolveComplaint('${c.id}', '${c.userPhone}')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-xs font-extrabold transition-all">RESOLVE</button>
+                                <button onclick="deleteComplaint('${c.id}', '${c.userPhone}')" class="px-5 py-2 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-xs font-extrabold transition-all">DELETE</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+        
+        function replyToComplaint(ticketId, reply, userPhone) {
+            if (!reply || !reply.trim() || !userPhone) return;
+            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).update({ 
+                adminReply: reply.trim(),
+                repliedAt: Date.now()
+            });
+            triggerToast('Reply sent to user');
+        }
+        
+        function resolveComplaint(ticketId, userPhone) {
+            if (!confirm('Mark this complaint/ticket as resolved?')) return;
+            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).update({ 
+                status: 'Resolved', 
+                resolvedAt: Date.now() 
+            });
+            triggerToast('Complaint resolved successfully');
+        }
+        
+        function deleteComplaint(ticketId, userPhone) {
+            if (!confirm('Permanently delete this complaint/ticket?')) return;
+            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).remove();
+            triggerToast('Complaint deleted', 'error');
+        }
+        
+        // ==================== SETTINGS ====================
+        function toggleMaintenance(active) {
+            db.ref('admin_settings/maintenance').update({ 
+                active: active, 
+                timestamp: Date.now() 
+            });
+            triggerToast(active ? 'Maintenance mode enabled' : 'Maintenance mode disabled');
+        }
+        
+        function updateMaintenanceNote() {
+            const note = document.getElementById('maintenance-note').value.trim();
+            db.ref('admin_settings/maintenance').update({ note: note });
+            triggerToast('Maintenance note updated');
+        }
+        
+        function saveLimits() {
+            const minW = document.getElementById('min-withdraw').value;
+            const coinsRate = document.getElementById('coins-per-rupee').value;
+            
+            db.ref('admin_settings').update({ 
+                min_withdraw: minW, 
+                coins_per_rupee: coinsRate 
+            });
+            triggerToast('System limits saved successfully');
+        }
+        
+        async function uploadPopupImage(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const previewContainer = document.getElementById('popup-image-preview');
+            const previewImg = document.getElementById('popup-image-preview-img');
+            const urlDisplay = document.getElementById('popup-image-url-display');
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                previewImg.src = ev.target.result;
+                previewContainer.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_PRESET);
+
+            try {
+                const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if (data.secure_url) {
+                    popupUploadedImageUrl = data.secure_url;
+                    urlDisplay.innerText = data.secure_url;
+                    urlDisplay.classList.remove('hidden');
+                    triggerToast('Image uploaded successfully');
+                } else {
+                    triggerToast('Image upload failed', 'error');
+                }
+            } catch (err) {
+                triggerToast('Failed to upload image', 'error');
+            }
+        }
+
+        function savePopupAnnouncement(active) {
+            const title = document.getElementById('popup-title').value.trim();
+            const desc = document.getElementById('popup-desc').value.trim();
+            const imageUrl = popupUploadedImageUrl || '';
+            
+            db.ref('admin_settings/popup_announcement').set({ 
+                active: active, 
+                title: title, 
+                description: desc,
+                image: imageUrl
+            });
+            
+            triggerToast(active ? 'Popup announcement activated' : 'Popup announcement deactivated');
+            
+            if (active) {
+                setTimeout(() => {
+                    popupUploadedImageUrl = '';
+                    const urlDisplay = document.getElementById('popup-image-url-display');
+                    if (urlDisplay) urlDisplay.classList.add('hidden');
+                }, 800);
+            }
+        }
+        
+        let aboutUploadedImageUrl = '';
+        
+        async function uploadAboutImage(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const previewContainer = document.getElementById('about-image-preview');
+            const previewImg = document.getElementById('about-image-preview-img');
+            const urlDisplay = document.getElementById('about-image-url-display');
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                previewImg.src = ev.target.result;
+                previewContainer.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_PRESET);
+
+            try {
+                const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if (data.secure_url) {
+                    aboutUploadedImageUrl = data.secure_url;
+                    urlDisplay.innerText = data.secure_url;
+                    urlDisplay.classList.remove('hidden');
+                    triggerToast('Image uploaded successfully');
+                } else {
+                    triggerToast('Image upload failed', 'error');
+                }
+            } catch (err) {
+                triggerToast('Failed to upload image', 'error');
+            }
+        }
+        
+        function saveAboutUs() {
+            const text = document.getElementById('about-us-text').value.trim();
+            const imageUrl = aboutUploadedImageUrl || '';
+            
+            db.ref('admin_settings/about_us').set({ 
+                text: text, 
+                image: imageUrl,
+                updatedAt: Date.now()
+            });
+            
+            triggerToast('About Us saved successfully');
+        }
+        
+        // ==================== INITIALIZE ====================
+        window.onload = function() {
+            checkAdminLogin();
+        }
+    </script>
+</body>
+</html>
