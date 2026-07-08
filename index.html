@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
         
         body { font-family: 'Inter', system-ui, sans-serif; }
         
@@ -250,6 +250,11 @@
                     <i class="fa-solid fa-exclamation-triangle w-5 text-orange-400"></i>
                     <span class="font-semibold">Complaints</span>
                     <span id="badge-complaints" class="ml-auto px-2.5 py-0.5 text-[10px] bg-orange-500 text-white font-extrabold rounded-full hidden">0</span>
+                </div>
+                
+                <div onclick="showSection('history'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-history">
+                    <i class="fa-solid fa-clock-rotate-left w-5 text-teal-400"></i>
+                    <span class="font-semibold">User History</span>
                 </div>
                 
                 <div onclick="showSection('settings'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-settings">
@@ -574,6 +579,29 @@
                         </div>
                     </div>
                     <div id="complaints-feed" class="space-y-4"></div>
+                </div>
+
+                <!-- USER HISTORY -->
+                <div id="section-history" class="section">
+                    <div class="mb-6">
+                        <h3 class="section-header">User Activity History</h3>
+                        <p class="text-slate-400 text-sm mt-1">Search by phone number, Gmail, Deposit ID or Withdraw ID to view a user's complete activity — deposits, withdrawals, complaints and feedback</p>
+                    </div>
+                    
+                    <div class="glass rounded-3xl p-5 border border-slate-700/50 mb-6">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative flex-1">
+                                <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-slate-500"></i>
+                                <input id="history-search-input" type="text" placeholder="Enter phone number, Gmail, Deposit ID or Withdraw ID..." class="w-full bg-slate-800 border border-slate-700 focus:border-teal-500 rounded-2xl pl-11 pr-4 py-3.5 text-sm outline-none transition-colors" onkeypress="if (event.key === 'Enter') performHistorySearch()">
+                            </div>
+                            <button onclick="performHistorySearch()" class="px-8 py-3.5 bg-teal-600 hover:bg-teal-500 active:bg-teal-700 rounded-2xl text-sm font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-teal-600/30 modern-btn whitespace-nowrap">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="history-results-container"></div>
                 </div>
 
                 <!-- SETTINGS -->
@@ -1096,6 +1124,7 @@
             if (section === 'support') loadSupportChannels();
             if (section === 'feedback') loadFeedbackAndAppeals();
             if (section === 'complaints') loadComplaints();
+            if (section === 'history') loadHistorySection();
             if (section === 'dashboard') loadDashboardStats();
         }
         
@@ -2285,6 +2314,252 @@
             if (!confirm('Permanently delete this complaint/ticket?')) return;
             db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).remove();
             triggerToast('Complaint deleted', 'error');
+        }
+        
+        // ==================== USER HISTORY ====================
+        function loadHistorySection() {
+            const container = document.getElementById('history-results-container');
+            if (container && !container.dataset.searched) {
+                showEmptyState(container, "Search above to view a user's complete activity history", 'fa-clock-rotate-left');
+            }
+        }
+        
+        async function performHistorySearch() {
+            const inputEl = document.getElementById('history-search-input');
+            const rawInput = inputEl.value.trim();
+            const container = document.getElementById('history-results-container');
+            
+            if (!rawInput) {
+                triggerToast('Please enter a search term', 'error');
+                return;
+            }
+            
+            container.dataset.searched = 'true';
+            showSkeletonLoader(container, 'user');
+            
+            try {
+                let targetPhone = null;
+                const cleanedInput = rawInput.replace(/\s/g, '');
+                
+                // 1. Direct phone number match
+                const directUserSnap = await db.ref('users/' + cleanedInput).once('value');
+                if (directUserSnap.exists()) {
+                    targetPhone = cleanedInput;
+                }
+                
+                // 2. Gmail match across all users
+                if (!targetPhone) {
+                    const usersSnap = await db.ref('users').once('value');
+                    if (usersSnap.exists()) {
+                        usersSnap.forEach(child => {
+                            const u = child.val();
+                            if (u.gmail && u.gmail.toLowerCase() === rawInput.toLowerCase()) {
+                                targetPhone = child.key;
+                            }
+                        });
+                    }
+                }
+                
+                // 3. Deposit ID match
+                if (!targetPhone) {
+                    const depSnap = await db.ref('admin_queues/deposits').once('value');
+                    if (depSnap.exists()) {
+                        depSnap.forEach(child => {
+                            if (child.key === rawInput) {
+                                targetPhone = child.val().userPhone;
+                            }
+                        });
+                    }
+                }
+                
+                // 4. Withdraw ID match
+                if (!targetPhone) {
+                    const wSnap = await db.ref('admin_queues/withdrawals').once('value');
+                    if (wSnap.exists()) {
+                        wSnap.forEach(child => {
+                            if (child.key === rawInput) {
+                                targetPhone = child.val().userPhone;
+                            }
+                        });
+                    }
+                }
+                
+                if (!targetPhone) {
+                    showEmptyState(container, 'No user found matching "' + rawInput + '"', 'fa-user-slash');
+                    return;
+                }
+                
+                await renderUserHistory(targetPhone, container);
+                
+            } catch (err) {
+                console.error(err);
+                showEmptyState(container, 'Error loading history. Please try again.', 'fa-triangle-exclamation');
+            }
+        }
+        
+        async function renderUserHistory(phone, container) {
+            const userSnap = await db.ref('users/' + phone).once('value');
+            const user = userSnap.exists() ? userSnap.val() : {};
+            
+            const [depSnap, wSnap, ticketsSnap, fbSnap] = await Promise.all([
+                db.ref('admin_queues/deposits').once('value'),
+                db.ref('admin_queues/withdrawals').once('value'),
+                db.ref('support_channels/' + phone + '/tickets').once('value'),
+                db.ref('admin_feedbacks/' + phone).once('value')
+            ]);
+            
+            let timeline = [];
+            let totalDeposit = 0, totalWithdraw = 0, depositCount = 0, withdrawCount = 0;
+            
+            if (depSnap.exists()) {
+                depSnap.forEach(child => {
+                    const d = child.val();
+                    if (d.userPhone === phone) {
+                        depositCount++;
+                        if (d.status === 'Approved') totalDeposit += Number(d.amount || 0);
+                        timeline.push({
+                            type: 'Deposit',
+                            id: child.key,
+                            amount: d.amount,
+                            status: d.status || 'Pending',
+                            timestamp: d.timestamp || d.createdAt || 0
+                        });
+                    }
+                });
+            }
+            
+            if (wSnap.exists()) {
+                wSnap.forEach(child => {
+                    const w = child.val();
+                    if (w.userPhone === phone) {
+                        withdrawCount++;
+                        if (w.status === 'Approved') totalWithdraw += Number(w.amount || 0);
+                        timeline.push({
+                            type: 'Withdraw',
+                            id: child.key,
+                            amount: w.amount,
+                            status: w.status || 'Pending',
+                            timestamp: w.timestamp || w.createdAt || 0
+                        });
+                    }
+                });
+            }
+            
+            let complaintCount = 0;
+            if (ticketsSnap.exists()) {
+                ticketsSnap.forEach(child => {
+                    complaintCount++;
+                    const t = child.val();
+                    timeline.push({
+                        type: 'Complaint',
+                        id: child.key,
+                        message: t.description || t.message || '',
+                        status: t.status || 'Pending',
+                        timestamp: t.timestamp || 0
+                    });
+                });
+            }
+            
+            let feedbackCount = 0;
+            if (fbSnap.exists()) {
+                fbSnap.forEach(child => {
+                    feedbackCount++;
+                    const f = child.val();
+                    timeline.push({
+                        type: 'Feedback',
+                        id: child.key,
+                        message: f.text || '',
+                        status: f.adminReply ? 'Replied' : 'Awaiting Reply',
+                        timestamp: f.timestamp || 0
+                    });
+                });
+            }
+            
+            timeline.sort((a, b) => b.timestamp - a.timestamp);
+            
+            container.innerHTML = `
+                <div class="glass rounded-3xl p-6 border border-slate-700/50 mb-6">
+                    <div class="flex items-center gap-4">
+                        <img src="${user.avatarUrl || 'https://i.pravatar.cc/56'}" class="w-14 h-14 rounded-2xl object-cover border border-slate-600" alt="">
+                        <div class="flex-1 min-w-0">
+                            <div class="font-extrabold text-xl">${user.username || 'No Name'}</div>
+                            <div class="text-teal-400 font-mono text-sm">${phone}</div>
+                            <div class="text-slate-400 text-xs mt-0.5">${user.gmail || 'No Gmail'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-extrabold text-2xl">Rs. ${Number(user.balance || 0).toFixed(0)}</div>
+                            <div class="text-indigo-400 text-sm font-semibold">${user.coins || 0} 🪙</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
+                        <div class="text-2xl font-black text-emerald-400">Rs. ${totalDeposit.toFixed(0)}</div>
+                        <div class="text-xs text-slate-400 mt-1">Total Deposits (${depositCount})</div>
+                    </div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
+                        <div class="text-2xl font-black text-purple-400">Rs. ${totalWithdraw.toFixed(0)}</div>
+                        <div class="text-xs text-slate-400 mt-1">Total Withdrawals (${withdrawCount})</div>
+                    </div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
+                        <div class="text-2xl font-black text-orange-400">${complaintCount}</div>
+                        <div class="text-xs text-slate-400 mt-1">Complaints</div>
+                    </div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
+                        <div class="text-2xl font-black text-amber-400">${feedbackCount}</div>
+                        <div class="text-xs text-slate-400 mt-1">Feedbacks</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-3xl p-2 border border-slate-700/50" id="history-timeline-list"></div>
+            `;
+            
+            const timelineContainer = document.getElementById('history-timeline-list');
+            
+            if (timeline.length === 0) {
+                showEmptyState(timelineContainer, 'No activity history found for this user', 'fa-clock-rotate-left');
+                return;
+            }
+            
+            const typeStyles = {
+                'Deposit': { iconBg: 'bg-emerald-500/10', iconText: 'text-emerald-400', icon: 'fa-arrow-down', badgeBg: 'bg-emerald-500/20', badgeText: 'text-emerald-400' },
+                'Withdraw': { iconBg: 'bg-purple-500/10', iconText: 'text-purple-400', icon: 'fa-arrow-up', badgeBg: 'bg-purple-500/20', badgeText: 'text-purple-400' },
+                'Complaint': { iconBg: 'bg-orange-500/10', iconText: 'text-orange-400', icon: 'fa-exclamation-triangle', badgeBg: 'bg-orange-500/20', badgeText: 'text-orange-400' },
+                'Feedback': { iconBg: 'bg-amber-500/10', iconText: 'text-amber-400', icon: 'fa-comment', badgeBg: 'bg-amber-500/20', badgeText: 'text-amber-400' }
+            };
+            
+            timelineContainer.innerHTML = '';
+            timeline.forEach(item => {
+                const style = typeStyles[item.type] || typeStyles['Complaint'];
+                const div = document.createElement('div');
+                div.className = 'flex items-start gap-4 p-4 border-b border-slate-700 last:border-0';
+                
+                const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Unknown date';
+                
+                let detailHtml = '';
+                if (item.type === 'Deposit' || item.type === 'Withdraw') {
+                    detailHtml = `<div class="font-extrabold text-lg mt-1">Rs. ${item.amount}</div>`;
+                } else {
+                    detailHtml = `<div class="text-sm text-slate-300 mt-1 leading-relaxed">${item.message}</div>`;
+                }
+                
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-2xl ${style.iconBg} flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid ${style.icon} ${style.iconText}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-extrabold">${item.type}</span>
+                            <span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full font-mono text-slate-400">${item.id}</span>
+                            <span class="text-[10px] px-2 py-0.5 ${style.badgeBg} ${style.badgeText} rounded-full font-bold">${item.status}</span>
+                        </div>
+                        ${detailHtml}
+                        <div class="text-xs text-slate-500 mt-1.5">${dateStr}</div>
+                    </div>
+                `;
+                timelineContainer.appendChild(div);
+            });
         }
         
         // ==================== SETTINGS ====================
