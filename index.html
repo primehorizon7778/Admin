@@ -112,10 +112,8 @@
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200">
-    <!-- ==================== LOGIN SCREEN (NEW) ==================== -->
     <div id="login-screen" class="fixed inset-0 z-[999] flex items-center justify-center login-container">
         <div class="w-full max-w-md mx-4">
-            <!-- Logo -->
             <div class="flex justify-center mb-8">
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 via-cyan-400 to-emerald-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-cyan-500/40">
@@ -176,14 +174,10 @@
         </div>
     </div>
 
-    <!-- Mobile Overlay -->
     <div id="mobile-overlay" onclick="closeMobileSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden"></div>
     
     <div class="flex h-screen overflow-hidden">
-        <!-- SIDEBAR -->
         <div id="sidebar" class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out mobile-drawer">
-            
-            <!-- Logo -->
             <div class="p-6 border-b border-slate-800">
                 <div class="flex items-center gap-3">
                     <div class="w-11 h-11 bg-gradient-to-br from-cyan-500 via-cyan-400 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
@@ -196,67 +190,68 @@
                 </div>
             </div>
 
-            <!-- Navigation -->
             <div class="p-3 flex-1 overflow-y-auto text-sm custom-scroll">
                 <div onclick="showSection('dashboard'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer nav-active nav-item" id="nav-dashboard">
                     <i class="fa-solid fa-chart-line w-5 text-cyan-400"></i>
                     <span class="font-semibold">Dashboard</span>
                 </div>
-                
                 <div onclick="showSection('users'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-users">
                     <i class="fa-solid fa-users w-5 text-slate-400"></i>
                     <span class="font-semibold">Users Directory</span>
                 </div>
                 
+                <div onclick="showSection('kyc'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-kyc">
+                    <i class="fa-solid fa-id-card-clip w-5 text-amber-400"></i>
+                    <span class="font-semibold">KYC Approvals</span>
+                    <span id="badge-kyc" class="ml-auto px-2.5 py-0.5 text-[10px] bg-amber-500 text-black font-extrabold rounded-full hidden">0</span>
+                </div>
+
+                <div onclick="showSection('password'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-password">
+                    <i class="fa-solid fa-unlock-keyhole w-5 text-rose-400"></i>
+                    <span class="font-semibold">Password Recovery</span>
+                    <span id="badge-password" class="ml-auto px-2.5 py-0.5 text-[10px] bg-rose-500 text-white font-extrabold rounded-full hidden">0</span>
+                </div>
+
                 <div onclick="showSection('deposits'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-deposits">
                     <i class="fa-solid fa-wallet w-5 text-emerald-400"></i>
                     <span class="font-semibold">Deposits</span>
-                    <span id="badge-deposits" class="ml-auto px-2.5 py-0.5 text-[10px] bg-amber-500 text-black font-extrabold rounded-full hidden">0</span>
+                    <span id="badge-deposits" class="ml-auto px-2.5 py-0.5 text-[10px] bg-emerald-500 text-white font-extrabold rounded-full hidden">0</span>
                 </div>
-                
                 <div onclick="showSection('withdrawals'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-withdrawals">
                     <i class="fa-solid fa-hand-holding-dollar w-5 text-purple-400"></i>
                     <span class="font-semibold">Withdrawals</span>
                     <span id="badge-withdrawals" class="ml-auto px-2.5 py-0.5 text-[10px] bg-purple-500 text-white font-extrabold rounded-full hidden">0</span>
                 </div>
-                
                 <div onclick="showSection('plans'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-plans">
                     <i class="fa-solid fa-seedling w-5 text-emerald-400"></i>
                     <span class="font-semibold">Investment Plans</span>
                 </div>
-                
                 <div onclick="showSection('tasks'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-tasks">
                     <i class="fa-solid fa-list-check w-5 text-purple-400"></i>
                     <span class="font-semibold">Daily Tasks</span>
                 </div>
-                
                 <div onclick="showSection('social'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-social">
                     <i class="fa-solid fa-share-alt w-5 text-pink-400"></i>
                     <span class="font-semibold">Social Channels</span>
                 </div>
-                
                 <div onclick="showSection('support'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-support">
                     <i class="fa-solid fa-headset w-5 text-indigo-400"></i>
                     <span class="font-semibold">Support &amp; Chat</span>
                     <span id="badge-support" class="ml-auto px-2.5 py-0.5 text-[10px] bg-indigo-500 text-white font-extrabold rounded-full hidden">0</span>
                 </div>
-                
                 <div onclick="showSection('feedback'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-feedback">
                     <i class="fa-solid fa-comments w-5 text-amber-400"></i>
                     <span class="font-semibold">Feedbacks &amp; Appeals</span>
                 </div>
-                
                 <div onclick="showSection('complaints'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-complaints">
                     <i class="fa-solid fa-exclamation-triangle w-5 text-orange-400"></i>
                     <span class="font-semibold">Complaints</span>
                     <span id="badge-complaints" class="ml-auto px-2.5 py-0.5 text-[10px] bg-orange-500 text-white font-extrabold rounded-full hidden">0</span>
                 </div>
-                
                 <div onclick="showSection('history'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-history">
                     <i class="fa-solid fa-clock-rotate-left w-5 text-teal-400"></i>
                     <span class="font-semibold">User History</span>
                 </div>
-                
                 <div onclick="showSection('settings'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-settings">
                     <i class="fa-solid fa-cog w-5 text-slate-400"></i>
                     <span class="font-semibold">System Settings</span>
@@ -269,30 +264,24 @@
             </div>
         </div>
 
-        <!-- MAIN CONTENT -->
         <div class="flex-1 flex flex-col overflow-hidden w-full">
-            <!-- Top Bar -->
             <div class="bg-slate-900 border-b border-slate-800 px-5 lg:px-8 py-4 flex items-center justify-between sticky top-0 z-40">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-2xl transition-colors">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
-                    
                     <h2 id="section-title" class="text-2xl lg:text-3xl font-extrabold tracking-tight">Dashboard</h2>
                 </div>
-                
                 <div class="flex items-center gap-3">
                     <div class="hidden sm:flex items-center px-4 py-2 bg-slate-800 rounded-2xl text-sm">
                         <div class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse mr-2"></div>
                         <span class="font-medium">Live • <span id="live-users-count" class="font-bold">0</span> Users</span>
                     </div>
-                    
                     <div class="flex items-center gap-2 bg-slate-800 rounded-2xl px-1 py-1">
                         <button onclick="showChangePasswordModal()" class="px-3 py-2 text-xs hover:bg-slate-700 rounded-xl flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors">
                             <i class="fa-solid fa-key text-xs"></i>
                             <span class="hidden sm:inline text-xs">Change Pass</span>
                         </button>
-                        
                         <button onclick="logoutAdmin()" class="px-4 lg:px-5 py-2 bg-red-600 hover:bg-red-500 active:bg-red-700 transition-all text-white text-sm rounded-2xl flex items-center gap-2 font-semibold shadow-lg shadow-red-600/30">
                             <i class="fa-solid fa-sign-out-alt"></i>
                             <span class="hidden sm:inline">Logout</span>
@@ -301,10 +290,8 @@
                 </div>
             </div>
 
-            <!-- CONTENT AREA -->
             <div class="flex-1 overflow-auto p-5 lg:p-8 bg-slate-950 custom-scroll">
                 
-                <!-- DASHBOARD -->
                 <div id="section-dashboard" class="section active">
                     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
                         <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
@@ -318,7 +305,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -330,19 +316,17 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-slate-400 text-xs lg:text-sm font-medium tracking-wider">PENDING DEPOSITS</p>
-                                    <p id="dash-pending-deposit" class="text-4xl lg:text-5xl font-black mt-3 text-amber-400 metric-value">0</p>
+                                    <p id="dash-pending-deposit" class="text-4xl lg:text-5xl font-black mt-3 text-emerald-400 metric-value">0</p>
                                 </div>
-                                <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center">
-                                    <i class="fa-solid fa-upload text-3xl text-amber-400"></i>
+                                <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
+                                    <i class="fa-solid fa-upload text-3xl text-emerald-400"></i>
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="glass p-6 rounded-3xl stat-card border border-slate-700/50">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -356,7 +340,6 @@
                         </div>
                     </div>
                     
-                    <!-- NEW STATS ROW -->
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-5 mb-8">
                         <div class="glass p-5 rounded-3xl stat-card border border-slate-700/50">
                             <div class="flex justify-between items-start">
@@ -411,27 +394,26 @@
                             <span>Quick Actions</span>
                         </h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <button onclick="showSection('kyc')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-id-card-clip text-2xl mb-4 block text-amber-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Review KYC</span>
+                            </button>
+                            <button onclick="showSection('password')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-unlock-keyhole text-2xl mb-4 block text-rose-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Password Recov.</span>
+                            </button>
                             <button onclick="showSection('deposits')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
                                 <i class="fa-solid fa-wallet text-2xl mb-4 block text-emerald-400 group-hover:scale-110 transition-transform"></i>
                                 <span class="font-bold text-sm">Approve Deposits</span>
                             </button>
                             <button onclick="showSection('withdrawals')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
                                 <i class="fa-solid fa-hand-holding-dollar text-2xl mb-4 block text-purple-400 group-hover:scale-110 transition-transform"></i>
-                                <span class="font-bold text-sm">Process Withdrawals</span>
-                            </button>
-                            <button onclick="showSection('users')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
-                                <i class="fa-solid fa-user-plus text-2xl mb-4 block text-cyan-400 group-hover:scale-110 transition-transform"></i>
-                                <span class="font-bold text-sm">Manage Users</span>
-                            </button>
-                            <button onclick="showSection('support')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
-                                <i class="fa-solid fa-headset text-2xl mb-4 block text-indigo-400 group-hover:scale-110 transition-transform"></i>
-                                <span class="font-bold text-sm">Live Support</span>
+                                <span class="font-bold text-sm">Withdrawals</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- USERS SECTION -->
                 <div id="section-users" class="section">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
@@ -443,11 +425,29 @@
                             <span>Add New User</span>
                         </button>
                     </div>
-                    
                     <div class="grid grid-cols-1 gap-4" id="users-directory-feed"></div>
                 </div>
 
-                <!-- DEPOSITS -->
+                <div id="section-kyc" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="section-header">KYC Approvals</h3>
+                            <p class="text-slate-400 text-sm">Verify user identity documents and details</p>
+                        </div>
+                    </div>
+                    <div id="kyc-requests-feed" class="space-y-4"></div>
+                </div>
+
+                <div id="section-password" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="section-header">Password Recovery Requests</h3>
+                            <p class="text-slate-400 text-sm">Process forgot password requests via WhatsApp</p>
+                        </div>
+                    </div>
+                    <div id="password-requests-feed" class="space-y-4"></div>
+                </div>
+
                 <div id="section-deposits" class="section">
                     <div class="flex items-center justify-between mb-6">
                         <div>
@@ -458,7 +458,6 @@
                     <div id="deposit-requests-feed" class="space-y-4"></div>
                 </div>
 
-                <!-- WITHDRAWALS -->
                 <div id="section-withdrawals" class="section">
                     <div class="flex items-center justify-between mb-6">
                         <div>
@@ -469,7 +468,6 @@
                     <div id="withdrawal-requests-feed" class="space-y-4"></div>
                 </div>
 
-                <!-- PLANS -->
                 <div id="section-plans" class="section">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
@@ -483,7 +481,6 @@
                     <div class="glass rounded-3xl p-2 border border-slate-700/50" id="plans-list"></div>
                 </div>
 
-                <!-- TASKS -->
                 <div id="section-tasks" class="section">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
@@ -497,7 +494,6 @@
                     <div class="glass rounded-3xl p-2 border border-slate-700/50" id="tasks-list"></div>
                 </div>
 
-                <!-- SOCIAL -->
                 <div id="section-social" class="section">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
@@ -511,12 +507,9 @@
                     <div class="glass rounded-3xl p-2 border border-slate-700/50" id="social-list"></div>
                 </div>
 
-                <!-- SUPPORT & LIVE CHAT -->
                 <div id="section-support" class="section">
                     <h3 class="section-header mb-6">Support &amp; Live Chat Hub</h3>
-                    
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <!-- Channels List -->
                         <div class="lg:col-span-4 glass rounded-3xl p-4 border border-slate-700/50">
                             <div class="flex items-center justify-between mb-4 px-1">
                                 <h4 class="font-extrabold text-sm tracking-wider">ACTIVE CHANNELS</h4>
@@ -524,8 +517,6 @@
                             </div>
                             <div id="support-active-channels-list" class="space-y-1.5 max-h-[420px] overflow-auto pr-1 custom-scroll"></div>
                         </div>
-                        
-                        <!-- Chat Window -->
                         <div class="lg:col-span-8 glass rounded-3xl flex flex-col h-[520px] border border-slate-700/50 overflow-hidden">
                             <div class="p-4 border-b border-slate-700 flex items-center gap-3 bg-slate-900/50">
                                 <img id="chat-header-avatar" src="https://i.pravatar.cc/36" class="w-9 h-9 rounded-2xl object-cover border border-slate-600 hidden">
@@ -535,9 +526,7 @@
                                 </div>
                                 <div id="chat-status-dot" class="w-3 h-3 bg-emerald-400 rounded-full hidden"></div>
                             </div>
-                            
                             <div id="admin-chat-messages-viewport" class="flex-1 p-4 overflow-auto space-y-4 bg-slate-900 custom-scroll"></div>
-                            
                             <div class="p-4 border-t border-slate-700 flex gap-2 bg-slate-900/70">
                                 <input type="file" id="admin-chat-image-file-input" accept="image/*" class="hidden" onchange="handleAdminChatImageFileSelectionEvent(event)">
                                 <button onclick="document.getElementById('admin-chat-image-file-input').click()" class="w-12 h-11 flex-shrink-0 flex items-center justify-center bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl transition-colors border border-slate-700">
@@ -550,7 +539,6 @@
                     </div>
                 </div>
 
-                <!-- FEEDBACK & APPEALS -->
                 <div id="section-feedback" class="section">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
@@ -570,7 +558,6 @@
                     </div>
                 </div>
 
-                <!-- COMPLAINTS -->
                 <div id="section-complaints" class="section">
                     <div class="flex items-center justify-between mb-6">
                         <div>
@@ -581,13 +568,11 @@
                     <div id="complaints-feed" class="space-y-4"></div>
                 </div>
 
-                <!-- USER HISTORY -->
                 <div id="section-history" class="section">
                     <div class="mb-6">
                         <h3 class="section-header">User Activity History</h3>
                         <p class="text-slate-400 text-sm mt-1">Search by phone number, Gmail, Deposit ID or Withdraw ID to view a user's complete activity — deposits, withdrawals, complaints and feedback</p>
                     </div>
-                    
                     <div class="glass rounded-3xl p-5 border border-slate-700/50 mb-6">
                         <div class="flex flex-col sm:flex-row gap-3">
                             <div class="relative flex-1">
@@ -600,16 +585,45 @@
                             </button>
                         </div>
                     </div>
-                    
                     <div id="history-results-container"></div>
                 </div>
 
-                <!-- SETTINGS -->
                 <div id="section-settings" class="section">
                     <h3 class="section-header mb-6">System Settings</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Maintenance -->
+                        
+                        <div class="glass p-6 rounded-3xl border border-slate-700/50 md:col-span-2">
+                            <h4 class="font-extrabold mb-5 flex items-center gap-2">
+                                <i class="fa-solid fa-building-columns text-emerald-400"></i>
+                                Deposit Accounts Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5 block">JAZZCASH TITLE</label>
+                                    <input id="dep-jazz-title" placeholder="e.g. Muhammad Naeem" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl mb-3 text-sm outline-none">
+                                    
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5 block">JAZZCASH NUMBER</label>
+                                    <input id="dep-jazz-acc" placeholder="e.g. 03257436319" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl mb-3 text-sm outline-none font-mono">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5 block">EASYPAISA TITLE</label>
+                                    <input id="dep-easy-title" placeholder="e.g. Muhammad Naeem" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl mb-3 text-sm outline-none">
+                                    
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5 block">EASYPAISA NUMBER</label>
+                                    <input id="dep-easy-acc" placeholder="e.g. 03257436319" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl mb-3 text-sm outline-none font-mono">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5 block">BANK TITLE</label>
+                                    <input id="dep-bank-title" placeholder="e.g. Prime Horizon Corp Bank Node" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl mb-3 text-sm outline-none">
+                                    
+                                    <label class="text-xs font-bold text-slate-400 tracking-wider mb-1.5 block">BANK IBAN / NUMBER</label>
+                                    <input id="dep-bank-acc" placeholder="e.g. IBAN-PK73MAIN00003257436319" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl mb-3 text-sm outline-none font-mono">
+                                </div>
+                            </div>
+                            <button onclick="saveDepositGateways()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold mt-2 transition-all">Save Deposit Accounts</button>
+                        </div>
+                        
                         <div class="glass p-6 rounded-3xl border border-slate-700/50">
                             <h4 class="font-extrabold mb-5 flex items-center gap-3 text-base">
                                 <i class="fa-solid fa-tools text-orange-400"></i> 
@@ -623,7 +637,6 @@
                             <button onclick="updateMaintenanceNote()" class="mt-3 w-full py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 rounded-2xl text-sm font-bold transition-all">Update Note</button>
                         </div>
                         
-                        <!-- Limits -->
                         <div class="glass p-6 rounded-3xl border border-slate-700/50">
                             <h4 class="font-extrabold mb-5">Limits &amp; Rates</h4>
                             <div class="space-y-4">
@@ -639,7 +652,6 @@
                             </div>
                         </div>
                         
-                        <!-- Popup Announcement -->
                         <div class="glass p-6 rounded-3xl md:col-span-2 border border-slate-700/50">
                             <h4 class="font-extrabold mb-5 flex items-center gap-2">
                                 <i class="fa-solid fa-bullhorn text-pink-400"></i>
@@ -675,8 +687,25 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- NEW: Feedback / App Rating Popup Toggle -->
+                        <div class="glass p-6 rounded-3xl border border-slate-700/50 md:col-span-2">
+                            <h4 class="font-extrabold mb-5 flex items-center gap-2">
+                                <i class="fa-solid fa-star text-amber-400"></i>
+                                App Feedback Popup (Show to Users)
+                            </h4>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-800 p-5 rounded-2xl border border-slate-700 gap-4">
+                                <div>
+                                    <div class="font-bold text-sm">Feedback Popup Status</div>
+                                    <div class="text-xs text-slate-400 mt-1">Enable to show the feedback / rating popup screen to users inside the app.</div>
+                                </div>
+                                <div class="flex gap-2 w-full sm:w-auto">
+                                    <button onclick="toggleFeedbackPopup(true)" class="flex-1 sm:flex-none px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-600/20">Enable</button>
+                                    <button onclick="toggleFeedbackPopup(false)" class="flex-1 sm:flex-none px-6 py-2.5 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-xl text-xs font-bold transition-all shadow-lg shadow-red-600/20">Disable</button>
+                                </div>
+                            </div>
+                        </div>
                         
-                        <!-- About Us (for user app bottom) -->
                         <div class="glass p-6 rounded-3xl md:col-span-2 border border-slate-700/50">
                             <h4 class="font-extrabold mb-5 flex items-center gap-2">
                                 <i class="fa-solid fa-info-circle text-sky-400"></i>
@@ -703,7 +732,6 @@
                                             <div id="about-image-url-display" class="text-[10px] text-emerald-400 mt-1.5 font-mono break-all hidden"></div>
                                         </div>
                                     </div>
-                                    
                                     <button onclick="saveAboutUs()" class="mt-auto py-3 bg-sky-600 hover:bg-sky-500 active:bg-sky-700 rounded-2xl text-sm font-extrabold transition-all">Save About Us</button>
                                 </div>
                             </div>
@@ -714,14 +742,12 @@
         </div>
     </div>
 
-    <!-- Change Password Modal -->
     <div id="change-password-modal" onclick="if (event.target.id === 'change-password-modal') hideChangePasswordModal()" class="hidden fixed inset-0 bg-black/70 z-[999] flex items-center justify-center">
         <div onclick="event.stopImmediatePropagation()" class="glass w-full max-w-md mx-4 rounded-3xl p-7 border border-slate-700">
             <h3 class="font-extrabold text-xl mb-5 flex items-center gap-3">
                 <i class="fa-solid fa-key text-cyan-400"></i>
                 Change Admin Password
             </h3>
-            
             <div class="space-y-4">
                 <div>
                     <label class="text-xs font-bold text-slate-400 tracking-wider">CURRENT PASSWORD</label>
@@ -736,7 +762,6 @@
                     <input id="confirm-password" type="password" class="mt-1.5 w-full px-5 py-3 bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-2xl text-sm outline-none">
                 </div>
             </div>
-            
             <div class="flex gap-3 mt-6">
                 <button onclick="hideChangePasswordModal()" class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 rounded-2xl font-bold text-sm">Cancel</button>
                 <button onclick="changeAdminPassword()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-extrabold text-sm">Update Password</button>
@@ -744,10 +769,9 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-[999] flex flex-col gap-2"></div>
 
-    <!-- SYSTEM LOCK SCREEN (Admin 2 OFF) - FIXED: Now properly scrollable -->
+    <!-- System Lock Modal code omitted for brevity but remains same in HTML -->
     <div id="system-lock-screen" class="hidden fixed inset-0 bg-slate-950 z-[999] overflow-y-auto">
         <div class="min-h-full flex items-center justify-center p-4">
             <div class="max-w-lg w-full">
@@ -756,16 +780,13 @@
                         <i class="fa-solid fa-lock text-red-400 text-4xl"></i>
                     </div>
                     <h2 class="text-3xl font-extrabold text-white">System automatic Currently OFF</h2>
-                    <p class="text-red-400 mt-1">محترم ناظم، چونکہ آپ کا پلان سالانہ ہے اس لیے آپ کا بل ادا کرنا باقی ہے۔ براہِ کرم ابھی بل ادا کریں، جس کے بعد آپ کا سسٹم خود بخود بحال ہو جائے گا۔
-​ناظم صاحب، آپ سے گزارش ہے کہ یہاں اصل رقم ادا کریں۔</p>
+                    <p class="text-red-400 mt-1">محترم ناظم، چونکہ آپ کا پلان سالانہ ہے اس لیے آپ کا بل ادا کرنا باقی ہے۔ براہِ کرم ابھی بل ادا کریں، جس کے بعد آپ کا سسٹم خود بخود بحال ہو جائے گا۔</p>
                 </div>
-
                 <div class="glass rounded-3xl p-7 border border-red-500/20">
                     <div class="text-center mb-6">
                         <div class="text-sm text-red-300">CURRENT BILL</div>
                         <div id="system-lock-bill-amount" class="text-6xl font-black text-white mt-1">Rs. 10,000</div>
                     </div>
-
                     <div class="bg-slate-900 rounded-2xl p-5 mb-6 border border-slate-700">
                         <div class="flex items-center gap-3 mb-4">
                             <i class="fa-solid fa-university text-emerald-400 text-2xl"></i>
@@ -774,7 +795,6 @@
                                 <div class="text-xs text-emerald-400">Official Payment Account</div>
                             </div>
                         </div>
-                        
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-slate-400">Account Number</span>
@@ -786,20 +806,17 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="text-center mb-6">
                         <p class="text-sm text-slate-300 leading-relaxed">
-                            براہِ کرم رقم ادا کرنے کے بعد، اس کی ٹرانزیکشن آئی ڈی (TRX ID) یہاں درج کریں۔ ۔<br>
-                          اپنی ادائیگی کا سکرین شاٹ نیچے لگائیں۔
+                            براہِ کرم رقم ادا کرنے کے بعد، اس کی ٹرانزیکشن آئی ڈی (TRX ID) یہاں درج کریں۔<br>
+                            اپنی ادائیگی کا سکرین شاٹ نیچے لگائیں۔
                         </p>
                     </div>
-
                     <div class="space-y-4">
                         <div>
                             <label class="text-xs font-bold text-slate-400 tracking-wider">TRX ID / Reference</label>
                             <input id="system-trx-id" type="text" placeholder="Enter TRX ID" class="mt-1.5 w-full px-5 py-3.5 bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-2xl text-lg outline-none">
                         </div>
-                        
                         <div>
                             <label class="text-xs font-bold text-slate-400 tracking-wider">SCREENSHOT (Proof)</label>
                             <input type="file" id="system-screenshot" accept="image/*" class="hidden" onchange="handleSystemScreenshot(event)">
@@ -812,18 +829,15 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="mt-6">
                         <button onclick="submitSystemBillPayment()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-extrabold text-lg">SUBMIT PAYMENT</button>
                     </div>
-                    
                     <p class="text-center text-xs text-slate-500 mt-4">Developer Payment</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
@@ -844,8 +858,9 @@
         let selectedChatPhone = null;
         let adminChatAttachmentFile = null;
         let popupUploadedImageUrl = '';
+        let aboutUploadedImageUrl = ''; // FIXED: Added Global Declaration for About Us Image
         
-        // ==================== ADMIN LOGIN SYSTEM (NEW) ====================
+        // ==================== ADMIN LOGIN SYSTEM ====================
         let currentAdminPassword = localStorage.getItem('admin1_password') || '12345';
         
         function performAdminLogin() {
@@ -880,10 +895,6 @@
         }
         
         function showChangePasswordModal() {
-            const loginScreen = document.getElementById('login-screen');
-            if (!loginScreen.classList.contains('hidden') && loginScreen.style.display !== 'none') {
-                // allow change from login too
-            }
             document.getElementById('change-password-modal').classList.remove('hidden');
             document.getElementById('change-password-modal').classList.add('flex');
         }
@@ -907,17 +918,14 @@
                 triggerToast('Please fill all fields', 'error');
                 return;
             }
-            
             if (current !== currentAdminPassword) {
                 triggerToast('Current password is incorrect', 'error');
                 return;
             }
-            
             if (newPass.length < 4) {
                 triggerToast('New password must be at least 4 characters', 'error');
                 return;
             }
-            
             if (newPass !== confirm) {
                 triggerToast('New passwords do not match', 'error');
                 return;
@@ -947,7 +955,6 @@
         function initAdminApp() {
             showSection('dashboard');
             loadDashboardStats();
-            
             listenAdmin2SystemLock();
             
             db.ref('admin_settings/min_withdraw').once('value', s => {
@@ -959,13 +966,30 @@
                 const el = document.getElementById('coins-per-rupee');
                 if (el && s.exists()) el.value = s.val();
             });
+
+            db.ref('admin_settings/deposit_gateway').once('value', s => {
+                if (s.exists()) {
+                    const data = s.val();
+                    if(data.JazzCash) {
+                        document.getElementById('dep-jazz-title').value = data.JazzCash.title || '';
+                        document.getElementById('dep-jazz-acc').value = data.JazzCash.account || '';
+                    }
+                    if(data.EasyPaisa) {
+                        document.getElementById('dep-easy-title').value = data.EasyPaisa.title || '';
+                        document.getElementById('dep-easy-acc').value = data.EasyPaisa.account || '';
+                    }
+                    if(data.CustomBank) {
+                        document.getElementById('dep-bank-title').value = data.CustomBank.title || '';
+                        document.getElementById('dep-bank-acc').value = data.CustomBank.account || '';
+                    }
+                }
+            });
             
             db.ref('admin_settings/about_us').once('value', s => {
                 if (s.exists()) {
                     const data = s.val();
                     const textEl = document.getElementById('about-us-text');
                     if (textEl) textEl.value = data.text || '';
-                    
                     if (data.image) {
                         aboutUploadedImageUrl = data.image;
                         const previewContainer = document.getElementById('about-image-preview');
@@ -983,41 +1007,31 @@
                     }
                 }
             });
-            
-            console.log('%c[Prime Horizon] Admin Panel initialized after login', 'color:#64748b');
         }
         
-        // Admin 2 System Lock Listener
         let systemLockListener = null;
-        
         function listenAdmin2SystemLock() {
             if (systemLockListener) systemLockListener.off();
-            
             systemLockListener = db.ref('admin2_status').on('value', snap => {
                 const data = snap.exists() ? snap.val() : { isOffline: false };
                 const isLocked = data.isOffline === true;
-                
                 const lockScreen = document.getElementById('system-lock-screen');
                 
                 if (isLocked && lockScreen) {
                     lockScreen.classList.remove('hidden');
-                    lockScreen.style.display = 'block'; // changed to block so overflow works properly
-                    
+                    lockScreen.style.display = 'block';
                     const amountEl = document.getElementById('system-lock-bill-amount');
                     if (amountEl) amountEl.innerText = 'Rs. ' + (data.billAmount || 10000);
-                    
                     document.querySelector('.flex.h-screen').style.display = 'none';
                 } else if (lockScreen) {
                     lockScreen.style.display = 'none';
                     lockScreen.classList.add('hidden');
-                    
                     document.querySelector('.flex.h-screen').style.display = 'flex';
                 }
             });
         }
         
         let systemScreenshotFile = null;
-        
         function handleSystemScreenshot(e) {
             systemScreenshotFile = e.target.files[0];
             if (systemScreenshotFile) {
@@ -1032,10 +1046,7 @@
         
         async function submitSystemBillPayment() {
             const trxId = document.getElementById('system-trx-id').value.trim();
-            if (!trxId) {
-                triggerToast('Please enter TRX ID', 'error');
-                return;
-            }
+            if (!trxId) { triggerToast('Please enter TRX ID', 'error'); return; }
             
             let screenshotUrl = '';
             if (systemScreenshotFile) {
@@ -1102,7 +1113,6 @@
             }
         }
         
-        // ==================== UTILITY FUNCTIONS ====================
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             const target = document.getElementById('section-' + section);
@@ -1113,9 +1123,15 @@
             if (navEl) navEl.classList.add('nav-active');
             
             const title = document.getElementById('section-title');
-            if (title) title.innerText = section.charAt(0).toUpperCase() + section.slice(1);
+            if (title) {
+                if(section === 'kyc') title.innerText = 'KYC Approvals';
+                else if(section === 'password') title.innerText = 'Password Recovery';
+                else title.innerText = section.charAt(0).toUpperCase() + section.slice(1);
+            }
             
             if (section === 'users') loadUsersAdvanced();
+            if (section === 'kyc') loadKYCRequests();
+            if (section === 'password') loadPasswordRequests();
             if (section === 'deposits') loadDepositsAdvanced();
             if (section === 'withdrawals') loadWithdrawalsAdvanced();
             if (section === 'plans') loadPlans();
@@ -1132,12 +1148,8 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `px-6 py-4 rounded-2xl shadow-2xl text-sm mb-2 flex items-center gap-3 max-w-xs ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} text-white`;
-            toast.innerHTML = `
-                <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} text-lg"></i>
-                <span class="font-medium">${msg}</span>
-            `;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} text-lg"></i><span class="font-medium">${msg}</span>`;
             container.appendChild(toast);
-            
             setTimeout(() => {
                 toast.style.transition = 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
                 toast.style.opacity = '0';
@@ -1146,10 +1158,21 @@
             }, 3200);
         }
         
+        function updateBadge(id, count) {
+            const badge = document.getElementById(id);
+            if(badge) {
+                if(count > 0) {
+                    badge.innerText = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
-            
             if (sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
@@ -1170,11 +1193,9 @@
         function showSkeletonLoader(container, type = 'user') {
             container.innerHTML = '';
             const count = type === 'user' ? 4 : 3;
-            
             for (let i = 0; i < count; i++) {
                 const skeleton = document.createElement('div');
                 skeleton.className = 'glass rounded-3xl p-5 skeleton mb-3';
-                
                 if (type === 'user') {
                     skeleton.innerHTML = `
                         <div class="flex items-center justify-between">
@@ -1189,8 +1210,7 @@
                                 <div class="h-5 bg-slate-700 rounded w-16 ml-auto"></div>
                                 <div class="h-3 bg-slate-700 rounded w-12 ml-auto"></div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 } else {
                     skeleton.innerHTML = `
                         <div class="flex justify-between items-center">
@@ -1199,8 +1219,7 @@
                                 <div class="h-3 bg-slate-700 rounded w-1/2"></div>
                             </div>
                             <div class="h-9 w-20 bg-slate-700 rounded-2xl"></div>
-                        </div>
-                    `;
+                        </div>`;
                 }
                 container.appendChild(skeleton);
             }
@@ -1217,7 +1236,7 @@
             `;
         }
         
-        // ==================== DASHBOARD ====================
+        // ==================== DASHBOARD STATS ====================
         function loadDashboardStats() {
             db.ref('users').on('value', snap => {
                 let total = 0, balance = 0;
@@ -1232,103 +1251,72 @@
                 document.getElementById('live-users-count').innerText = total;
             });
             
-            db.ref('admin_queues/deposits').on('value', snap => {
+            db.ref('admin_queues/kyc_requests').on('value', snap => {
                 let pending = 0;
+                if(snap.exists()) snap.forEach(c => { if(c.val().status === 'pending') pending++; });
+                updateBadge('badge-kyc', pending);
+            });
+            
+            db.ref('admin_queues/password_requests').on('value', snap => {
+                let pending = 0;
+                if(snap.exists()) snap.forEach(c => { if(c.val().status === 'pending') pending++; });
+                updateBadge('badge-password', pending);
+            });
+
+            db.ref('admin_queues/deposits').on('value', snap => {
+                let pending = 0, totalDep = 0;
                 if (snap.exists()) {
-                    snap.forEach(c => { if (c.val().status === 'Pending') pending++; });
+                    snap.forEach(c => { 
+                        if (c.val().status === 'Pending') pending++; 
+                        if (c.val().status === 'Approved') totalDep += Number(c.val().amount || 0);
+                    });
                 }
-                const el = document.getElementById('dash-pending-deposit');
-                if (el) el.innerText = pending;
+                const elPending = document.getElementById('dash-pending-deposit');
+                if (elPending) elPending.innerText = pending;
+                const elTotal = document.getElementById('dash-total-deposits');
+                if (elTotal) elTotal.innerText = 'Rs. ' + totalDep.toFixed(0);
                 
-                const badge = document.getElementById('badge-deposits');
-                if (badge) {
-                    if (pending > 0) {
-                        badge.innerText = pending;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
+                updateBadge('badge-deposits', pending);
             });
             
             db.ref('admin_queues/withdrawals').on('value', snap => {
-                let pending = 0;
+                let pending = 0, totalW = 0;
                 if (snap.exists()) {
-                    snap.forEach(c => { if (c.val().status === 'Pending') pending++; });
+                    snap.forEach(c => { 
+                        if (c.val().status === 'Pending') pending++; 
+                        if (c.val().status === 'Approved') totalW += Number(c.val().amount || 0);
+                    });
                 }
-                const el = document.getElementById('dash-pending-withdraw');
-                if (el) el.innerText = pending;
+                const elPending = document.getElementById('dash-pending-withdraw');
+                if (elPending) elPending.innerText = pending;
+                const elTotal = document.getElementById('dash-total-withdrawals');
+                if (elTotal) elTotal.innerText = 'Rs. ' + totalW.toFixed(0);
                 
-                const badge = document.getElementById('badge-withdrawals');
-                if (badge) {
-                    if (pending > 0) {
-                        badge.innerText = pending;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
-            });
-            
-            db.ref('admin_queues/deposits').on('value', snap => {
-                let totalDep = 0;
-                if (snap.exists()) {
-                    snap.forEach(c => {
-                        const d = c.val();
-                        if (d.status === 'Approved') totalDep += Number(d.amount || 0);
-                    });
-                }
-                const el = document.getElementById('dash-total-deposits');
-                if (el) el.innerText = 'Rs. ' + totalDep.toFixed(0);
-            });
-            
-            db.ref('admin_queues/withdrawals').on('value', snap => {
-                let totalW = 0;
-                if (snap.exists()) {
-                    snap.forEach(c => {
-                        const w = c.val();
-                        if (w.status === 'Approved') totalW += Number(w.amount || 0);
-                    });
-                }
-                const el = document.getElementById('dash-total-withdrawals');
-                if (el) el.innerText = 'Rs. ' + totalW.toFixed(0);
+                updateBadge('badge-withdrawals', pending);
             });
             
             db.ref('admin_queues/complaints').on('value', snap => {
-                let count = 0;
-                if (snap.exists()) count = snap.numChildren();
+                let count = snap.exists() ? snap.numChildren() : 0;
                 const el = document.getElementById('dash-total-complaints');
                 if (el) el.innerText = count;
-                
-                const badge = document.getElementById('badge-complaints');
-                if (badge) {
-                    if (count > 0) {
-                        badge.innerText = count;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
+                updateBadge('badge-complaints', count);
             });
             
             db.ref('admin_feedbacks').on('value', snap => {
                 let count = 0;
-                if (snap.exists()) {
-                    snap.forEach(u => { count += u.numChildren(); });
-                }
+                if (snap.exists()) snap.forEach(u => { count += u.numChildren(); });
                 const el = document.getElementById('dash-total-feedbacks');
                 if (el) el.innerText = count;
             });
             
             db.ref('admin_queues/appeals').on('value', snap => {
-                let count = 0;
-                if (snap.exists()) count = snap.numChildren();
+                let count = snap.exists() ? snap.numChildren() : 0;
                 const el = document.getElementById('dash-total-appeals');
                 if (el) el.innerText = count;
             });
         }
         
-        // ==================== USERS ====================
+        // ==================== USERS & FORCE LOGOUT ====================
         function loadUsersAdvanced() {
             const container = document.getElementById('users-directory-feed');
             showSkeletonLoader(container, 'user');
@@ -1347,6 +1335,9 @@
                     const coins = parseInt(user.coins || 0);
                     const balance = Number(user.balance || 0);
                     const baseLimit = parseInt(user.withdrawalLimit) || 1000;
+                    
+                    // Count Active Sessions/Devices
+                    const activeDevices = user.sessions ? Object.keys(user.sessions).length : (user.activeDevices || 0);
                     
                     const card = document.createElement('div');
                     card.className = `glass rounded-3xl p-5 user-card border border-slate-700/60`;
@@ -1367,6 +1358,24 @@
                         </div>
                         
                         <div id="user-details-${phone}" class="hidden mt-6 pt-5 border-t border-slate-700">
+                            
+                            <!-- NEW: Device Management & Logout -->
+                            <div class="mb-5 bg-slate-900 p-4 rounded-2xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
+                                        <i class="fa-solid fa-mobile-screen-button text-cyan-400 text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-400 font-bold tracking-wider">ACTIVE LOGIN DEVICES</div>
+                                        <div class="text-sm font-extrabold text-white mt-0.5">${activeDevices} Device(s) Connected</div>
+                                    </div>
+                                </div>
+                                <button onclick="forceLogoutUser('${phone}')" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/20">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span>Force Logout All Devices</span>
+                                </button>
+                            </div>
+                            
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div class="space-y-3">
                                     <div>
@@ -1377,13 +1386,19 @@
                                             <button onclick="adjustBalance('${phone}', 'debit')" class="px-4 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold text-lg transition-colors">-</button>
                                         </div>
                                     </div>
-                                    
                                     <div>
                                         <label class="text-xs font-bold text-slate-400 tracking-wider">COINS</label>
                                         <div class="flex gap-2 mt-1.5">
                                             <input type="number" id="coins-input-${phone}" value="${coins}" class="flex-1 bg-slate-800 border border-slate-700 focus:border-indigo-500 rounded-2xl px-4 py-2.5 text-sm outline-none">
                                             <button onclick="adjustCoins('${phone}', 'credit')" class="px-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-2xl font-extrabold text-lg transition-colors">+</button>
                                             <button onclick="adjustCoins('${phone}', 'debit')" class="px-4 bg-indigo-800 hover:bg-indigo-700 rounded-2xl font-extrabold text-lg transition-colors">-</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-400 tracking-wider">FREE WITHDRAWALS</label>
+                                        <div class="flex gap-2 mt-1.5">
+                                            <input type="number" id="freewithdraw-input-${phone}" value="${user.freeWithdraws || 0}" class="flex-1 bg-slate-800 border border-slate-700 focus:border-cyan-500 rounded-2xl px-4 py-2.5 text-sm outline-none">
+                                            <button onclick="saveFreeWithdraws('${phone}')" class="px-5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 rounded-2xl text-xs font-extrabold">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1404,8 +1419,8 @@
                                             <button onclick="saveUserLimit('${phone}')" class="px-5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 rounded-2xl text-xs font-extrabold">Save</button>
                                         </div>
                                         <div class="flex gap-2 mt-2">
-                                            <button onclick="quickSetLimit('${phone}', 1000)" class="flex-1 py-2 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold">Unlock (1000)</button>
-                                            <button onclick="quickSetLimit('${phone}', 0)" class="flex-1 py-2 text-xs bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold">Lock (0)</button>
+                                            <button onclick="toggleWithdrawLock('${phone}', false)" class="flex-1 py-2 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold">Unlock W.D</button>
+                                            <button onclick="toggleWithdrawLock('${phone}', true)" class="flex-1 py-2 text-xs bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold">Lock W.D</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1431,6 +1446,17 @@
             });
         }
         
+        function forceLogoutUser(phone) {
+            if (!confirm('Are you sure you want to log out this user from all devices?')) return;
+            // Setting forceLogout flag and clearing sessions/activeDevices
+            db.ref('users/' + phone).update({
+                forceLogout: true,
+                activeDevices: 0,
+                sessions: null
+            });
+            triggerToast('User forced to logout from all devices', 'success');
+        }
+        
         function toggleUserDetails(phone) {
             const el = document.getElementById('user-details-' + phone);
             if (el) el.classList.toggle('hidden');
@@ -1441,7 +1467,6 @@
             if (!input) return;
             const value = parseFloat(input.value) || 0;
             if (!value) { triggerToast('Please enter a valid amount', 'error'); return; }
-            
             db.ref('users/' + phone).transaction(u => {
                 if (u) {
                     if (type === 'credit') u.balance = Number(u.balance || 0) + value;
@@ -1457,7 +1482,6 @@
             if (!input) return;
             const value = parseInt(input.value) || 0;
             if (!value) { triggerToast('Please enter a valid amount', 'error'); return; }
-            
             db.ref('users/' + phone).transaction(u => {
                 if (u) {
                     if (type === 'credit') u.coins = Number(u.coins || 0) + value;
@@ -1466,6 +1490,32 @@
                 return u;
             });
             triggerToast('Coins updated successfully');
+        }
+
+        function saveFreeWithdraws(phone) {
+            const input = document.getElementById('freewithdraw-input-' + phone);
+            if (!input) return;
+            const freeW = parseInt(input.value) || 0;
+            db.ref('users/' + phone).update({ freeWithdraws: freeW });
+            triggerToast('Free withdrawals updated to ' + freeW);
+        }
+
+        function toggleWithdrawLock(phone, lock) {
+            if (lock) {
+                db.ref('users/' + phone).update({ 
+                    freeWithdraws: 0,
+                    withdrawalLimit: 0,
+                    withdrawalAccountLocked: true
+                });
+                triggerToast('User withdrawals have been LOCKED', 'error');
+            } else {
+                db.ref('users/' + phone).update({ 
+                    freeWithdraws: 1,
+                    withdrawalLimit: 1000,
+                    withdrawalAccountLocked: false
+                });
+                triggerToast('User withdrawals UNLOCKED');
+            }
         }
         
         function setWarning(phone) {
@@ -1479,14 +1529,8 @@
             const input = document.getElementById('limit-input-' + phone);
             if (!input) return;
             const newLimit = parseInt(input.value) || 0;
-            
             db.ref('users/' + phone).update({ withdrawalLimit: newLimit });
             triggerToast('Withdrawal limit updated to Rs. ' + newLimit);
-        }
-        
-        function quickSetLimit(phone, limit) {
-            db.ref('users/' + phone).update({ withdrawalLimit: limit });
-            triggerToast(limit > 0 ? 'Withdrawals Unlocked!' : 'Withdrawals Locked!');
         }
         
         function verifyUser(phone) {
@@ -1509,7 +1553,6 @@
         function downloadUserPDF(phone) {
             db.ref('users/' + phone).once('value', snap => {
                 const user = snap.exists() ? snap.val() : {};
-                
                 const createdDate = user.userSince ? new Date(user.userSince).toLocaleDateString() + ' ' + new Date(user.userSince).toLocaleTimeString() : 'N/A';
                 const loginCount = user.loginCount || 'N/A (not tracked)';
                 const balanceHistory = user.balanceHistory || [];
@@ -1529,81 +1572,31 @@
                                 <p style="margin: 4px 0 0; color: #64748b; font-size: 13px; letter-spacing: 2px;">OFFICIAL USER REPORT</p>
                             </div>
                         </div>
-                        
                         <h2 style="font-size: 22px; margin-bottom: 8px;">User Account Summary</h2>
                         <p style="color: #64748b; margin-bottom: 25px;">Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-                        
                         <div style="background: #f8fafc; padding: 24px; border-radius: 16px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
                             <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600; width: 200px;">Phone Number</td>
-                                    <td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${phone}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Username</td>
-                                    <td style="padding: 10px 0; font-weight: 700;">${user.username || 'N/A'}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Email / Gmail</td>
-                                    <td style="padding: 10px 0; font-weight: 700;">${user.gmail || 'N/A'}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Password</td>
-                                    <td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${user.password || 'N/A'}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Account Created</td>
-                                    <td style="padding: 10px 0; font-weight: 700;">${createdDate}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Current Balance</td>
-                                    <td style="padding: 10px 0; font-weight: 700; color: #059669;">Rs. ${(user.balance || 0).toFixed(0)}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Coins</td>
-                                    <td style="padding: 10px 0; font-weight: 700;">${user.coins || 0} 🪙</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Verification Status</td>
-                                    <td style="padding: 10px 0; font-weight: 700; text-transform: uppercase;">${user.verificationStatus || 'unverified'}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px 0; color: #475569; font-weight: 600;">Login Count</td>
-                                    <td style="padding: 10px 0; font-weight: 700;">${loginCount}</td>
-                                </tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600; width: 200px;">Phone Number</td><td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${phone}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Username</td><td style="padding: 10px 0; font-weight: 700;">${user.username || 'N/A'}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Email / Gmail</td><td style="padding: 10px 0; font-weight: 700;">${user.gmail || 'N/A'}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Password</td><td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${user.password || 'N/A'}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Account Created</td><td style="padding: 10px 0; font-weight: 700;">${createdDate}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Current Balance</td><td style="padding: 10px 0; font-weight: 700; color: #059669;">Rs. ${(user.balance || 0).toFixed(0)}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Coins</td><td style="padding: 10px 0; font-weight: 700;">${user.coins || 0} 🪙</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Verification Status</td><td style="padding: 10px 0; font-weight: 700; text-transform: uppercase;">${user.verificationStatus || 'unverified'}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Login Count</td><td style="padding: 10px 0; font-weight: 700;">${loginCount}</td></tr>
                             </table>
                         </div>
-                        
                         <h3 style="font-size: 16px; margin: 20px 0 10px; color: #334155;">Balance History &amp; Transactions</h3>
                         <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px; max-height: 220px; overflow-y: auto;">
-                            ${balanceHistory.length > 0 ? balanceHistory.map(h => `
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 13px;">
-                                    <span>${new Date(h.timestamp || Date.now()).toLocaleString()}</span>
-                                    <span style="font-weight: 600; color: ${h.type === 'credit' ? '#059669' : '#dc2626'};">${h.type === 'credit' ? '+' : ''}Rs. ${h.amount || 0}</span>
-                                </div>
-                            `).join('') : (transactions.length > 0 ? transactions.map(t => `
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 13px;">
-                                    <span>${t.date || 'N/A'} — ${t.type || 'Transaction'}</span>
-                                    <span style="font-weight: 600;">Rs. ${t.amount || 0}</span>
-                                </div>
-                            `).join('') : '<div style="color:#64748b; font-size:13px; padding:10px 0;">No detailed transaction history available in records.</div>')}
+                            ${balanceHistory.length > 0 ? balanceHistory.map(h => `<div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 13px;"><span>${new Date(h.timestamp || Date.now()).toLocaleString()}</span><span style="font-weight: 600; color: ${h.type === 'credit' ? '#059669' : '#dc2626'};">${h.type === 'credit' ? '+' : ''}Rs. ${h.amount || 0}</span></div>`).join('') : (transactions.length > 0 ? transactions.map(t => `<div style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 13px;"><span>${t.date || 'N/A'} — ${t.type || 'Transaction'}</span><span style="font-weight: 600;">Rs. ${t.amount || 0}</span></div>`).join('') : '<div style="color:#64748b; font-size:13px; padding:10px 0;">No detailed transaction history available in records.</div>')}
                         </div>
-                        
                         <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0; text-align: center;">
-                            <p style="color: #64748b; font-size: 12px;">
-                                This is a system generated report from Prime Horizon Admin Panel.<br>
-                                For any queries, contact support@primehorizon.app
-                            </p>
+                            <p style="color: #64748b; font-size: 12px;">This is a system generated report from Prime Horizon Admin Panel.<br>For any queries, contact support@primehorizon.app</p>
                         </div>
                     </div>
                 `;
-                
-                html2pdf().from(element).set({
-                    margin: 0,
-                    filename: `prime-horizon-user-report-${phone}.pdf`,
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-                }).save();
+                html2pdf().from(element).set({ margin: 0, filename: `prime-horizon-user-report-${phone}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' } }).save();
             });
         }
         
@@ -1614,62 +1607,131 @@
             if (!phone) return;
             const email = prompt("Enter Email (optional):") || '';
             const password = prompt("Set Password (default: 123456):") || '123456';
-            
             const cleanPhone = phone.replace(/\D/g, '');
-            
-            db.ref('users/' + cleanPhone).set({
-                username: username,
-                phone: cleanPhone,
-                gmail: email,
-                password: password,
-                balance: 0,
-                coins: 0,
-                verificationStatus: 'unverified',
-                status: 'active',
-                userSince: new Date().toISOString()
-            });
+            db.ref('users/' + cleanPhone).set({ username: username, phone: cleanPhone, gmail: email, password: password, balance: 0, coins: 0, verificationStatus: 'unverified', status: 'active', userSince: new Date().toISOString() });
             triggerToast('New user created successfully');
+        }
+
+        // ==================== KYC REQUESTS ====================
+        function loadKYCRequests() {
+            const container = document.getElementById('kyc-requests-feed');
+            showSkeletonLoader(container, 'list');
+            db.ref('admin_queues/kyc_requests').on('value', snap => {
+                container.innerHTML = '';
+                let pendingCount = 0;
+                if (!snap.exists()) { showEmptyState(container, 'No pending KYC requests', 'fa-id-card-clip'); updateBadge('badge-kyc', 0); return; }
+                
+                snap.forEach(child => {
+                    const req = child.val();
+                    if (req.status !== 'pending') return;
+                    pendingCount++;
+                    const div = document.createElement('div');
+                    div.className = 'glass p-5 rounded-3xl border border-slate-700/60 flex flex-col md:flex-row gap-4 justify-between items-center';
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2"><h4 class="font-extrabold text-lg">${req.fullName || 'N/A'}</h4><span class="px-2 py-0.5 text-[9px] bg-amber-500/20 text-amber-400 rounded-full font-bold uppercase">Pending</span></div>
+                            <div class="text-sm text-slate-400 mt-1">Username: <span class="text-white">${req.username || 'N/A'}</span> | Phone: <span class="font-mono text-emerald-400">${req.phone}</span></div>
+                            <div class="text-sm text-slate-400 mt-1">Date of Birth: <span class="text-white font-mono">${req.birthday || 'N/A'}</span></div>
+                            <div class="text-xs text-slate-500 mt-2">Submitted: ${new Date(req.timestamp).toLocaleString()}</div>
+                        </div>
+                        <div class="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
+                            <button onclick="approveKYC('${child.key}', '${req.phone}')" class="flex-1 md:flex-none px-6 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all">APPROVE</button>
+                            <button onclick="rejectKYC('${child.key}', '${req.phone}')" class="flex-1 md:flex-none px-6 py-3 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-sm font-extrabold transition-all">REJECT</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                if(pendingCount === 0) showEmptyState(container, 'No pending KYC requests', 'fa-id-card-clip');
+                updateBadge('badge-kyc', pendingCount);
+            });
+        }
+        
+        function approveKYC(reqId, phone) {
+            db.ref(`admin_queues/kyc_requests/${reqId}`).update({ status: 'Approved' });
+            db.ref(`users/${phone}`).update({ kycStatus: 'verified' });
+            triggerToast('KYC Approved successfully');
+        }
+        
+        function rejectKYC(reqId, phone) {
+            db.ref(`admin_queues/kyc_requests/${reqId}`).update({ status: 'Rejected' });
+            db.ref(`users/${phone}`).update({ kycStatus: 'unverified' });
+            triggerToast('KYC Rejected', 'error');
+        }
+
+        // ==================== PASSWORD RECOVERY REQUESTS ====================
+        function loadPasswordRequests() {
+            const container = document.getElementById('password-requests-feed');
+            showSkeletonLoader(container, 'list');
+            db.ref('admin_queues/password_requests').on('value', snap => {
+                container.innerHTML = '';
+                let pendingCount = 0;
+                if (!snap.exists()) { showEmptyState(container, 'No password recovery requests', 'fa-unlock-keyhole'); updateBadge('badge-password', 0); return; }
+                
+                snap.forEach(child => {
+                    const req = child.val();
+                    if (req.status !== 'pending') return;
+                    pendingCount++;
+                    const div = document.createElement('div');
+                    div.className = 'glass p-5 rounded-3xl border border-slate-700/60 flex flex-col md:flex-row gap-4 justify-between items-start';
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2"><h4 class="font-extrabold text-lg">${req.username || 'N/A'}</h4><span class="px-2 py-0.5 text-[9px] bg-rose-500/20 text-rose-400 rounded-full font-bold uppercase">Pending</span></div>
+                            <div class="text-sm text-slate-400 mt-1">Account Phone: <span class="text-white font-mono">${req.phone || 'N/A'}</span> | Email: <span class="text-white">${req.email || 'N/A'}</span></div>
+                            <div class="mt-4 p-4 bg-slate-900 rounded-2xl border border-slate-700 inline-block">
+                                <div class="text-xs text-slate-500 mb-1">WhatsApp Provided for Contact:</div>
+                                <div class="font-mono text-emerald-400 font-bold flex items-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> ${req.whatsappProvided || 'N/A'}</div>
+                            </div>
+                            <div class="mt-4 p-4 bg-slate-900 rounded-2xl border border-rose-500/30 inline-block ml-0 sm:ml-2">
+                                <div class="text-xs text-slate-500 mb-1">User's Found Password:</div>
+                                <div class="font-mono text-rose-400 font-bold tracking-wider text-lg">${req.foundPassword || 'Not Found'}</div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-4">Requested: ${new Date(req.timestamp).toLocaleString()}</div>
+                        </div>
+                        <div class="flex gap-3 w-full md:w-auto mt-4 md:mt-0 flex-col sm:flex-row md:flex-col">
+                            <a href="https://wa.me/${(req.whatsappProvided || '').replace(/\D/g, '')}?text=Hello ${req.username || ''}, your Prime Horizon system password is: ${req.foundPassword}" target="_blank" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all text-center flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp"></i> WhatsApp User</a>
+                            <button onclick="resolvePasswordReq('${child.key}')" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-800 rounded-2xl text-sm font-extrabold transition-all text-center">Mark Resolved</button>
+                            <button onclick="rejectPasswordReq('${child.key}')" class="px-6 py-3 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-sm font-extrabold transition-all text-center">Reject Request</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                if(pendingCount === 0) showEmptyState(container, 'No password recovery requests', 'fa-unlock-keyhole');
+                updateBadge('badge-password', pendingCount);
+            });
+        }
+        
+        function resolvePasswordReq(reqId) {
+            db.ref(`admin_queues/password_requests/${reqId}`).update({ status: 'Resolved' });
+            triggerToast('Request marked as resolved');
+        }
+        
+        function rejectPasswordReq(reqId) {
+            db.ref(`admin_queues/password_requests/${reqId}`).update({ status: 'Rejected' });
+            triggerToast('Request rejected', 'error');
         }
         
         // ==================== DEPOSITS ====================
         function loadDepositsAdvanced() {
             const container = document.getElementById('deposit-requests-feed');
             showSkeletonLoader(container, 'list');
-            
             db.ref('admin_queues/deposits').on('value', snap => {
                 container.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(container, 'No pending deposits at the moment', 'fa-wallet');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(container, 'No pending deposits at the moment', 'fa-wallet'); return; }
                 let hasPending = false;
-                
                 snap.forEach(child => {
                     const d = child.val();
                     if (d.status !== 'Pending') return;
                     hasPending = true;
-                    
                     const div = document.createElement('div');
                     div.className = 'glass p-5 rounded-3xl flex flex-col md:flex-row gap-5 items-center border border-slate-700/60';
                     div.innerHTML = `
                         <div class="flex-1 min-w-0">
                             <div class="font-extrabold text-lg">${d.username || 'Unknown User'}</div>
                             <div class="text-emerald-400 font-mono text-sm">${d.userPhone}</div>
-                            <div class="mt-3">
-                                <span class="text-xs text-slate-400">AMOUNT</span><br>
-                                <span class="font-black text-3xl">Rs. ${d.amount}</span>
-                            </div>
+                            <div class="mt-3"><span class="text-xs text-slate-400">AMOUNT</span><br><span class="font-black text-3xl">Rs. ${d.amount}</span></div>
                             <div class="text-xs text-slate-400 mt-2">TRX ID: <span class="font-mono">${d.trxId || 'N/A'}</span></div>
                         </div>
-                        
-                        <div class="flex-shrink-0">
-                            <a href="${d.proofUrl}" target="_blank" class="block">
-                                <img src="${d.proofUrl}" class="w-24 h-24 object-cover rounded-2xl border border-slate-600 shadow-lg" alt="Payment proof">
-                            </a>
-                        </div>
-                        
+                        <div class="flex-shrink-0"><a href="${d.proofUrl}" target="_blank" class="block"><img src="${d.proofUrl}" class="w-24 h-24 object-cover rounded-2xl border border-slate-600 shadow-lg" alt="Payment proof"></a></div>
                         <div class="flex flex-col sm:flex-row md:flex-col gap-2 w-full md:w-auto">
                             <button onclick="approveDeposit('${child.key}', '${d.userPhone}', ${d.amount})" class="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all whitespace-nowrap">APPROVE</button>
                             <button onclick="rejectDeposit('${child.key}')" class="px-8 py-3 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-sm font-extrabold transition-all whitespace-nowrap">REJECT</button>
@@ -1677,20 +1739,14 @@
                     `;
                     container.appendChild(div);
                 });
-                
-                if (!hasPending) {
-                    showEmptyState(container, 'No pending deposits at the moment', 'fa-wallet');
-                }
+                if (!hasPending) { showEmptyState(container, 'No pending deposits at the moment', 'fa-wallet'); }
             });
         }
         
         function approveDeposit(id, phone, amount) {
             db.ref('admin_queues/deposits/' + id).update({ status: 'Approved' });
             db.ref('users/' + phone).transaction(u => {
-                if (u) {
-                    u.balance = Number(u.balance || 0) + amount;
-                    u.totalDeposit = Number(u.totalDeposit || 0) + amount;
-                }
+                if (u) { u.balance = Number(u.balance || 0) + amount; u.totalDeposit = Number(u.totalDeposit || 0) + amount; }
                 return u;
             });
             triggerToast('Deposit approved and balance updated');
@@ -1705,22 +1761,14 @@
         function loadWithdrawalsAdvanced() {
             const container = document.getElementById('withdrawal-requests-feed');
             showSkeletonLoader(container, 'list');
-            
             db.ref('admin_queues/withdrawals').on('value', snap => {
                 container.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(container, 'No pending withdrawals at the moment', 'fa-hand-holding-dollar');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(container, 'No pending withdrawals at the moment', 'fa-hand-holding-dollar'); return; }
                 let hasPending = false;
-                
                 snap.forEach(child => {
                     const w = child.val();
                     if (w.status !== 'Pending') return;
                     hasPending = true;
-                    
                     const div = document.createElement('div');
                     div.className = 'glass p-5 rounded-3xl border border-slate-700/60';
                     div.innerHTML = `
@@ -1728,22 +1776,13 @@
                             <div class="flex-1">
                                 <div class="font-extrabold text-lg">${w.username || 'Unknown User'}</div>
                                 <div class="text-sm text-purple-400 font-mono">${w.userPhone}</div>
-                                
-                                <div class="mt-4 text-sm">
-                                    <div><strong>Account Title:</strong> ${w.accountTitle || 'N/A'}</div>
-                                    <div class="font-mono text-xs mt-0.5">${w.accountNumber || ''}</div>
-                                </div>
+                                <div class="mt-4 text-sm"><div><strong>Account Title:</strong> ${w.accountTitle || 'N/A'}</div><div class="font-mono text-xs mt-0.5">${w.accountNumber || ''}</div></div>
                             </div>
-                            
                             <div class="text-right">
-                                <div>
-                                    <span class="text-xs text-slate-400">AMOUNT</span><br>
-                                    <span class="font-black text-3xl">Rs. ${w.amount}</span>
-                                </div>
+                                <div><span class="text-xs text-slate-400">AMOUNT</span><br><span class="font-black text-3xl">Rs. ${w.amount}</span></div>
                                 <div class="text-xs mt-1 text-slate-400">${w.method || 'Bank Transfer'}</div>
                             </div>
                         </div>
-                        
                         <div class="flex gap-3 mt-6">
                             <button onclick="approveWithdrawal('${child.key}', '${w.userPhone}', ${w.amount})" class="flex-1 py-3.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold transition-all">APPROVE</button>
                             <button onclick="rejectWithdrawal('${child.key}', '${w.userPhone}', ${w.amount})" class="flex-1 py-3.5 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold transition-all">REJECT + REFUND</button>
@@ -1751,10 +1790,7 @@
                     `;
                     container.appendChild(div);
                 });
-                
-                if (!hasPending) {
-                    showEmptyState(container, 'No pending withdrawals at the moment', 'fa-hand-holding-dollar');
-                }
+                if (!hasPending) { showEmptyState(container, 'No pending withdrawals at the moment', 'fa-hand-holding-dollar'); }
             });
         }
         
@@ -1766,10 +1802,7 @@
         function rejectWithdrawal(id, phone, amount) {
             if (!confirm('Reject this withdrawal and refund the amount to user balance?')) return;
             db.ref('admin_queues/withdrawals/' + id).update({ status: 'Rejected' });
-            db.ref('users/' + phone).transaction(u => {
-                if (u) u.balance = Number(u.balance || 0) + amount;
-                return u;
-            });
+            db.ref('users/' + phone).transaction(u => { if (u) u.balance = Number(u.balance || 0) + amount; return u; });
             triggerToast('Withdrawal rejected and amount refunded');
         }
         
@@ -1777,26 +1810,15 @@
         function loadPlans() {
             const container = document.getElementById('plans-list');
             showSkeletonLoader(container, 'list');
-            
             db.ref('investment_plans').on('value', snap => {
                 container.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(container, 'No investment plans added yet', 'fa-seedling');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(container, 'No investment plans added yet', 'fa-seedling'); return; }
                 snap.forEach(child => {
                     const plan = child.val();
                     const div = document.createElement('div');
                     div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-700 last:border-0 gap-3';
                     div.innerHTML = `
-                        <div class="flex-1">
-                            <span class="font-extrabold text-lg">${plan.name}</span>
-                            <div class="text-sm text-slate-400 mt-1">
-                                Rs.${plan.cost} • ${plan.days} days • ${plan.percentage}% daily return
-                            </div>
-                        </div>
+                        <div class="flex-1"><span class="font-extrabold text-lg">${plan.name}</span><div class="text-sm text-slate-400 mt-1">Rs.${plan.cost} • ${plan.days} days • ${plan.percentage}% daily return</div></div>
                         <button onclick="deletePlan('${child.key}')" class="px-6 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-2xl font-bold transition-colors">Delete Plan</button>
                     `;
                     container.appendChild(div);
@@ -1813,48 +1835,25 @@
             if (!days) return;
             const percentage = prompt("Daily Return %:");
             if (!percentage) return;
-            
-            db.ref('investment_plans/PLAN-' + Date.now()).set({
-                name: name,
-                cost: parseFloat(cost),
-                days: parseInt(days),
-                percentage: parseFloat(percentage)
-            });
+            db.ref('investment_plans/PLAN-' + Date.now()).set({ name: name, cost: parseFloat(cost), days: parseInt(days), percentage: parseFloat(percentage) });
             triggerToast('Investment plan added successfully');
         }
         
-        function deletePlan(id) {
-            if (confirm('Delete this investment plan permanently?')) {
-                db.ref('investment_plans/' + id).remove();
-                triggerToast('Plan deleted');
-            }
-        }
+        function deletePlan(id) { if (confirm('Delete this investment plan permanently?')) { db.ref('investment_plans/' + id).remove(); triggerToast('Plan deleted'); } }
         
         // ==================== TASKS ====================
         function loadTasks() {
             const container = document.getElementById('tasks-list');
             showSkeletonLoader(container, 'list');
-            
             db.ref('daily_tasks').on('value', snap => {
                 container.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(container, 'No daily tasks added yet', 'fa-list-check');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(container, 'No daily tasks added yet', 'fa-list-check'); return; }
                 snap.forEach(child => {
                     const task = child.val();
                     const div = document.createElement('div');
                     div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-700 last:border-0 gap-3';
                     div.innerHTML = `
-                        <div class="flex-1">
-                            <div class="font-extrabold">${task.title || 'Untitled Task'}</div>
-                            <div class="text-sm text-slate-400 mt-1">${task.description || ''}</div>
-                            <div class="mt-2">
-                                <span class="inline-block px-3 py-1 bg-purple-600/20 text-purple-400 text-xs font-extrabold rounded-full">${task.rewardCoins || 0} Coins Reward</span>
-                            </div>
-                        </div>
+                        <div class="flex-1"><div class="font-extrabold">${task.title || 'Untitled Task'}</div><div class="text-sm text-slate-400 mt-1">${task.description || ''}</div><div class="mt-2"><span class="inline-block px-3 py-1 bg-purple-600/20 text-purple-400 text-xs font-extrabold rounded-full">${task.rewardCoins || 0} Coins Reward</span></div></div>
                         <button onclick="deleteTask('${child.key}')" class="px-6 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-2xl font-bold transition-colors">Delete</button>
                     `;
                     container.appendChild(div);
@@ -1868,46 +1867,25 @@
             const description = prompt("Task Description:") || '';
             const reward = prompt("Reward Coins:");
             if (!reward) return;
-            
-            db.ref('daily_tasks/TASK-' + Date.now()).set({
-                title: title,
-                description: description,
-                rewardCoins: parseInt(reward)
-            });
+            db.ref('daily_tasks/TASK-' + Date.now()).set({ title: title, description: description, rewardCoins: parseInt(reward) });
             triggerToast('Daily task added successfully');
         }
         
-        function deleteTask(id) {
-            if (confirm('Delete this daily task?')) {
-                db.ref('daily_tasks/' + id).remove();
-            }
-        }
+        function deleteTask(id) { if (confirm('Delete this daily task?')) { db.ref('daily_tasks/' + id).remove(); } }
         
         // ==================== SOCIAL ====================
         function loadSocialChannels() {
             const container = document.getElementById('social-list');
             showSkeletonLoader(container, 'list');
-            
             db.ref('social_channels').on('value', snap => {
                 container.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(container, 'No social channels added yet', 'fa-share-alt');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(container, 'No social channels added yet', 'fa-share-alt'); return; }
                 snap.forEach(child => {
                     const channel = child.val();
                     const div = document.createElement('div');
                     div.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-slate-700 last:border-0 gap-3';
                     div.innerHTML = `
-                        <div class="flex-1">
-                            <div class="font-extrabold flex items-center gap-2">
-                                <i class="fa-brands fa-telegram text-xl text-sky-400"></i>
-                                ${channel.name || 'Untitled Channel'}
-                            </div>
-                            <a href="${channel.url}" target="_blank" class="text-sm text-emerald-400 hover:underline break-all">${channel.url}</a>
-                        </div>
+                        <div class="flex-1"><div class="font-extrabold flex items-center gap-2"><i class="fa-brands fa-telegram text-xl text-sky-400"></i>${channel.name || 'Untitled Channel'}</div><a href="${channel.url}" target="_blank" class="text-sm text-emerald-400 hover:underline break-all">${channel.url}</a></div>
                         <button onclick="deleteSocialChannel('${child.key}')" class="px-6 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-2xl font-bold transition-colors">Delete</button>
                     `;
                     container.appendChild(div);
@@ -1920,65 +1898,36 @@
             if (!name) return;
             const url = prompt("Channel URL:");
             if (!url) return;
-            
-            db.ref('social_channels/CH-' + Date.now()).set({
-                name: name,
-                url: url
-            });
+            db.ref('social_channels/CH-' + Date.now()).set({ name: name, url: url });
             triggerToast('Social channel added successfully');
         }
         
-        function deleteSocialChannel(id) {
-            if (confirm('Delete this social channel?')) {
-                db.ref('social_channels/' + id).remove();
-            }
-        }
+        function deleteSocialChannel(id) { if (confirm('Delete this social channel?')) { db.ref('social_channels/' + id).remove(); } }
         
         // ==================== LIVE CHAT ====================
         function loadSupportChannels() {
             const container = document.getElementById('support-active-channels-list');
             const countEl = document.getElementById('support-channel-count');
-            
             db.ref('support_channels').on('value', snap => {
                 container.innerHTML = '';
                 let count = 0;
-                
-                if (!snap.exists()) {
-                    container.innerHTML = `<div class="text-center text-sm text-slate-400 py-8">No active support chats</div>`;
-                    if (countEl) countEl.innerText = '0';
-                    return;
-                }
-                
+                if (!snap.exists()) { container.innerHTML = `<div class="text-center text-sm text-slate-400 py-8">No active support chats</div>`; if (countEl) countEl.innerText = '0'; return; }
                 snap.forEach(child => {
                     const meta = child.val().meta || {};
                     const lastMsgTime = child.val().lastMessageAt || 0;
                     const hasMessages = child.val().messages && Object.keys(child.val().messages).length > 0;
-                    
                     if (!hasMessages) return;
-                    
                     count++;
                     const isNew = lastMsgTime && (Date.now() - lastMsgTime < 1000 * 60 * 15);
-                    
                     const btn = document.createElement('button');
                     btn.className = `w-full text-left p-3.5 rounded-2xl flex items-center gap-3 hover:bg-slate-800 transition-colors ${selectedChatPhone === child.key ? 'bg-slate-800 ring-1 ring-cyan-500/30' : ''}`;
                     btn.innerHTML = `
                         <img src="${meta.avatarUrl || 'https://i.pravatar.cc/36'}" class="w-9 h-9 rounded-2xl object-cover border border-slate-600 flex-shrink-0" alt="">
-                        <div class="flex-1 min-w-0 text-left">
-                            <div class="font-extrabold truncate flex items-center gap-2">
-                                ${meta.username || child.key}
-                                ${isNew ? '<span class="px-1.5 py-0.5 text-[9px] bg-red-500 text-white font-extrabold rounded">NEW</span>' : ''}
-                            </div>
-                            <div class="text-xs text-slate-400 font-mono truncate">${child.key}</div>
-                        </div>
+                        <div class="flex-1 min-w-0 text-left"><div class="font-extrabold truncate flex items-center gap-2">${meta.username || child.key} ${isNew ? '<span class="px-1.5 py-0.5 text-[9px] bg-red-500 text-white font-extrabold rounded">NEW</span>' : ''}</div><div class="text-xs text-slate-400 font-mono truncate">${child.key}</div></div>
                     `;
-                    btn.onclick = () => {
-                        openChat(child.key);
-                        document.querySelectorAll('#support-active-channels-list button').forEach(b => b.classList.remove('bg-slate-800', 'ring-1', 'ring-cyan-500/30'));
-                        btn.classList.add('bg-slate-800', 'ring-1', 'ring-cyan-500/30');
-                    };
+                    btn.onclick = () => { openChat(child.key); document.querySelectorAll('#support-active-channels-list button').forEach(b => b.classList.remove('bg-slate-800', 'ring-1', 'ring-cyan-500/30')); btn.classList.add('bg-slate-800', 'ring-1', 'ring-cyan-500/30'); };
                     container.appendChild(btn);
                 });
-                
                 if (countEl) countEl.innerText = count;
             });
         }
@@ -1989,53 +1938,25 @@
             const phoneEl = document.getElementById('chat-header-user-phone');
             const avatarEl = document.getElementById('chat-header-avatar');
             const statusDot = document.getElementById('chat-status-dot');
-            
             titleEl.innerText = phone;
             phoneEl.innerText = phone;
             avatarEl.classList.remove('hidden');
             if (statusDot) statusDot.classList.remove('hidden');
-            
             const viewport = document.getElementById('admin-chat-messages-viewport');
             viewport.innerHTML = '';
-            
             db.ref('support_channels/' + phone + '/messages').on('value', snap => {
                 viewport.innerHTML = '';
-                if (!snap.exists()) {
-                    const empty = document.createElement('div');
-                    empty.className = 'flex items-center justify-center h-full text-slate-400 text-sm';
-                    empty.innerHTML = 'No messages yet. Start the conversation!';
-                    viewport.appendChild(empty);
-                    return;
-                }
-                
+                if (!snap.exists()) { viewport.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 text-sm">No messages yet. Start the conversation!</div>'; return; }
                 snap.forEach(msg => {
                     const m = msg.val();
                     const isAdmin = m.sender === 'admin';
                     const div = document.createElement('div');
                     div.className = `flex ${isAdmin ? 'justify-end' : 'justify-start'}`;
-                    
                     let content = m.text || '';
-                    if (m.imageUrl) {
-                        content += `<img src="${m.imageUrl}" class="mt-2 rounded-xl max-w-[220px] border border-slate-600">`;
-                    }
-                    
+                    if (m.imageUrl) { content += `<img src="${m.imageUrl}" class="mt-2 rounded-xl max-w-[220px] border border-slate-600">`; }
                     let actionsHtml = '';
-                    if (isAdmin) {
-                        actionsHtml = `
-                            <div class="flex gap-1 mt-1 justify-end">
-                                <button onclick="editAdminMessage('${phone}', '${msg.key}', '${(m.text || '').replace(/'/g, "\\'")}')" class="text-[10px] px-1.5 py-0.5 bg-white/20 hover:bg-white/30 rounded text-white">Edit</button>
-                                <button onclick="deleteAdminMessage('${phone}', '${msg.key}')" class="text-[10px] px-1.5 py-0.5 bg-white/20 hover:bg-white/30 rounded text-white">Del</button>
-                            </div>
-                        `;
-                    }
-                    
-                    div.innerHTML = `
-                        <div class="chat-bubble ${isAdmin ? 'admin-chat-bubble' : 'user-chat-bubble'}">
-                            ${content}
-                            <div class="text-[10px] mt-1.5 opacity-60 text-right">${new Date(m.timestamp || Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
-                            ${actionsHtml}
-                        </div>
-                    `;
+                    if (isAdmin) { actionsHtml = `<div class="flex gap-1 mt-1 justify-end"><button onclick="editAdminMessage('${phone}', '${msg.key}', '${(m.text || '').replace(/'/g, "\\'")}')" class="text-[10px] px-1.5 py-0.5 bg-white/20 hover:bg-white/30 rounded text-white">Edit</button><button onclick="deleteAdminMessage('${phone}', '${msg.key}')" class="text-[10px] px-1.5 py-0.5 bg-white/20 hover:bg-white/30 rounded text-white">Del</button></div>`; }
+                    div.innerHTML = `<div class="chat-bubble ${isAdmin ? 'admin-chat-bubble' : 'user-chat-bubble'}">${content}<div class="text-[10px] mt-1.5 opacity-60 text-right">${new Date(m.timestamp || Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>${actionsHtml}</div>`;
                     viewport.appendChild(div);
                 });
                 viewport.scrollTop = viewport.scrollHeight;
@@ -2043,58 +1964,29 @@
         }
         
         async function transmitAdminLiveChatMessage() {
-            if (!selectedChatPhone) {
-                triggerToast('Please select a chat first', 'error');
-                return;
-            }
-            
+            if (!selectedChatPhone) { triggerToast('Please select a chat first', 'error'); return; }
             const input = document.getElementById('admin-chat-message-field');
             const text = input.value.trim();
-            
             if (!text && !adminChatAttachmentFile) return;
-            
             let imageUrl = '';
             if (adminChatAttachmentFile) {
-                const formData = new FormData();
-                formData.append('file', adminChatAttachmentFile);
-                formData.append('upload_preset', CLOUDINARY_PRESET);
-                
-                try {
-                    const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
-                    const data = await res.json();
-                    imageUrl = data.secure_url || '';
-                } catch (e) {
-                    triggerToast('Failed to upload image', 'error');
-                }
+                const formData = new FormData(); formData.append('file', adminChatAttachmentFile); formData.append('upload_preset', CLOUDINARY_PRESET);
+                try { const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData }); const data = await res.json(); imageUrl = data.secure_url || ''; } 
+                catch (e) { triggerToast('Failed to upload image', 'error'); }
             }
-            
-            await db.ref('support_channels/' + selectedChatPhone + '/messages').push({
-                sender: 'admin',
-                text: text,
-                imageUrl: imageUrl,
-                timestamp: Date.now()
-            });
-            
-            input.value = '';
-            adminChatAttachmentFile = null;
+            await db.ref('support_channels/' + selectedChatPhone + '/messages').push({ sender: 'admin', text: text, imageUrl: imageUrl, timestamp: Date.now() });
+            input.value = ''; adminChatAttachmentFile = null;
         }
         
         function handleAdminChatImageFileSelectionEvent(e) {
             adminChatAttachmentFile = e.target.files[0];
-            if (adminChatAttachmentFile) {
-                triggerToast('Image attached. Send message to upload.');
-            }
+            if (adminChatAttachmentFile) { triggerToast('Image attached. Send message to upload.'); }
         }
         
         function editAdminMessage(phone, msgId, currentText) {
             const newText = prompt('Edit your message:', currentText);
             if (newText === null || newText.trim() === '') return;
-            
-            db.ref(`support_channels/${phone}/messages/${msgId}`).update({
-                text: newText.trim(),
-                edited: true,
-                editedAt: Date.now()
-            });
+            db.ref(`support_channels/${phone}/messages/${msgId}`).update({ text: newText.trim(), edited: true, editedAt: Date.now() });
             triggerToast('Message updated');
         }
         
@@ -2108,52 +2000,28 @@
         function loadFeedbackAndAppeals() {
             const fbContainer = document.getElementById('feedback-list');
             showSkeletonLoader(fbContainer, 'list');
-            
             db.ref('admin_feedbacks').on('value', snap => {
                 fbContainer.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(fbContainer, 'No user feedback yet', 'fa-comments');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(fbContainer, 'No user feedback yet', 'fa-comments'); return; }
                 snap.forEach(userFb => {
                     userFb.forEach(fb => {
                         const data = fb.val();
                         const div = document.createElement('div');
                         div.className = 'p-4 border-b border-slate-700 last:border-0';
                         div.innerHTML = `
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="font-extrabold">${data.username || 'Anonymous'}</div>
-                                    <div class="text-xs text-slate-400 font-mono">${userFb.key}</div>
-                                </div>
-                            </div>
+                            <div class="flex justify-between items-start"><div><div class="font-extrabold">${data.username || 'Anonymous'}</div><div class="text-xs text-slate-400 font-mono">${userFb.key}</div></div></div>
                             <p class="text-sm mt-3 leading-relaxed">${data.text || ''}</p>
-                            
-                            ${data.adminReply ? 
-                                `<div class="mt-3 p-3 bg-slate-800 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${data.adminReply}</div>` : 
-                                `<div class="mt-3">
-                                    <input placeholder="Write reply..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl w-full outline-none" onblur="replyToFeedback('${userFb.key}', '${fb.key}', this.value)">
-                                </div>`
-                            }
+                            ${data.adminReply ? `<div class="mt-3 p-3 bg-slate-800 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${data.adminReply}</div>` : `<div class="mt-3"><input placeholder="Write reply..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-emerald-500 rounded-2xl w-full outline-none" onblur="replyToFeedback('${userFb.key}', '${fb.key}', this.value)"></div>`}
                         `;
                         fbContainer.appendChild(div);
                     });
                 });
             });
-            
             const apContainer = document.getElementById('appeals-list');
             showSkeletonLoader(apContainer, 'list');
-            
             db.ref('admin_queues/appeals').on('value', snap => {
                 apContainer.innerHTML = '';
-                
-                if (!snap.exists()) {
-                    showEmptyState(apContainer, 'No suspension appeals', 'fa-gavel');
-                    return;
-                }
-                
+                if (!snap.exists()) { showEmptyState(apContainer, 'No suspension appeals', 'fa-gavel'); return; }
                 snap.forEach(child => {
                     const a = child.val();
                     const div = document.createElement('div');
@@ -2161,18 +2029,8 @@
                     div.innerHTML = `
                         <div class="font-extrabold">${a.username || 'User'} <span class="font-mono text-xs text-slate-400">(${a.phone || ''})</span></div>
                         <p class="text-sm mt-2 leading-relaxed">${a.message || ''}</p>
-                        
-                        ${a.adminReply ? 
-                            `<div class="mt-3 p-3 bg-emerald-900/30 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${a.adminReply}</div>` : 
-                            `<div class="mt-3">
-                                <input placeholder="Write reply..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-purple-500 rounded-2xl w-full outline-none" onblur="replyToAppeal('${child.key}', this.value)">
-                            </div>`
-                        }
-                        
-                        <div class="flex gap-2 mt-3">
-                            <button onclick="resolveAppeal('${child.key}')" class="flex-1 py-2 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold">RESOLVE / APPROVE</button>
-                            <button onclick="deleteAppeal('${child.key}')" class="flex-1 py-2 text-xs bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold">DELETE</button>
-                        </div>
+                        ${a.adminReply ? `<div class="mt-3 p-3 bg-emerald-900/30 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${a.adminReply}</div>` : `<div class="mt-3"><input placeholder="Write reply..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-purple-500 rounded-2xl w-full outline-none" onblur="replyToAppeal('${child.key}', this.value)"></div>`}
+                        <div class="flex gap-2 mt-3"><button onclick="resolveAppeal('${child.key}')" class="flex-1 py-2 text-xs bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl font-extrabold">RESOLVE / APPROVE</button><button onclick="deleteAppeal('${child.key}')" class="flex-1 py-2 text-xs bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl font-extrabold">DELETE</button></div>
                     `;
                     apContainer.appendChild(div);
                 });
@@ -2207,84 +2065,42 @@
         function loadComplaints() {
             const container = document.getElementById('complaints-feed');
             showSkeletonLoader(container, 'list');
-            
             db.ref('support_channels').on('value', rootSnap => {
                 container.innerHTML = '';
                 let allTickets = [];
-                
-                if (!rootSnap.exists()) {
-                    showEmptyState(container, 'No complaints/tickets from users yet', 'fa-exclamation-triangle');
-                    return;
-                }
-                
+                if (!rootSnap.exists()) { showEmptyState(container, 'No complaints/tickets from users yet', 'fa-exclamation-triangle'); return; }
                 rootSnap.forEach(phoneSnap => {
                     const phone = phoneSnap.key;
                     const ticketsSnap = phoneSnap.child('tickets');
-                    
                     if (ticketsSnap.exists()) {
                         ticketsSnap.forEach(ticketChild => {
                             const ticket = ticketChild.val();
                             allTickets.push({
-                                id: ticketChild.key,
-                                userPhone: phone,
-                                username: ticket.username || phone,
-                                message: ticket.description || ticket.message || 'No description provided',
-                                category: ticket.category || 'General Issue',
-                                proofUrl: ticket.proofUrl || null,
-                                createdAt: ticket.timestamp || Date.now(),
-                                adminReply: ticket.adminReply || '',
-                                status: ticket.status || 'Pending'
+                                id: ticketChild.key, userPhone: phone, username: ticket.username || phone, message: ticket.description || ticket.message || 'No description provided',
+                                category: ticket.category || 'General Issue', proofUrl: ticket.proofUrl || null, createdAt: ticket.timestamp || Date.now(), adminReply: ticket.adminReply || '', status: ticket.status || 'Pending'
                             });
                         });
                     }
                 });
                 
-                if (allTickets.length === 0) {
-                    showEmptyState(container, 'No complaints/tickets from users yet', 'fa-exclamation-triangle');
-                    return;
-                }
-                
+                if (allTickets.length === 0) { showEmptyState(container, 'No complaints/tickets from users yet', 'fa-exclamation-triangle'); return; }
                 allTickets.sort((a, b) => b.createdAt - a.createdAt);
-                
                 allTickets.forEach(c => {
                     const div = document.createElement('div');
                     div.className = 'glass p-5 rounded-3xl border border-slate-700/60';
-                    
                     const isNew = (Date.now() - c.createdAt) < (1000 * 60 * 30);
-                    
                     let proofHtml = '';
-                    if (c.proofUrl && c.proofUrl !== 'NONE') {
-                        proofHtml = `<a href="${c.proofUrl}" target="_blank" class="inline-block mt-2"><img src="${c.proofUrl}" class="w-16 h-16 object-cover rounded-xl border border-slate-600"></a>`;
-                    }
-                    
+                    if (c.proofUrl && c.proofUrl !== 'NONE') { proofHtml = `<a href="${c.proofUrl}" target="_blank" class="inline-block mt-2"><img src="${c.proofUrl}" class="w-16 h-16 object-cover rounded-xl border border-slate-600"></a>`; }
                     div.innerHTML = `
                         <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
                             <div class="flex-1">
-                                <div class="flex items-center gap-2 flex-wrap mb-1">
-                                    <div class="font-extrabold text-lg">${c.username}</div>
-                                    <span class="px-2 py-0.5 text-[9px] bg-orange-500/20 text-orange-400 rounded-full font-bold">${c.category}</span>
-                                    ${isNew ? '<span class="px-2.5 py-0.5 text-[10px] bg-orange-500 text-white font-extrabold rounded-full animate-pulse">NEW</span>' : ''}
-                                </div>
+                                <div class="flex items-center gap-2 flex-wrap mb-1"><div class="font-extrabold text-lg">${c.username}</div><span class="px-2 py-0.5 text-[9px] bg-orange-500/20 text-orange-400 rounded-full font-bold">${c.category}</span>${isNew ? '<span class="px-2.5 py-0.5 text-[10px] bg-orange-500 text-white font-extrabold rounded-full animate-pulse">NEW</span>' : ''}</div>
                                 <div class="text-sm text-orange-400 font-mono">${c.userPhone}</div>
-                                
-                                <div class="mt-3 text-sm leading-relaxed bg-slate-900/60 p-3 rounded-2xl">
-                                    ${c.message}
-                                </div>
-                                
+                                <div class="mt-3 text-sm leading-relaxed bg-slate-900/60 p-3 rounded-2xl">${c.message}</div>
                                 ${proofHtml}
-                                
-                                ${c.adminReply ? 
-                                    `<div class="mt-3 p-3 bg-emerald-900/30 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${c.adminReply}</div>` : 
-                                    `<div class="mt-3">
-                                        <input placeholder="Write reply to user..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-orange-500 rounded-2xl w-full outline-none" onblur="replyToComplaint('${c.id}', this.value, '${c.userPhone}')">
-                                    </div>`
-                                }
+                                ${c.adminReply ? `<div class="mt-3 p-3 bg-emerald-900/30 rounded-2xl text-xs"><strong class="text-emerald-400">Your Reply:</strong> ${c.adminReply}</div>` : `<div class="mt-3"><input placeholder="Write reply to user..." class="text-xs px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-orange-500 rounded-2xl w-full outline-none" onblur="replyToComplaint('${c.id}', this.value, '${c.userPhone}')"></div>`}
                             </div>
-                            
-                            <div class="flex flex-col gap-2 w-full md:w-auto pt-2">
-                                <button onclick="resolveComplaint('${c.id}', '${c.userPhone}')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-xs font-extrabold transition-all">RESOLVE</button>
-                                <button onclick="deleteComplaint('${c.id}', '${c.userPhone}')" class="px-5 py-2 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-xs font-extrabold transition-all">DELETE</button>
-                            </div>
+                            <div class="flex flex-col gap-2 w-full md:w-auto pt-2"><button onclick="resolveComplaint('${c.id}', '${c.userPhone}')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-xs font-extrabold transition-all">RESOLVE</button><button onclick="deleteComplaint('${c.id}', '${c.userPhone}')" class="px-5 py-2 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-xs font-extrabold transition-all">DELETE</button></div>
                         </div>
                     `;
                     container.appendChild(div);
@@ -2294,19 +2110,13 @@
         
         function replyToComplaint(ticketId, reply, userPhone) {
             if (!reply || !reply.trim() || !userPhone) return;
-            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).update({ 
-                adminReply: reply.trim(),
-                repliedAt: Date.now()
-            });
+            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).update({ adminReply: reply.trim(), repliedAt: Date.now() });
             triggerToast('Reply sent to user');
         }
         
         function resolveComplaint(ticketId, userPhone) {
             if (!confirm('Mark this complaint/ticket as resolved?')) return;
-            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).update({ 
-                status: 'Resolved', 
-                resolvedAt: Date.now() 
-            });
+            db.ref(`support_channels/${userPhone}/tickets/${ticketId}`).update({ status: 'Resolved', resolvedAt: Date.now() });
             triggerToast('Complaint resolved successfully');
         }
         
@@ -2319,9 +2129,7 @@
         // ==================== USER HISTORY ====================
         function loadHistorySection() {
             const container = document.getElementById('history-results-container');
-            if (container && !container.dataset.searched) {
-                showEmptyState(container, "Search above to view a user's complete activity history", 'fa-clock-rotate-left');
-            }
+            if (container && !container.dataset.searched) { showEmptyState(container, "Search above to view a user's complete activity history", 'fa-clock-rotate-left'); }
         }
         
         async function performHistorySearch() {
@@ -2329,11 +2137,7 @@
             const rawInput = inputEl.value.trim();
             const container = document.getElementById('history-results-container');
             
-            if (!rawInput) {
-                triggerToast('Please enter a search term', 'error');
-                return;
-            }
-            
+            if (!rawInput) { triggerToast('Please enter a search term', 'error'); return; }
             container.dataset.searched = 'true';
             showSkeletonLoader(container, 'user');
             
@@ -2341,54 +2145,27 @@
                 let targetPhone = null;
                 const cleanedInput = rawInput.replace(/\s/g, '');
                 
-                // 1. Direct phone number match
                 const directUserSnap = await db.ref('users/' + cleanedInput).once('value');
-                if (directUserSnap.exists()) {
-                    targetPhone = cleanedInput;
-                }
+                if (directUserSnap.exists()) { targetPhone = cleanedInput; }
                 
-                // 2. Gmail match across all users
                 if (!targetPhone) {
                     const usersSnap = await db.ref('users').once('value');
                     if (usersSnap.exists()) {
-                        usersSnap.forEach(child => {
-                            const u = child.val();
-                            if (u.gmail && u.gmail.toLowerCase() === rawInput.toLowerCase()) {
-                                targetPhone = child.key;
-                            }
-                        });
+                        usersSnap.forEach(child => { const u = child.val(); if (u.gmail && u.gmail.toLowerCase() === rawInput.toLowerCase()) { targetPhone = child.key; } });
                     }
                 }
                 
-                // 3. Deposit ID match
                 if (!targetPhone) {
                     const depSnap = await db.ref('admin_queues/deposits').once('value');
-                    if (depSnap.exists()) {
-                        depSnap.forEach(child => {
-                            if (child.key === rawInput) {
-                                targetPhone = child.val().userPhone;
-                            }
-                        });
-                    }
+                    if (depSnap.exists()) { depSnap.forEach(child => { if (child.key === rawInput) { targetPhone = child.val().userPhone; } }); }
                 }
                 
-                // 4. Withdraw ID match
                 if (!targetPhone) {
                     const wSnap = await db.ref('admin_queues/withdrawals').once('value');
-                    if (wSnap.exists()) {
-                        wSnap.forEach(child => {
-                            if (child.key === rawInput) {
-                                targetPhone = child.val().userPhone;
-                            }
-                        });
-                    }
+                    if (wSnap.exists()) { wSnap.forEach(child => { if (child.key === rawInput) { targetPhone = child.val().userPhone; } }); }
                 }
                 
-                if (!targetPhone) {
-                    showEmptyState(container, 'No user found matching "' + rawInput + '"', 'fa-user-slash');
-                    return;
-                }
-                
+                if (!targetPhone) { showEmptyState(container, 'No user found matching "' + rawInput + '"', 'fa-user-slash'); return; }
                 await renderUserHistory(targetPhone, container);
                 
             } catch (err) {
@@ -2402,10 +2179,8 @@
             const user = userSnap.exists() ? userSnap.val() : {};
             
             const [depSnap, wSnap, ticketsSnap, fbSnap] = await Promise.all([
-                db.ref('admin_queues/deposits').once('value'),
-                db.ref('admin_queues/withdrawals').once('value'),
-                db.ref('support_channels/' + phone + '/tickets').once('value'),
-                db.ref('admin_feedbacks/' + phone).once('value')
+                db.ref('admin_queues/deposits').once('value'), db.ref('admin_queues/withdrawals').once('value'),
+                db.ref('support_channels/' + phone + '/tickets').once('value'), db.ref('admin_feedbacks/' + phone).once('value')
             ]);
             
             let timeline = [];
@@ -2417,13 +2192,7 @@
                     if (d.userPhone === phone) {
                         depositCount++;
                         if (d.status === 'Approved') totalDeposit += Number(d.amount || 0);
-                        timeline.push({
-                            type: 'Deposit',
-                            id: child.key,
-                            amount: d.amount,
-                            status: d.status || 'Pending',
-                            timestamp: d.timestamp || d.createdAt || 0
-                        });
+                        timeline.push({ type: 'Deposit', id: child.key, amount: d.amount, status: d.status || 'Pending', timestamp: d.timestamp || d.createdAt || 0 });
                     }
                 });
             }
@@ -2434,13 +2203,7 @@
                     if (w.userPhone === phone) {
                         withdrawCount++;
                         if (w.status === 'Approved') totalWithdraw += Number(w.amount || 0);
-                        timeline.push({
-                            type: 'Withdraw',
-                            id: child.key,
-                            amount: w.amount,
-                            status: w.status || 'Pending',
-                            timestamp: w.timestamp || w.createdAt || 0
-                        });
+                        timeline.push({ type: 'Withdraw', id: child.key, amount: w.amount, status: w.status || 'Pending', timestamp: w.timestamp || w.createdAt || 0 });
                     }
                 });
             }
@@ -2448,30 +2211,16 @@
             let complaintCount = 0;
             if (ticketsSnap.exists()) {
                 ticketsSnap.forEach(child => {
-                    complaintCount++;
-                    const t = child.val();
-                    timeline.push({
-                        type: 'Complaint',
-                        id: child.key,
-                        message: t.description || t.message || '',
-                        status: t.status || 'Pending',
-                        timestamp: t.timestamp || 0
-                    });
+                    complaintCount++; const t = child.val();
+                    timeline.push({ type: 'Complaint', id: child.key, message: t.description || t.message || '', status: t.status || 'Pending', timestamp: t.timestamp || 0 });
                 });
             }
             
             let feedbackCount = 0;
             if (fbSnap.exists()) {
                 fbSnap.forEach(child => {
-                    feedbackCount++;
-                    const f = child.val();
-                    timeline.push({
-                        type: 'Feedback',
-                        id: child.key,
-                        message: f.text || '',
-                        status: f.adminReply ? 'Replied' : 'Awaiting Reply',
-                        timestamp: f.timestamp || 0
-                    });
+                    feedbackCount++; const f = child.val();
+                    timeline.push({ type: 'Feedback', id: child.key, message: f.text || '', status: f.adminReply ? 'Replied' : 'Awaiting Reply', timestamp: f.timestamp || 0 });
                 });
             }
             
@@ -2492,35 +2241,17 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
-                        <div class="text-2xl font-black text-emerald-400">Rs. ${totalDeposit.toFixed(0)}</div>
-                        <div class="text-xs text-slate-400 mt-1">Total Deposits (${depositCount})</div>
-                    </div>
-                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
-                        <div class="text-2xl font-black text-purple-400">Rs. ${totalWithdraw.toFixed(0)}</div>
-                        <div class="text-xs text-slate-400 mt-1">Total Withdrawals (${withdrawCount})</div>
-                    </div>
-                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
-                        <div class="text-2xl font-black text-orange-400">${complaintCount}</div>
-                        <div class="text-xs text-slate-400 mt-1">Complaints</div>
-                    </div>
-                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center">
-                        <div class="text-2xl font-black text-amber-400">${feedbackCount}</div>
-                        <div class="text-xs text-slate-400 mt-1">Feedbacks</div>
-                    </div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center"><div class="text-2xl font-black text-emerald-400">Rs. ${totalDeposit.toFixed(0)}</div><div class="text-xs text-slate-400 mt-1">Total Deposits (${depositCount})</div></div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center"><div class="text-2xl font-black text-purple-400">Rs. ${totalWithdraw.toFixed(0)}</div><div class="text-xs text-slate-400 mt-1">Total Withdrawals (${withdrawCount})</div></div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center"><div class="text-2xl font-black text-orange-400">${complaintCount}</div><div class="text-xs text-slate-400 mt-1">Complaints</div></div>
+                    <div class="glass p-4 rounded-2xl border border-slate-700/50 text-center"><div class="text-2xl font-black text-amber-400">${feedbackCount}</div><div class="text-xs text-slate-400 mt-1">Feedbacks</div></div>
                 </div>
-                
                 <div class="glass rounded-3xl p-2 border border-slate-700/50" id="history-timeline-list"></div>
             `;
             
             const timelineContainer = document.getElementById('history-timeline-list');
-            
-            if (timeline.length === 0) {
-                showEmptyState(timelineContainer, 'No activity history found for this user', 'fa-clock-rotate-left');
-                return;
-            }
+            if (timeline.length === 0) { showEmptyState(timelineContainer, 'No activity history found for this user', 'fa-clock-rotate-left'); return; }
             
             const typeStyles = {
                 'Deposit': { iconBg: 'bg-emerald-500/10', iconText: 'text-emerald-400', icon: 'fa-arrow-down', badgeBg: 'bg-emerald-500/20', badgeText: 'text-emerald-400' },
@@ -2534,29 +2265,13 @@
                 const style = typeStyles[item.type] || typeStyles['Complaint'];
                 const div = document.createElement('div');
                 div.className = 'flex items-start gap-4 p-4 border-b border-slate-700 last:border-0';
-                
                 const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Unknown date';
-                
                 let detailHtml = '';
-                if (item.type === 'Deposit' || item.type === 'Withdraw') {
-                    detailHtml = `<div class="font-extrabold text-lg mt-1">Rs. ${item.amount}</div>`;
-                } else {
-                    detailHtml = `<div class="text-sm text-slate-300 mt-1 leading-relaxed">${item.message}</div>`;
-                }
-                
+                if (item.type === 'Deposit' || item.type === 'Withdraw') { detailHtml = `<div class="font-extrabold text-lg mt-1">Rs. ${item.amount}</div>`; } 
+                else { detailHtml = `<div class="text-sm text-slate-300 mt-1 leading-relaxed">${item.message}</div>`; }
                 div.innerHTML = `
-                    <div class="w-10 h-10 rounded-2xl ${style.iconBg} flex items-center justify-center flex-shrink-0">
-                        <i class="fa-solid ${style.icon} ${style.iconText}"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="font-extrabold">${item.type}</span>
-                            <span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full font-mono text-slate-400">${item.id}</span>
-                            <span class="text-[10px] px-2 py-0.5 ${style.badgeBg} ${style.badgeText} rounded-full font-bold">${item.status}</span>
-                        </div>
-                        ${detailHtml}
-                        <div class="text-xs text-slate-500 mt-1.5">${dateStr}</div>
-                    </div>
+                    <div class="w-10 h-10 rounded-2xl ${style.iconBg} flex items-center justify-center flex-shrink-0"><i class="fa-solid ${style.icon} ${style.iconText}"></i></div>
+                    <div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-extrabold">${item.type}</span><span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full font-mono text-slate-400">${item.id}</span><span class="text-[10px] px-2 py-0.5 ${style.badgeBg} ${style.badgeText} rounded-full font-bold">${item.status}</span></div>${detailHtml}<div class="text-xs text-slate-500 mt-1.5">${dateStr}</div></div>
                 `;
                 timelineContainer.appendChild(div);
             });
@@ -2564,10 +2279,7 @@
         
         // ==================== SETTINGS ====================
         function toggleMaintenance(active) {
-            db.ref('admin_settings/maintenance').update({ 
-                active: active, 
-                timestamp: Date.now() 
-            });
+            db.ref('admin_settings/maintenance').update({ active: active, timestamp: Date.now() });
             triggerToast(active ? 'Maintenance mode enabled' : 'Maintenance mode disabled');
         }
         
@@ -2580,128 +2292,86 @@
         function saveLimits() {
             const minW = document.getElementById('min-withdraw').value;
             const coinsRate = document.getElementById('coins-per-rupee').value;
-            
-            db.ref('admin_settings').update({ 
-                min_withdraw: minW, 
-                coins_per_rupee: coinsRate 
-            });
+            db.ref('admin_settings').update({ min_withdraw: minW, coins_per_rupee: coinsRate });
             triggerToast('System limits saved successfully');
+        }
+
+        function saveDepositGateways() {
+            const jazzTitle = document.getElementById('dep-jazz-title').value.trim();
+            const jazzAcc = document.getElementById('dep-jazz-acc').value.trim();
+            const easyTitle = document.getElementById('dep-easy-title').value.trim();
+            const easyAcc = document.getElementById('dep-easy-acc').value.trim();
+            const bankTitle = document.getElementById('dep-bank-title').value.trim();
+            const bankAcc = document.getElementById('dep-bank-acc').value.trim();
+            
+            db.ref('admin_settings/deposit_gateway').set({
+                JazzCash: { title: jazzTitle, account: jazzAcc },
+                EasyPaisa: { title: easyTitle, account: easyAcc },
+                CustomBank: { title: bankTitle, account: bankAcc }
+            });
+            triggerToast('Deposit accounts configuration saved successfully');
         }
         
         async function uploadPopupImage(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const previewContainer = document.getElementById('popup-image-preview');
             const previewImg = document.getElementById('popup-image-preview-img');
             const urlDisplay = document.getElementById('popup-image-url-display');
-
             const reader = new FileReader();
-            reader.onload = function(ev) {
-                previewImg.src = ev.target.result;
-                previewContainer.classList.remove('hidden');
-            };
+            reader.onload = function(ev) { previewImg.src = ev.target.result; previewContainer.classList.remove('hidden'); };
             reader.readAsDataURL(file);
-
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', CLOUDINARY_PRESET);
-
+            const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', CLOUDINARY_PRESET);
             try {
                 const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
                 const data = await res.json();
-                
-                if (data.secure_url) {
-                    popupUploadedImageUrl = data.secure_url;
-                    urlDisplay.innerText = data.secure_url;
-                    urlDisplay.classList.remove('hidden');
-                    triggerToast('Image uploaded successfully');
-                } else {
-                    triggerToast('Image upload failed', 'error');
-                }
-            } catch (err) {
-                triggerToast('Failed to upload image', 'error');
-            }
+                if (data.secure_url) { popupUploadedImageUrl = data.secure_url; urlDisplay.innerText = data.secure_url; urlDisplay.classList.remove('hidden'); triggerToast('Image uploaded successfully'); } 
+                else { triggerToast('Image upload failed', 'error'); }
+            } catch (err) { triggerToast('Failed to upload image', 'error'); }
         }
 
         function savePopupAnnouncement(active) {
             const title = document.getElementById('popup-title').value.trim();
             const desc = document.getElementById('popup-desc').value.trim();
             const imageUrl = popupUploadedImageUrl || '';
-            
-            db.ref('admin_settings/popup_announcement').set({ 
-                active: active, 
-                title: title, 
-                description: desc,
-                image: imageUrl
-            });
-            
+            db.ref('admin_settings/popup_announcement').set({ active: active, title: title, description: desc, image: imageUrl });
             triggerToast(active ? 'Popup announcement activated' : 'Popup announcement deactivated');
-            
-            if (active) {
-                setTimeout(() => {
-                    popupUploadedImageUrl = '';
-                    const urlDisplay = document.getElementById('popup-image-url-display');
-                    if (urlDisplay) urlDisplay.classList.add('hidden');
-                }, 800);
-            }
+            if (active) { setTimeout(() => { popupUploadedImageUrl = ''; const urlDisplay = document.getElementById('popup-image-url-display'); if (urlDisplay) urlDisplay.classList.add('hidden'); }, 800); }
         }
-        
-        let aboutUploadedImageUrl = '';
+
+        // NEW: Feedback Popup Toggle
+        function toggleFeedbackPopup(active) {
+            db.ref('admin_settings/feedback_popup').update({ active: active, updatedAt: Date.now() });
+            triggerToast(active ? 'Feedback popup activated for users' : 'Feedback popup deactivated for users');
+        }
         
         async function uploadAboutImage(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const previewContainer = document.getElementById('about-image-preview');
             const previewImg = document.getElementById('about-image-preview-img');
             const urlDisplay = document.getElementById('about-image-url-display');
-
             const reader = new FileReader();
-            reader.onload = function(ev) {
-                previewImg.src = ev.target.result;
-                previewContainer.classList.remove('hidden');
-            };
+            reader.onload = function(ev) { previewImg.src = ev.target.result; previewContainer.classList.remove('hidden'); };
             reader.readAsDataURL(file);
-
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', CLOUDINARY_PRESET);
-
+            const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', CLOUDINARY_PRESET);
             try {
                 const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
                 const data = await res.json();
-                
-                if (data.secure_url) {
-                    aboutUploadedImageUrl = data.secure_url;
-                    urlDisplay.innerText = data.secure_url;
-                    urlDisplay.classList.remove('hidden');
-                    triggerToast('Image uploaded successfully');
-                } else {
-                    triggerToast('Image upload failed', 'error');
-                }
-            } catch (err) {
-                triggerToast('Failed to upload image', 'error');
-            }
+                if (data.secure_url) { aboutUploadedImageUrl = data.secure_url; urlDisplay.innerText = data.secure_url; urlDisplay.classList.remove('hidden'); triggerToast('Image uploaded successfully'); } 
+                else { triggerToast('Image upload failed', 'error'); }
+            } catch (err) { triggerToast('Failed to upload image', 'error'); }
         }
         
         function saveAboutUs() {
             const text = document.getElementById('about-us-text').value.trim();
             const imageUrl = aboutUploadedImageUrl || '';
-            
-            db.ref('admin_settings/about_us').set({ 
-                text: text, 
-                image: imageUrl,
-                updatedAt: Date.now()
-            });
-            
+            db.ref('admin_settings/about_us').set({ text: text, image: imageUrl, updatedAt: Date.now() });
             triggerToast('About Us saved successfully');
         }
         
         // ==================== INITIALIZE ====================
-        window.onload = function() {
-            checkAdminLogin();
-        }
+        window.onload = function() { checkAdminLogin(); }
     </script>
 </body>
 </html>
