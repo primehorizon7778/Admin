@@ -205,6 +205,12 @@
                     <span class="font-semibold">KYC Approvals</span>
                     <span id="badge-kyc" class="ml-auto px-2.5 py-0.5 text-[10px] bg-amber-500 text-black font-extrabold rounded-full hidden">0</span>
                 </div>
+                
+                <div onclick="showSection('doubleauth'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-doubleauth">
+                    <i class="fa-solid fa-camera-rotate w-5 text-indigo-400"></i>
+                    <span class="font-semibold">Double Verification</span>
+                    <span id="badge-doubleauth" class="ml-auto px-2.5 py-0.5 text-[10px] bg-indigo-500 text-white font-extrabold rounded-full hidden">0</span>
+                </div>
 
                 <div onclick="showSection('password'); closeMobileSidebar()" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl mb-1 cursor-pointer hover:bg-slate-800 nav-item" id="nav-password">
                     <i class="fa-solid fa-unlock-keyhole w-5 text-rose-400"></i>
@@ -398,9 +404,9 @@
                                 <i class="fa-solid fa-id-card-clip text-2xl mb-4 block text-amber-400 group-hover:scale-110 transition-transform"></i>
                                 <span class="font-bold text-sm">Review KYC</span>
                             </button>
-                            <button onclick="showSection('password')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
-                                <i class="fa-solid fa-unlock-keyhole text-2xl mb-4 block text-rose-400 group-hover:scale-110 transition-transform"></i>
-                                <span class="font-bold text-sm">Password Recov.</span>
+                            <button onclick="showSection('doubleauth')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
+                                <i class="fa-solid fa-camera-rotate text-2xl mb-4 block text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                                <span class="font-bold text-sm">Double Verif.</span>
                             </button>
                             <button onclick="showSection('deposits')" class="p-5 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 rounded-2xl text-left transition-all group border border-slate-700/60 modern-btn">
                                 <i class="fa-solid fa-wallet text-2xl mb-4 block text-emerald-400 group-hover:scale-110 transition-transform"></i>
@@ -436,6 +442,16 @@
                         </div>
                     </div>
                     <div id="kyc-requests-feed" class="space-y-4"></div>
+                </div>
+
+                <div id="section-doubleauth" class="section">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="section-header">Double Verification Requests</h3>
+                            <p class="text-slate-400 text-sm">Verify live captures against baseline photos</p>
+                        </div>
+                    </div>
+                    <div id="doubleauth-requests-feed" class="space-y-4"></div>
                 </div>
 
                 <div id="section-password" class="section">
@@ -687,24 +703,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- NEW: Feedback / App Rating Popup Toggle -->
-                        <div class="glass p-6 rounded-3xl border border-slate-700/50 md:col-span-2">
-                            <h4 class="font-extrabold mb-5 flex items-center gap-2">
-                                <i class="fa-solid fa-star text-amber-400"></i>
-                                App Feedback Popup (Show to Users)
-                            </h4>
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-800 p-5 rounded-2xl border border-slate-700 gap-4">
-                                <div>
-                                    <div class="font-bold text-sm">Feedback Popup Status</div>
-                                    <div class="text-xs text-slate-400 mt-1">Enable to show the feedback / rating popup screen to users inside the app.</div>
-                                </div>
-                                <div class="flex gap-2 w-full sm:w-auto">
-                                    <button onclick="toggleFeedbackPopup(true)" class="flex-1 sm:flex-none px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-600/20">Enable</button>
-                                    <button onclick="toggleFeedbackPopup(false)" class="flex-1 sm:flex-none px-6 py-2.5 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-xl text-xs font-bold transition-all shadow-lg shadow-red-600/20">Disable</button>
-                                </div>
-                            </div>
-                        </div>
                         
                         <div class="glass p-6 rounded-3xl md:col-span-2 border border-slate-700/50">
                             <h4 class="font-extrabold mb-5 flex items-center gap-2">
@@ -771,7 +769,6 @@
 
     <div id="toast-container" class="fixed bottom-6 right-6 z-[999] flex flex-col gap-2"></div>
 
-    <!-- System Lock Modal code omitted for brevity but remains same in HTML -->
     <div id="system-lock-screen" class="hidden fixed inset-0 bg-slate-950 z-[999] overflow-y-auto">
         <div class="min-h-full flex items-center justify-center p-4">
             <div class="max-w-lg w-full">
@@ -780,13 +777,16 @@
                         <i class="fa-solid fa-lock text-red-400 text-4xl"></i>
                     </div>
                     <h2 class="text-3xl font-extrabold text-white">System automatic Currently OFF</h2>
-                    <p class="text-red-400 mt-1">محترم ناظم، چونکہ آپ کا پلان سالانہ ہے اس لیے آپ کا بل ادا کرنا باقی ہے۔ براہِ کرم ابھی بل ادا کریں، جس کے بعد آپ کا سسٹم خود بخود بحال ہو جائے گا۔</p>
+                    <p class="text-red-400 mt-1">محترم ناظم، چونکہ آپ کا پلان سالانہ ہے اس لیے آپ کا بل ادا کرنا باقی ہے۔ براہِ کرم ابھی بل ادا کریں، جس کے بعد آپ کا سسٹم خود بخود بحال ہو جائے گا۔
+​ناظم صاحب، آپ سے گزارش ہے کہ یہاں اصل رقم ادا کریں۔</p>
                 </div>
+
                 <div class="glass rounded-3xl p-7 border border-red-500/20">
                     <div class="text-center mb-6">
                         <div class="text-sm text-red-300">CURRENT BILL</div>
                         <div id="system-lock-bill-amount" class="text-6xl font-black text-white mt-1">Rs. 10,000</div>
                     </div>
+
                     <div class="bg-slate-900 rounded-2xl p-5 mb-6 border border-slate-700">
                         <div class="flex items-center gap-3 mb-4">
                             <i class="fa-solid fa-university text-emerald-400 text-2xl"></i>
@@ -806,12 +806,14 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="text-center mb-6">
                         <p class="text-sm text-slate-300 leading-relaxed">
-                            براہِ کرم رقم ادا کرنے کے بعد، اس کی ٹرانزیکشن آئی ڈی (TRX ID) یہاں درج کریں۔<br>
-                            اپنی ادائیگی کا سکرین شاٹ نیچے لگائیں۔
+                            براہِ کرم رقم ادا کرنے کے بعد، اس کی ٹرانزیکشن آئی ڈی (TRX ID) یہاں درج کریں۔ ۔<br>
+                          اپنی ادائیگی کا سکرین شاٹ نیچے لگائیں۔
                         </p>
                     </div>
+
                     <div class="space-y-4">
                         <div>
                             <label class="text-xs font-bold text-slate-400 tracking-wider">TRX ID / Reference</label>
@@ -829,6 +831,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="mt-6">
                         <button onclick="submitSystemBillPayment()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-extrabold text-lg">SUBMIT PAYMENT</button>
                     </div>
@@ -858,7 +861,6 @@
         let selectedChatPhone = null;
         let adminChatAttachmentFile = null;
         let popupUploadedImageUrl = '';
-        let aboutUploadedImageUrl = ''; // FIXED: Added Global Declaration for About Us Image
         
         // ==================== ADMIN LOGIN SYSTEM ====================
         let currentAdminPassword = localStorage.getItem('admin1_password') || '12345';
@@ -967,6 +969,7 @@
                 if (el && s.exists()) el.value = s.val();
             });
 
+            // Load deposit gateways
             db.ref('admin_settings/deposit_gateway').once('value', s => {
                 if (s.exists()) {
                     const data = s.val();
@@ -1124,13 +1127,16 @@
             
             const title = document.getElementById('section-title');
             if (title) {
+                // Formatting title based on section
                 if(section === 'kyc') title.innerText = 'KYC Approvals';
+                else if(section === 'doubleauth') title.innerText = 'Double Verification';
                 else if(section === 'password') title.innerText = 'Password Recovery';
                 else title.innerText = section.charAt(0).toUpperCase() + section.slice(1);
             }
             
             if (section === 'users') loadUsersAdvanced();
             if (section === 'kyc') loadKYCRequests();
+            if (section === 'doubleauth') loadDoubleAuthRequests();
             if (section === 'password') loadPasswordRequests();
             if (section === 'deposits') loadDepositsAdvanced();
             if (section === 'withdrawals') loadWithdrawalsAdvanced();
@@ -1251,12 +1257,21 @@
                 document.getElementById('live-users-count').innerText = total;
             });
             
+            // Pending KYC
             db.ref('admin_queues/kyc_requests').on('value', snap => {
                 let pending = 0;
                 if(snap.exists()) snap.forEach(c => { if(c.val().status === 'pending') pending++; });
                 updateBadge('badge-kyc', pending);
             });
+
+            // Pending Double Auth
+            db.ref('admin_queues/double_auth').on('value', snap => {
+                let pending = 0;
+                if(snap.exists()) snap.forEach(c => { if(c.val().status === 'pending') pending++; });
+                updateBadge('badge-doubleauth', pending);
+            });
             
+            // Pending Password Requests
             db.ref('admin_queues/password_requests').on('value', snap => {
                 let pending = 0;
                 if(snap.exists()) snap.forEach(c => { if(c.val().status === 'pending') pending++; });
@@ -1316,7 +1331,7 @@
             });
         }
         
-        // ==================== USERS & FORCE LOGOUT ====================
+        // ==================== USERS ====================
         function loadUsersAdvanced() {
             const container = document.getElementById('users-directory-feed');
             showSkeletonLoader(container, 'user');
@@ -1336,8 +1351,14 @@
                     const balance = Number(user.balance || 0);
                     const baseLimit = parseInt(user.withdrawalLimit) || 1000;
                     
-                    // Count Active Sessions/Devices
-                    const activeDevices = user.sessions ? Object.keys(user.sessions).length : (user.activeDevices || 0);
+                    let validRefs = 0;
+                    if (user.referrals) {
+                        Object.values(user.referrals).forEach(r => {
+                            if (r.isDeposited || r.depositCommissionPaid) validRefs++;
+                        });
+                    }
+                    let tier = Math.floor(validRefs / 10) + 1;
+                    if(tier > 10) tier = 10;
                     
                     const card = document.createElement('div');
                     card.className = `glass rounded-3xl p-5 user-card border border-slate-700/60`;
@@ -1348,7 +1369,7 @@
                                 <img src="${user.avatarUrl || 'https://i.pravatar.cc/48'}" class="w-12 h-12 rounded-2xl object-cover border border-slate-600" alt="">
                                 <div>
                                     <div class="font-extrabold text-lg">${user.username || 'No Name'}</div>
-                                    <div class="text-emerald-400 font-mono text-sm">${phone}</div>
+                                    <div class="text-emerald-400 font-mono text-sm">${phone} <span class="text-xs text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md inline-block ml-1">Level ${tier}</span></div>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -1358,24 +1379,6 @@
                         </div>
                         
                         <div id="user-details-${phone}" class="hidden mt-6 pt-5 border-t border-slate-700">
-                            
-                            <!-- NEW: Device Management & Logout -->
-                            <div class="mb-5 bg-slate-900 p-4 rounded-2xl border border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
-                                        <i class="fa-solid fa-mobile-screen-button text-cyan-400 text-lg"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-xs text-slate-400 font-bold tracking-wider">ACTIVE LOGIN DEVICES</div>
-                                        <div class="text-sm font-extrabold text-white mt-0.5">${activeDevices} Device(s) Connected</div>
-                                    </div>
-                                </div>
-                                <button onclick="forceLogoutUser('${phone}')" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/20">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                    <span>Force Logout All Devices</span>
-                                </button>
-                            </div>
-                            
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div class="space-y-3">
                                     <div>
@@ -1444,17 +1447,6 @@
                     container.appendChild(card);
                 });
             });
-        }
-        
-        function forceLogoutUser(phone) {
-            if (!confirm('Are you sure you want to log out this user from all devices?')) return;
-            // Setting forceLogout flag and clearing sessions/activeDevices
-            db.ref('users/' + phone).update({
-                forceLogout: true,
-                activeDevices: 0,
-                sessions: null
-            });
-            triggerToast('User forced to logout from all devices', 'success');
         }
         
         function toggleUserDetails(phone) {
@@ -1558,6 +1550,17 @@
                 const balanceHistory = user.balanceHistory || [];
                 const transactions = user.transactions || [];
                 
+                let validRefs = 0;
+                let refsHtml = '';
+                if (user.referrals) {
+                    Object.values(user.referrals).forEach(r => {
+                        if (r.isDeposited || r.depositCommissionPaid) validRefs++;
+                        refsHtml += `<tr><td style="padding: 5px 0; border-bottom: 1px solid #e2e8f0;">${r.username || 'N/A'}</td><td style="padding: 5px 0; border-bottom: 1px solid #e2e8f0;">${(r.isDeposited || r.depositCommissionPaid) ? 'Active' : 'Pending'}</td><td style="padding: 5px 0; border-bottom: 1px solid #e2e8f0;">${r.commissionEarnedCoins || 0} 🪙</td></tr>`;
+                    });
+                }
+                let tier = Math.floor(validRefs / 10) + 1;
+                if(tier > 10) tier = 10;
+                
                 const element = document.createElement('div');
                 element.style.padding = '40px';
                 element.style.fontFamily = 'Inter, system-ui, sans-serif';
@@ -1580,12 +1583,18 @@
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Username</td><td style="padding: 10px 0; font-weight: 700;">${user.username || 'N/A'}</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Email / Gmail</td><td style="padding: 10px 0; font-weight: 700;">${user.gmail || 'N/A'}</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Password</td><td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${user.password || 'N/A'}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Withdrawal PIN</td><td style="padding: 10px 0; font-weight: 700; font-family: monospace;">${user.withdrawPin || 'Not Set'}</td></tr>
+                                <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Affiliate Level</td><td style="padding: 10px 0; font-weight: 700;">Level ${tier} (${validRefs} Active Refs)</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Account Created</td><td style="padding: 10px 0; font-weight: 700;">${createdDate}</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Current Balance</td><td style="padding: 10px 0; font-weight: 700; color: #059669;">Rs. ${(user.balance || 0).toFixed(0)}</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Coins</td><td style="padding: 10px 0; font-weight: 700;">${user.coins || 0} 🪙</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Verification Status</td><td style="padding: 10px 0; font-weight: 700; text-transform: uppercase;">${user.verificationStatus || 'unverified'}</td></tr>
                                 <tr><td style="padding: 10px 0; color: #475569; font-weight: 600;">Login Count</td><td style="padding: 10px 0; font-weight: 700;">${loginCount}</td></tr>
                             </table>
+                        </div>
+                        <h3 style="font-size: 16px; margin: 20px 0 10px; color: #334155;">Referred Users</h3>
+                        <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px; max-height: 220px; overflow-y: auto;">
+                            ${user.referrals ? `<table style="width: 100%; text-align: left; font-size: 13px;"><thead><tr><th style="padding-bottom: 10px;">Username</th><th style="padding-bottom: 10px;">Status</th><th style="padding-bottom: 10px;">Commission Earned</th></tr></thead><tbody>${refsHtml}</tbody></table>` : '<div style="color:#64748b; font-size:13px; padding:10px 0;">No users invited yet.</div>'}
                         </div>
                         <h3 style="font-size: 16px; margin: 20px 0 10px; color: #334155;">Balance History &amp; Transactions</h3>
                         <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px; max-height: 220px; overflow-y: auto;">
@@ -1656,6 +1665,61 @@
             db.ref(`admin_queues/kyc_requests/${reqId}`).update({ status: 'Rejected' });
             db.ref(`users/${phone}`).update({ kycStatus: 'unverified' });
             triggerToast('KYC Rejected', 'error');
+        }
+
+        // ==================== DOUBLE VERIFICATION REQUESTS ====================
+        function loadDoubleAuthRequests() {
+            const container = document.getElementById('doubleauth-requests-feed');
+            showSkeletonLoader(container, 'list');
+            db.ref('admin_queues/double_auth').on('value', snap => {
+                container.innerHTML = '';
+                let pendingCount = 0;
+                if (!snap.exists()) { showEmptyState(container, 'No pending double verification requests', 'fa-camera-rotate'); updateBadge('badge-doubleauth', 0); return; }
+
+                snap.forEach(child => {
+                    const req = child.val();
+                    if (req.status !== 'pending') return;
+                    pendingCount++;
+                    const div = document.createElement('div');
+                    div.className = 'glass p-5 rounded-3xl border border-slate-700/60 flex flex-col md:flex-row gap-4 justify-between items-center';
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2"><h4 class="font-extrabold text-lg">${req.username || 'N/A'}</h4><span class="px-2 py-0.5 text-[9px] bg-indigo-500/20 text-indigo-400 rounded-full font-bold uppercase">Pending</span></div>
+                            <div class="text-sm text-slate-400 mt-1">Phone: <span class="font-mono text-emerald-400">${req.phone}</span></div>
+                            <div class="flex flex-wrap gap-4 mt-4">
+                                <div class="text-center">
+                                    <div class="text-[10px] text-slate-400 mb-1 font-bold">BASELINE (OLD)</div>
+                                    <img src="${req.oldImage || 'https://via.placeholder.com/150'}" class="w-24 h-24 object-cover rounded-xl border border-slate-600">
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-[10px] text-slate-400 mb-1 font-bold">LIVE CAPTURE (NEW)</div>
+                                    <img src="${req.newImage || 'https://via.placeholder.com/150'}" class="w-24 h-24 object-cover rounded-xl border border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                                </div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-3">Submitted: ${new Date(req.timestamp).toLocaleString()}</div>
+                        </div>
+                        <div class="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
+                            <button onclick="approveDoubleAuth('${child.key}', '${req.phone}')" class="flex-1 md:flex-none px-6 py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 rounded-2xl text-sm font-extrabold transition-all">APPROVE</button>
+                            <button onclick="rejectDoubleAuth('${child.key}', '${req.phone}')" class="flex-1 md:flex-none px-6 py-3 bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-2xl text-sm font-extrabold transition-all">REJECT</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                if(pendingCount === 0) showEmptyState(container, 'No pending double verification requests', 'fa-camera-rotate');
+                updateBadge('badge-doubleauth', pendingCount);
+            });
+        }
+
+        function approveDoubleAuth(reqId, phone) {
+            db.ref(`admin_queues/double_auth/${reqId}`).update({ status: 'Approved' });
+            db.ref(`users/${phone}`).update({ verificationStatus: 'verified' });
+            triggerToast('Verification Approved successfully');
+        }
+
+        function rejectDoubleAuth(reqId, phone) {
+            db.ref(`admin_queues/double_auth/${reqId}`).update({ status: 'Rejected' });
+            db.ref(`users/${phone}`).update({ verificationStatus: 'suspended', suspensionWarning: 'Double Verification Failed. Live face did not match baseline.' });
+            triggerToast('Verification Rejected. User suspended.', 'error');
         }
 
         // ==================== PASSWORD RECOVERY REQUESTS ====================
@@ -2337,12 +2401,6 @@
             db.ref('admin_settings/popup_announcement').set({ active: active, title: title, description: desc, image: imageUrl });
             triggerToast(active ? 'Popup announcement activated' : 'Popup announcement deactivated');
             if (active) { setTimeout(() => { popupUploadedImageUrl = ''; const urlDisplay = document.getElementById('popup-image-url-display'); if (urlDisplay) urlDisplay.classList.add('hidden'); }, 800); }
-        }
-
-        // NEW: Feedback Popup Toggle
-        function toggleFeedbackPopup(active) {
-            db.ref('admin_settings/feedback_popup').update({ active: active, updatedAt: Date.now() });
-            triggerToast(active ? 'Feedback popup activated for users' : 'Feedback popup deactivated for users');
         }
         
         async function uploadAboutImage(e) {
