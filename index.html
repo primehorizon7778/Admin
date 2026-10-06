@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- APP UPDATE VERSION: v6.6 | Change window.PH_APP_VERSION in script when shipping new build -->
-<title>Prime Horizon · v6.6</title>
+<!-- APP UPDATE VERSION: v6.7 | Change window.PH_APP_VERSION in script when shipping new build -->
+<title>Prime Horizon · v6.7</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -552,7 +552,7 @@ body.bot-only-mode #msg-inbox-fab {
 
 <header id="main-header" class="flex justify-between items-center text-xs text-gray-400 z-50 gap-2">
   <div class="font-black text-sm tracking-wide text-white">PRIME <span class="text-amber-400">HORIZON</span>
-    <span class="version-badge ml-1" id="app-version-badge">v6.6</span>
+    <span class="version-badge ml-1" id="app-version-badge">v6.7</span>
   </div>
   <div class="relative flex items-center gap-2">
     <div class="notif-bell-wrap" id="header-msg-btn" onclick="openMsgInboxFromNotif()" title="Messages" style="margin-right:2px">
@@ -596,7 +596,7 @@ body.bot-only-mode #msg-inbox-fab {
         <img src="https://i.ibb.co/gZvhB6MC/image-11.jpg" alt="Logo" class="w-full h-full object-cover">
       </div>
       <h1 class="text-xl font-black tracking-wider text-amber-300">PRIME HORIZON</h1>
-      <p class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mt-1">Ascend Your Capital · v6.6</p>
+      <p class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mt-1">Ascend Your Capital · v6.7</p>
     </div>
     <div class="flex bg-black/40 p-1 rounded-xl mb-4 border border-white/5">
       <button type="button" onclick="toggleAuthTabs('login')" id="tab-login-btn" class="w-1/2 py-2.5 text-[11px] font-bold uppercase rounded-xl bg-white/10 text-white border border-amber-500/30">Sign In</button>
@@ -724,11 +724,16 @@ body.bot-only-mode #msg-inbox-fab {
         </button>
       </div>
 
-      <div id="play-games-card" class="glass-panel p-3.5">
-        <div class="flex justify-between items-center mb-2">
-          <h4 class="text-[11px] font-extrabold text-emerald-400 uppercase tracking-wider">Play Games</h4>
+      <div id="play-games-card" class="glass-panel p-2.5">
+        <div id="play-games-list" class="space-y-1.5 text-[11px] text-gray-400">
+          <button type="button" id="pg-default-btn" class="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
+            <span class="flex items-center gap-2 min-w-0">
+              <i class="fa-solid fa-gamepad text-emerald-400 text-sm"></i>
+              <span class="font-black text-white text-[12px]">Play Games</span>
+            </span>
+            <i class="fa-solid fa-chevron-right text-emerald-400 text-[10px]"></i>
+          </button>
         </div>
-        <div id="play-games-list" class="space-y-2 text-[11px] text-gray-400">Loading…</div>
       </div>
 
       <div class="glass-panel p-3.5 flex justify-between items-center cursor-pointer" onclick="switchScreen('screen-invite-friends')">
@@ -802,7 +807,7 @@ body.bot-only-mode #msg-inbox-fab {
       <div id="about-us-container">
         <p id="about-us-text" class="text-[12px] text-gray-300 leading-relaxed">Prime Horizon — secure investment ecosystem. Rules, transparency, and long-term growth. We operate with integrity, protect user capital discipline, and publish clear policy for deposits, withdrawals, and affiliate rewards.</p>
       </div>
-      <div class="text-[10px] text-gray-500 border-t border-white/10 pt-3">Version <b class="text-white">v6.6</b> · Developed for long-term platform trust.</div>
+      <div class="text-[10px] text-gray-500 border-t border-white/10 pt-3">Version <b class="text-white">v6.7</b> · Developed for long-term platform trust.</div>
     </div>
   </section>
 
@@ -1913,7 +1918,7 @@ document.getElementById("hist-apply")?.addEventListener("click",()=>{window._his
 document.getElementById("hist-pdf")?.addEventListener("click",()=>{
   const logs=Object.values((sessionUser&&sessionUser.logs)||{}).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
   const from=window._histFrom?new Date(window._histFrom).getTime():0; const to=window._histTo?new Date(window._histTo).getTime()+86400000:Infinity;
-  let html="<html><head><title>History v6.6</title><style>body{font-family:sans-serif;font-size:12px;padding:16px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px}</style></head><body><h2>Prime Horizon History v6.6</h2><table><tr><th>Date</th><th>Title</th><th>Amount</th><th>Status</th></tr>";
+  let html="<html><head><title>History v6.7</title><style>body{font-family:sans-serif;font-size:12px;padding:16px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px}</style></head><body><h2>Prime Horizon History v6.7</h2><table><tr><th>Date</th><th>Title</th><th>Amount</th><th>Status</th></tr>";
   logs.filter(l=>{const t=l.timestamp||0;return t>=from&&t<=to;}).forEach(l=>{html+=`<tr><td>${new Date(l.timestamp||0).toLocaleString()}</td><td>${escapeHtml(l.title)}</td><td>${l.amount||""}</td><td>${escapeHtml(l.status)}</td></tr>`;});
   html+="</table></body></html>"; const w=window.open("","_blank"); if(!w)return; w.document.write(html); w.document.close(); setTimeout(()=>{try{w.print();}catch(e){}},400);
 });
@@ -8142,6 +8147,766 @@ setInterval(function(){
       checkAppVersion();
     }
   }, 4000);
+})();
+</script>
+
+
+<script>
+/* ===== v6.7 PATCH: Play Games in-app + 24h timer + Sunday allow games ===== */
+(function(){
+  "use strict";
+
+  function getDb(){
+    return window.db || (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length && firebase.database()) || null;
+  }
+  function esc(s){ return String(s||"").replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+
+  function normalizeGameUrl(raw){
+    var u = String(raw || "").trim();
+    if(!u || u === "#") return "";
+    if(/^https?:\/\//i.test(u)) return u;
+    if(/^\/\//.test(u)) return "https:" + u;
+    if(/^[a-z0-9.-]+\.[a-z]{2,}/i.test(u)) return "https://" + u;
+    return u;
+  }
+
+  /* ---- In-app game viewer with back confirm ---- */
+  window.openGameLinkInApp = function(url, title){
+    if(typeof isGamesLaunched === "function" && !isGamesLaunched()){
+      if(typeof showCenterPop === "function")
+        showCenterPop("Games aa rahi hain", "Games 10 October ko start hongi. Countdown dekhte rahein!", "info");
+      return;
+    }
+    url = normalizeGameUrl(url);
+    if(!url){
+      if(typeof showCenterPop === "function") showCenterPop("No link", "Admin ne abhi game link set nahi kiya.", "info");
+      return;
+    }
+    if(document.getElementById("ph-game-view-ov")) return;
+
+    var ov = document.createElement("div");
+    ov.id = "ph-game-view-ov";
+    ov.style.cssText = "position:fixed;inset:0;z-index:280;background:#020617;display:flex;flex-direction:column";
+    ov.innerHTML =
+      '<div style="flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:10px 12px;background:#0b1220;border-bottom:1px solid rgba(52,211,153,.35)">'+
+      '<button type="button" id="ph-game-back" style="padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-weight:900;font-size:11px"><i class="fa-solid fa-arrow-left"></i> Back</button>'+
+      '<div style="flex:1;min-width:0;font-size:12px;font-weight:900;color:#6ee7b7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(title||"Play Games")+'</div>'+
+      '</div>'+
+      '<div style="flex:1;position:relative;background:#000">'+
+      '<iframe id="ph-game-iframe" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;display:none" allow="autoplay; fullscreen; payment; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>'+
+      '<div id="ph-game-load" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0b1220;color:#94a3b8;font-size:12px;font-weight:700;z-index:2;padding:16px;text-align:center">Loading game…</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+    document.body.style.overflow = "hidden";
+
+    var iframe = document.getElementById("ph-game-iframe");
+    var loadEl = document.getElementById("ph-game-load");
+    var loadedOk = false;
+    var closed = false;
+    var loadTimer = null;
+    var prevBeforeUnload = window.onbeforeunload;
+
+    function showLoadError(msg){
+      if(closed) return;
+      loadedOk = false;
+      try { if(iframe){ iframe.style.display = "none"; iframe.src = "about:blank"; } } catch(e){}
+      if(loadEl){
+        loadEl.style.display = "flex";
+        loadEl.innerHTML =
+          '<div style="max-width:280px">'+
+          '<div style="font-size:28px;margin-bottom:8px">⚠️</div>'+
+          '<div style="color:#f87171;font-weight:900;font-size:14px;margin-bottom:6px">Website load nahi hui</div>'+
+          '<div style="color:#94a3b8;font-size:12px;line-height:1.45;margin-bottom:14px">'+esc(msg || "Game open nahi ho saka. Link check karein ya baad mein try karein.")+'</div>'+
+          '<button type="button" id="ph-game-err-close" style="width:100%;padding:12px;border:none;border-radius:12px;background:#334155;color:#fff;font-weight:900;font-size:12px">Band karein</button>'+
+          '</div>';
+        var cb = document.getElementById("ph-game-err-close");
+        if(cb) cb.onclick = function(){ closeGameSilent(); };
+      }
+    }
+
+    function showGameFrame(){
+      if(closed || !loadedOk) return;
+      if(loadEl) loadEl.style.display = "none";
+      if(iframe) iframe.style.display = "block";
+    }
+
+    function stripUnloadHandlers(){
+      try { window.onbeforeunload = null; } catch(e){}
+      try {
+        if(iframe && iframe.contentWindow){
+          iframe.contentWindow.onbeforeunload = null;
+          iframe.contentWindow.onunload = null;
+          try {
+            var w = iframe.contentWindow;
+            if(w.addEventListener){
+              // cannot remove anonymous, but null assignment helps same-origin
+            }
+          } catch(e2){}
+        }
+      } catch(e){}
+    }
+
+    function closeGameSilent(){
+      if(closed) return;
+      closed = true;
+      try { if(loadTimer) clearTimeout(loadTimer); } catch(e){}
+      stripUnloadHandlers();
+      try {
+        if(iframe){
+          try { iframe.onload = null; iframe.onerror = null; } catch(e){}
+          try {
+            // blank via srcdoc avoids some beforeunload prompts
+            iframe.removeAttribute("src");
+            iframe.srcdoc = "<!doctype html><title></title><body></body>";
+          } catch(e){}
+          try { iframe.remove(); } catch(e){}
+        }
+      } catch(e){}
+      try {
+        var ask = document.getElementById("ph-game-back-ask");
+        if(ask) ask.remove();
+      } catch(e){}
+      try { ov.remove(); } catch(e){}
+      document.body.style.overflow = "";
+      // restore only if still null (don't re-attach game handlers)
+      try { if(window.onbeforeunload == null) window.onbeforeunload = prevBeforeUnload; } catch(e){}
+    }
+
+    function askBack(){
+      if(closed) return;
+      if(document.getElementById("ph-game-back-ask")) return;
+      // strip game leave handlers BEFORE any confirm so browser "Leave game?" never appears
+      stripUnloadHandlers();
+      var ask = document.createElement("div");
+      ask.id = "ph-game-back-ask";
+      ask.style.cssText = "position:fixed;inset:0;z-index:290;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:16px";
+      ask.innerHTML =
+        '<div style="width:100%;max-width:320px;background:#0f172a;border:1px solid rgba(52,211,153,.4);border-radius:18px;padding:18px;text-align:center">'+
+        '<div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:8px">Wapis jana chahte hain?</div>'+
+        '<div style="font-size:12px;color:#94a3b8;margin-bottom:14px">Game band ho jayega aur dashboard par wapis aa jayenge.</div>'+
+        '<div style="display:flex;gap:8px">'+
+        '<button type="button" id="ph-game-no" style="flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-weight:900;font-size:12px">Naa</button>'+
+        '<button type="button" id="ph-game-yes" style="flex:1;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-weight:900;font-size:12px">Haan</button>'+
+        '</div></div>';
+      document.body.appendChild(ask);
+      document.getElementById("ph-game-no").onclick = function(){ ask.remove(); };
+      document.getElementById("ph-game-yes").onclick = function(){ ask.remove(); closeGameSilent(); };
+    }
+
+    document.getElementById("ph-game-back").onclick = askBack;
+
+    // Load with timeout — fail = direct error, no broken page
+    loadTimer = setTimeout(function(){
+      if(closed || loadedOk) return;
+      showLoadError("Website respond nahi kar rahi. Link invalid ho sakti hai ya site block hai.");
+    }, 12000);
+
+    if(iframe){
+      iframe.onload = function(){
+        if(closed) return;
+        try {
+          // same-origin: clear leave handlers immediately
+          stripUnloadHandlers();
+          var doc = iframe.contentDocument;
+          if(doc){
+            var bodyText = (doc.body && (doc.body.innerText || doc.body.textContent) || "").trim();
+            var titleText = (doc.title || "").toLowerCase();
+            // detect common error pages
+            if(/404|not found|file not found|cannot be found|site can.t be reached|refused to connect/i.test(bodyText + " " + titleText)){
+              showLoadError("Website nahi mili (404 / not found).");
+              return;
+            }
+          }
+        } catch(e){
+          // cross-origin — treat load event as success
+        }
+        loadedOk = true;
+        try { if(loadTimer) clearTimeout(loadTimer); } catch(e){}
+        showGameFrame();
+        // keep stripping unload every few sec while open (game may re-bind)
+        var stripIv = setInterval(function(){
+          if(closed || !document.getElementById("ph-game-view-ov")){
+            clearInterval(stripIv);
+            return;
+          }
+          stripUnloadHandlers();
+        }, 1500);
+      };
+      iframe.onerror = function(){
+        if(closed) return;
+        showLoadError("Website load nahi ho saki.");
+      };
+      try {
+        iframe.src = url;
+      } catch(e){
+        showLoadError("Link open nahi ho saki.");
+      }
+    } else {
+      showLoadError("Game viewer start nahi hua.");
+    }
+  };
+
+  /* ---- Render Play Games list (hide if no link) ---- */
+  function parseGameItems(val){
+    if(!val) return [];
+    var items;
+    if(Array.isArray(val)) items = val;
+    else if(val.url || val.link) items = [val];
+    else items = Object.values(val || {});
+    return items.filter(function(g){
+      if(!g) return false;
+      var u = normalizeGameUrl(g.url || g.link || g.href || "");
+      return !!u;
+    }).map(function(g){
+      return {
+        url: normalizeGameUrl(g.url || g.link || g.href || ""),
+        title: g.title || g.name || "Play Games"
+      };
+    });
+  }
+
+  function slimGameBtn(id, title){
+    return '<button type="button" id="'+id+'" class="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10">'
+      + '<span class="flex items-center gap-2 min-w-0">'
+      + '<i class="fa-solid fa-gamepad text-emerald-400 text-sm"></i>'
+      + '<span class="font-black text-white text-[12px] truncate">'+esc(title || "Play Games")+'</span>'
+      + '</span>'
+      + '<i class="fa-solid fa-chevron-right text-emerald-400 text-[10px]"></i>'
+      + '</button>';
+  }
+
+  function bindGameClick(id, url, title){
+    setTimeout(function(){
+      var b = document.getElementById(id);
+      if(!b) return;
+      b.onclick = function(){
+        try{ if(typeof playSfx==="function") playSfx("click"); }catch(e){}
+        if(url){
+          openGameLinkInApp(url, title || "Play Games");
+        } else {
+          if(typeof showCenterPop === "function")
+            showCenterPop("Play Games", "Admin ne abhi game link set nahi kiya.", "info");
+        }
+      };
+    }, 20);
+  }
+
+  function renderPlayGamesList(items){
+    var box = document.getElementById("play-games-list");
+    var card = document.getElementById("play-games-card");
+    if(!box) return;
+    if(card){ card.style.display = ""; card.style.opacity = ""; card.style.pointerEvents = ""; }
+
+    // Before 10 OCT — only countdown, no play
+    if(typeof isGamesLaunched === "function" && !isGamesLaunched()){
+      renderPreLaunchGamesBtn();
+      if(!window._pgCdIv) window._pgCdIv = setInterval(tickGamesCountdown, 1000);
+      return;
+    }
+
+    // Always show at least one slim Play Games button
+    if(!items || !items.length){
+      box.innerHTML = slimGameBtn("pg-v67-0", "Play Games");
+      bindGameClick("pg-v67-0", "", "Play Games");
+      return;
+    }
+    // One primary slim row (first link) + extra links if multiple
+    box.innerHTML = items.map(function(g, idx){
+      var id = "pg-v67-" + idx;
+      var label = items.length === 1 ? "Play Games" : (g.title || ("Play Games " + (idx+1)));
+      bindGameClick(id, g.url, g.title || "Play Games");
+      return slimGameBtn(id, label);
+    }).join("");
+  }
+
+  // Ensure default button works before firebase loads
+  function wireDefaultPlayGamesBtn(){
+    var b = document.getElementById("pg-default-btn");
+    if(!b || b._v67) return;
+    b._v67 = true;
+    b.onclick = function(){
+      var links = window._phGameLinks || [];
+      if(links.length){
+        openGameLinkInApp(links[0].url, links[0].title || "Play Games");
+      } else if(typeof showCenterPop === "function"){
+        showCenterPop("Play Games", "Admin ne abhi game link set nahi kiya.", "info");
+      }
+    };
+  }
+
+  window._phGameLinks = [];
+  function listenPlayGamesV67(){
+    if(window._pgV67On) return;
+    var ref = getDb();
+    if(!ref) return;
+    window._pgV67On = true;
+    try { ref.ref("admin_settings/play_games").off(); } catch(e){}
+    ref.ref("admin_settings/play_games").on("value", function(snap){
+      var items = snap.exists() ? parseGameItems(snap.val()) : [];
+      window._phGameLinks = items;
+      renderPlayGamesList(items);
+      updateTimerPlayGamesCta();
+    });
+  }
+
+  /* ---- Sunday lock: keep Play Games enabled ---- */
+  function applySundayLockV67(){
+    var sunday = new Date().getDay() === 0;
+    document.body.classList.toggle("sunday-lock", sunday);
+    document.querySelectorAll("[data-sunday-lock]").forEach(function(btn){
+      btn.style.opacity = "";
+      btn.style.pointerEvents = "";
+      btn.removeAttribute("data-sunday-lock");
+    });
+    if(!sunday) return;
+    document.querySelectorAll(".action-grid-3 button, #dashboard-unlocked-features button").forEach(function(btn){
+      var t = (btn.textContent || "").toLowerCase();
+      var allow =
+        t.indexOf("balance") >= 0 ||
+        t.indexOf("entertainment") >= 0 ||
+        t.indexOf("play game") >= 0 ||
+        t.indexOf("play games") >= 0 ||
+        btn.id === "ent-enter-btn" ||
+        (btn.closest && btn.closest("#play-games-card"));
+      if(!allow){
+        btn.style.opacity = "0.4";
+        btn.style.pointerEvents = "none";
+        btn.setAttribute("data-sunday-lock", "1");
+      }
+    });
+    var card = document.getElementById("play-games-card");
+    if(card){
+      card.style.opacity = "";
+      card.style.pointerEvents = "";
+      card.querySelectorAll("button").forEach(function(b){
+        b.style.opacity = "";
+        b.style.pointerEvents = "";
+        b.removeAttribute("data-sunday-lock");
+      });
+    }
+    var ent = document.getElementById("ent-enter-btn");
+    if(ent){ ent.style.opacity = ""; ent.style.pointerEvents = ""; }
+  }
+
+  /* Override global applySundayLock if present later */
+  var _sunIv = setInterval(function(){
+    applySundayLockV67();
+  }, 2000);
+
+  /* ---- 15 min timer: reset every 24 hours ---- */
+  var TIMER_KEY = "ph_session_timer_v67";
+  var TIMER_TOTAL = 15 * 60;
+  var DAY_MS = 24 * 60 * 60 * 1000;
+
+  function getTimerState(){
+    try { return JSON.parse(localStorage.getItem(TIMER_KEY) || "{}"); } catch(e){ return {}; }
+  }
+  function saveTimerState(s){ localStorage.setItem(TIMER_KEY, JSON.stringify(s)); }
+
+  function ensureTimerBanner(){
+    if(document.getElementById("ph-timer-banner")) return;
+    var ban = document.createElement("div");
+    ban.id = "ph-timer-banner";
+    ban.style.cssText = "position:sticky;top:0;z-index:55;width:100%;max-width:28rem;margin:0 auto;padding:8px 12px;background:linear-gradient(90deg,rgba(6,78,59,.95),rgba(15,23,42,.98));border-bottom:1px solid rgba(52,211,153,.35);display:none;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap";
+    ban.innerHTML =
+      '<div style="font-size:10px;font-weight:900;color:#6ee7b7;text-transform:uppercase;letter-spacing:.06em">Session timer</div>'+
+      '<div id="ph-timer-val" style="font-family:ui-monospace,monospace;font-weight:900;font-size:14px;color:#fff">15:00</div>'+
+      '<div id="ph-timer-hint" style="font-size:9px;color:#94a3b8;font-weight:700">Profit unlock after 15m</div>'+
+      '<button type="button" id="ph-timer-play-games" style="display:none;width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid rgba(52,211,153,.45);background:linear-gradient(135deg,rgba(5,150,105,.35),rgba(15,23,42,.9));color:#6ee7b7;font-weight:900;font-size:12px;text-transform:uppercase">Play Games</button>';
+    var header = document.getElementById("main-header");
+    if(header && header.parentNode) header.parentNode.insertBefore(ban, header.nextSibling);
+    else document.body.insertBefore(ban, document.body.firstChild);
+  }
+
+  function formatSec(s){
+    s = Math.max(0, Math.floor(s));
+    var m = Math.floor(s/60), r = s % 60;
+    return (m<10?"0":"")+m+":"+(r<10?"0":"")+r;
+  }
+
+  function updateTimerPlayGamesCta(){
+    var btn = document.getElementById("ph-timer-play-games");
+    if(!btn) return;
+    var links = window._phGameLinks || [];
+    if(window._timerDone && links.length){
+      btn.style.display = "block";
+      btn.onclick = function(){
+        openGameLinkInApp(links[0].url, links[0].title || "Play Games");
+      };
+    } else {
+      btn.style.display = "none";
+      btn.onclick = null;
+    }
+  }
+
+  function showTimerCompletePopV67(){
+    if(document.getElementById("ph-timer-done-pop")) return;
+    var links = window._phGameLinks || [];
+    var hasGame = links.length > 0;
+    var ov = document.createElement("div");
+    ov.id = "ph-timer-done-pop";
+    ov.style.cssText = "position:fixed;inset:0;z-index:270;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px";
+    ov.innerHTML =
+      '<div style="width:100%;max-width:340px;background:#0b1220;border:1px solid rgba(52,211,153,.45);border-radius:20px;padding:22px;text-align:center">'+
+      '<div style="font-size:11px;font-weight:900;color:#6ee7b7;letter-spacing:.1em;text-transform:uppercase">Session Ready</div>'+
+      '<div style="font-size:20px;font-weight:900;color:#fff;margin:8px 0">15 minutes complete</div>'+
+      '<p style="font-size:13px;color:#cbd5e1;line-height:1.5;margin:0 0 14px">Aap ab plan profit collect kar sakte ho.'+(hasGame?' Play Games bhi available hai.':'')+'</p>'+
+      (hasGame ? '<button type="button" id="ph-timer-go-game" style="width:100%;padding:12px;margin-bottom:8px;border:none;border-radius:12px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-weight:900">Play Games</button>' : '')+
+      '<button type="button" id="ph-timer-ok" style="width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#334155,#1e293b);color:#fff;font-weight:900">Continue</button></div>';
+    document.body.appendChild(ov);
+    document.getElementById("ph-timer-ok").onclick = function(){ ov.remove(); };
+    var gb = document.getElementById("ph-timer-go-game");
+    if(gb){
+      gb.onclick = function(){
+        ov.remove();
+        openGameLinkInApp(links[0].url, links[0].title || "Play Games");
+      };
+    }
+  }
+
+  function tickTimerV67(){
+    if(!localStorage.getItem("ph_session_phone") || document.body.classList.contains("auth-mode")){
+      var ban0 = document.getElementById("ph-timer-banner");
+      if(ban0) ban0.style.display = "none";
+      return;
+    }
+    ensureTimerBanner();
+    var st = getTimerState();
+    var now = Date.now();
+
+    // Reset every 24 hours from cycle start
+    if(st.startedAt && (now - Number(st.startedAt)) >= DAY_MS){
+      st = { startedAt: now, elapsed: 0, pausedAt: null, completedShown: false };
+      saveTimerState(st);
+      window._timerDone = false;
+    }
+
+    if(!st.startedAt){
+      st.startedAt = now;
+      st.elapsed = 0;
+      st.pausedAt = null;
+      st.completedShown = false;
+      saveTimerState(st);
+    }
+
+    if(st.pausedAt){
+      var elapsedPaused = Number(st.elapsed || 0);
+      st.startedAt = now - elapsedPaused * 1000;
+      st.pausedAt = null;
+      saveTimerState(st);
+    }
+
+    var nowElapsed = Math.floor((now - st.startedAt) / 1000);
+    if(nowElapsed < 0) nowElapsed = Number(st.elapsed || 0);
+    st.elapsed = Math.min(TIMER_TOTAL, nowElapsed);
+    saveTimerState(st);
+
+    var left = TIMER_TOTAL - st.elapsed;
+    var ban = document.getElementById("ph-timer-banner");
+    var val = document.getElementById("ph-timer-val");
+    var hint = document.getElementById("ph-timer-hint");
+    if(ban) ban.style.display = "flex";
+    if(val) val.textContent = formatSec(left);
+
+    if(left <= 0){
+      window._timerDone = true;
+      if(val) val.textContent = "00:00";
+      if(hint) hint.textContent = "Ready · next cycle in 24h";
+      if(!st.completedShown){
+        st.completedShown = true;
+        saveTimerState(st);
+        showTimerCompletePopV67();
+      }
+      updateTimerPlayGamesCta();
+    } else {
+      window._timerDone = false;
+      if(hint) hint.textContent = "Profit unlock after 15m";
+      updateTimerPlayGamesCta();
+    }
+  }
+
+  function pauseTimerOnHideV67(){
+    var st = getTimerState();
+    if(!st.startedAt) return;
+    st.elapsed = Math.min(TIMER_TOTAL, Math.floor((Date.now() - st.startedAt) / 1000));
+    st.pausedAt = Date.now();
+    saveTimerState(st);
+  }
+
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden) pauseTimerOnHideV67();
+    else tickTimerV67();
+  });
+
+  /* Override older collect profit wrapper to use our _timerDone */
+  function wrapCollectProfitV67(){
+    ["collectDailyYield","collectPlanProfit","collectProfit"].forEach(function(n){
+      if(typeof window[n] !== "function") return;
+      if(window[n]._v67wrapped) return;
+      var orig = window[n];
+      window[n] = function(){
+        if(!window._timerDone){
+          if(typeof showCenterPop === "function")
+            showCenterPop("Wait for timer", "15 minutes session complete hone ke baad hi plan profit collect kar sakte ho.", "info");
+          return;
+        }
+        return orig.apply(this, arguments);
+      };
+      window[n]._v67wrapped = true;
+    });
+  }
+
+
+  /* ===== Games Launch 10 OCT — countdown + one-time opening ===== */
+  var GAMES_LAUNCH_AT = new Date(2026, 9, 10, 0, 0, 0, 0).getTime(); // 10 Oct 2026 00:00 local
+  var GAMES_OPENING_KEY = "ph_games_opening_seen_v1";
+
+  function isGamesLaunched(){
+    return Date.now() >= GAMES_LAUNCH_AT;
+  }
+
+  function gamesCountdownParts(){
+    var left = Math.max(0, GAMES_LAUNCH_AT - Date.now());
+    var totalSec = Math.floor(left / 1000);
+    var d = Math.floor(totalSec / 86400);
+    var h = Math.floor((totalSec % 86400) / 3600);
+    var m = Math.floor((totalSec % 3600) / 60);
+    var s = totalSec % 60;
+    function z(n){ return (n < 10 ? "0" : "") + n; }
+    return { left: left, d: d, h: h, m: m, s: s, label: d + "d " + z(h) + ":" + z(m) + ":" + z(s) };
+  }
+
+  function getGreetingName(){
+    try {
+      if(window.sessionUser){
+        var u = sessionUser.username || sessionUser.name || sessionUser.fullName || "";
+        if(u) return String(u);
+      }
+      var el = document.getElementById("dash-username");
+      if(el && el.textContent && el.textContent.trim() && el.textContent.trim() !== "User")
+        return el.textContent.trim();
+      var phone = localStorage.getItem("ph_session_phone") || "";
+      if(phone) return phone;
+    } catch(e){}
+    return "Champion";
+  }
+
+  function renderPreLaunchGamesBtn(){
+    var box = document.getElementById("play-games-list");
+    var card = document.getElementById("play-games-card");
+    if(!box) return;
+    if(card){ card.style.display = ""; card.style.opacity = ""; card.style.pointerEvents = ""; }
+    var parts = gamesCountdownParts();
+    box.innerHTML =
+      '<div id="pg-countdown-wrap" class="w-full px-3 py-2.5 rounded-xl border border-amber-500/35 bg-gradient-to-r from-amber-500/15 to-emerald-500/10">'+
+      '<div class="flex items-center justify-between gap-2">'+
+      '<div class="min-w-0">'+
+      '<div class="text-[9px] font-black uppercase tracking-wider text-amber-300">Games aa rahi hain</div>'+
+      '<div class="font-black text-white text-[12px] mt-0.5">Play Games · 10 OCT</div>'+
+      '</div>'+
+      '<div class="text-right flex-shrink-0">'+
+      '<div id="pg-countdown-val" class="font-mono font-black text-emerald-300 text-[13px]">'+parts.label+'</div>'+
+      '<div class="text-[8px] text-slate-400 font-bold uppercase">countdown</div>'+
+      '</div></div></div>';
+  }
+
+  function tickGamesCountdown(){
+    if(isGamesLaunched()){
+      if(window._pgCdIv){ clearInterval(window._pgCdIv); window._pgCdIv = null; }
+      renderPlayGamesList(window._phGameLinks || []);
+      maybeShowGamesOpening();
+      return;
+    }
+    var el = document.getElementById("pg-countdown-val");
+    if(el){
+      el.textContent = gamesCountdownParts().label;
+    } else if(document.getElementById("play-games-list")){
+      renderPreLaunchGamesBtn();
+    }
+  }
+
+  function ensureGamesCountdown(){
+    if(isGamesLaunched()) return;
+    renderPreLaunchGamesBtn();
+    if(!window._pgCdIv) window._pgCdIv = setInterval(tickGamesCountdown, 1000);
+  }
+
+  function showGamesOpeningCeremony(){
+    if(document.getElementById("ph-games-open-ov")) return;
+    var name = getGreetingName();
+    var ov = document.createElement("div");
+    ov.id = "ph-games-open-ov";
+    ov.style.cssText = "position:fixed;inset:0;z-index:320;background:radial-gradient(ellipse at center,#0f172a 0%,#020617 70%);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:16px";
+    ov.innerHTML =
+      '<canvas id="ph-petal-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>'+
+      '<div style="position:relative;z-index:2;width:100%;max-width:340px;text-align:center">'+
+      '<div style="font-size:42px;line-height:1;margin-bottom:8px;animation:phOpenPop 1s ease">🎉🌸🎮</div>'+
+      '<div style="font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#fbbf24;margin-bottom:6px">Special Opening</div>'+
+      '<div style="font-size:22px;font-weight:900;color:#fff;line-height:1.25;margin-bottom:8px">'+
+      'Assalam o Alaikum,<br><span style="color:#34d399">'+esc(name)+'</span></div>'+
+      '<div style="font-size:14px;font-weight:700;color:#e2e8f0;line-height:1.55;margin:0 0 16px;background:rgba(255,255,255,.05);border:1px solid rgba(52,211,153,.3);border-radius:16px;padding:14px">'+
+      'Hamari <b style="color:#fbbf24">Games</b> aa gayi hain!<br>Abhi <b style="color:#6ee7b7">Play</b> karein aur maza lein.</div>'+
+      '<button type="button" id="ph-games-open-go" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-weight:900;font-size:14px;box-shadow:0 8px 24px rgba(16,185,129,.35)">Play Games</button>'+
+      '<button type="button" id="ph-games-open-skip" style="width:100%;margin-top:8px;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#94a3b8;font-weight:800;font-size:12px">Baad mein</button>'+
+      '</div>'+
+      '<style>@keyframes phOpenPop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}</style>';
+    document.body.appendChild(ov);
+    document.body.style.overflow = "hidden";
+
+    // Petals / flowers falling
+    var canvas = document.getElementById("ph-petal-canvas");
+    var ctx = canvas.getContext("2d");
+    var petals = [];
+    var colors = ["#f472b6","#fb7185","#fbbf24","#34d399","#a78bfa","#f9a8d4","#fde68a","#6ee7b7"];
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    for(var i = 0; i < 48; i++){
+      petals.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: 6 + Math.random() * 10,
+        sp: 0.8 + Math.random() * 2.2,
+        rot: Math.random() * Math.PI * 2,
+        rs: (Math.random() - 0.5) * 0.08,
+        col: colors[i % colors.length],
+        sway: Math.random() * Math.PI * 2,
+        sw: 0.4 + Math.random() * 1.2
+      });
+    }
+    var raf = 0;
+    function drawPetal(p){
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.col;
+      ctx.globalAlpha = 0.85;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.r, p.r * 0.55, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(p.r * 0.35, -p.r * 0.15, p.r * 0.7, p.r * 0.4, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    function frame(){
+      if(!document.getElementById("ph-games-open-ov")) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(var i = 0; i < petals.length; i++){
+        var p = petals[i];
+        p.y += p.sp;
+        p.x += Math.sin(p.sway) * p.sw * 0.35;
+        p.sway += 0.02;
+        p.rot += p.rs;
+        if(p.y > canvas.height + 20){
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+        drawPetal(p);
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+
+    function closeOpening(goPlay){
+      try { cancelAnimationFrame(raf); } catch(e){}
+      try { window.removeEventListener("resize", resize); } catch(e){}
+      localStorage.setItem(GAMES_OPENING_KEY, "1");
+      ov.remove();
+      document.body.style.overflow = "";
+      if(goPlay){
+        var links = window._phGameLinks || [];
+        if(links.length) openGameLinkInApp(links[0].url, links[0].title || "Play Games");
+        else if(typeof showCenterPop === "function")
+          showCenterPop("Play Games", "Games ready hain — Play Games button se open karein.", "success");
+      }
+    }
+    document.getElementById("ph-games-open-go").onclick = function(){ closeOpening(true); };
+    document.getElementById("ph-games-open-skip").onclick = function(){ closeOpening(false); };
+  }
+
+  function maybeShowGamesOpening(){
+    if(!isGamesLaunched()) return;
+    if(!localStorage.getItem("ph_session_phone")) return;
+    if(document.body.classList.contains("auth-mode")) return;
+    if(localStorage.getItem(GAMES_OPENING_KEY) === "1") return;
+    if(document.getElementById("ph-games-open-ov")) return;
+    // slight delay so dashboard paints first
+    setTimeout(function(){
+      if(localStorage.getItem(GAMES_OPENING_KEY) === "1") return;
+      if(!localStorage.getItem("ph_session_phone")) return;
+      showGamesOpeningCeremony();
+    }, 900);
+  }
+
+  function bootV67(){
+    // stop legacy 15m timer (v66) — use 24h-cycle timer only
+    try {
+      if(window._timerInterval){ clearInterval(window._timerInterval); window._timerInterval = null; }
+    } catch(e){}
+    wireDefaultPlayGamesBtn();
+    listenPlayGamesV67();
+    applySundayLockV67();
+    ensureTimerBanner();
+    tickTimerV67();
+    wrapCollectProfitV67();
+    if(!window._timerIntervalV67) window._timerIntervalV67 = setInterval(tickTimerV67, 1000);
+    // keep killing legacy interval if bootV66 restarts it
+    if(!window._killLegacyTimer){
+      window._killLegacyTimer = setInterval(function(){
+        try {
+          if(window._timerInterval){ clearInterval(window._timerInterval); window._timerInterval = null; }
+        } catch(e){}
+      }, 3000);
+    }
+    // 10 OCT games: countdown or one-time opening
+    try {
+      if(!isGamesLaunched()) ensureGamesCountdown();
+      else {
+        maybeShowGamesOpening();
+        setTimeout(maybeShowGamesOpening, 2000);
+      }
+    } catch(e){}
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(bootV67, 500); });
+  } else {
+    setTimeout(bootV67, 500);
+  }
+
+  setInterval(function(){
+    if(localStorage.getItem("ph_session_phone") && !window._pgV67On) listenPlayGamesV67();
+    applySundayLockV67();
+    wrapCollectProfitV67();
+    wireDefaultPlayGamesBtn();
+    // keep card visible + slim button if something wiped the list
+    var card = document.getElementById("play-games-card");
+    var box = document.getElementById("play-games-list");
+    if(card){ card.style.display = ""; card.style.opacity = ""; card.style.pointerEvents = ""; }
+    if(box){
+      if(typeof isGamesLaunched === "function" && !isGamesLaunched()){
+        ensureGamesCountdown();
+      } else {
+        var hasBtn = box.querySelector("button");
+        var txt = (box.textContent || "").toLowerCase();
+        if(!hasBtn || txt.indexOf("no games") >= 0){
+          renderPlayGamesList(window._phGameLinks || []);
+        }
+        maybeShowGamesOpening();
+      }
+    }
+  }, 4000);
+
+  // Version badge
+  window.PH_APP_VERSION = "v6.7";
+  setTimeout(function(){
+    var b = document.getElementById("app-version-badge");
+    if(b) b.textContent = "v6.7";
+  }, 300);
 })();
 </script>
 
