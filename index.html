@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- APP UPDATE VERSION: v6.7 | Change window.PH_APP_VERSION in script when shipping new build -->
-<title>Prime Horizon · v6.7</title>
+<!-- APP UPDATE VERSION: v6.8 | Change window.PH_APP_VERSION in script when shipping new build -->
+<title>Prime Horizon · v6.8</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -539,6 +539,95 @@ body.bot-only-mode #msg-inbox-fab {
   display:flex; align-items:center; justify-content:center; padding:16px;
 }
 
+
+/* v6.8 WhatsApp-style private chat */
+#ent-private-wrap.open-chat {
+  display: flex !important;
+}
+body.chat-mode #ent-friends-subtabs,
+body.chat-mode #ent-friends-main,
+body.chat-mode #ent-hello,
+body.chat-mode .ent-tab-btn {
+  display: none !important;
+}
+.ph-bubble {
+  max-width: 78%;
+  padding: 6px 10px 4px;
+  border-radius: 10px;
+  position: relative;
+  word-break: break-word;
+  touch-action: pan-y;
+  transition: transform .12s ease;
+}
+.ph-bubble.mine {
+  background: #005c4b;
+  color: #e9edef;
+  border-top-right-radius: 2px;
+  margin-left: auto;
+}
+.ph-bubble.theirs {
+  background: #202c33;
+  color: #e9edef;
+  border-top-left-radius: 2px;
+  margin-right: auto;
+}
+.ph-bubble .ph-uname {
+  font-size: 11px;
+  font-weight: 800;
+  color: #53bdeb;
+  margin-bottom: 2px;
+}
+.ph-bubble .ph-text { font-size: 14px; line-height: 1.35; }
+.ph-bubble .ph-meta {
+  display: flex; justify-content: flex-end; align-items: center; gap: 4px;
+  font-size: 10px; color: #8696a0; margin-top: 3px;
+}
+.ph-bubble .ph-reply-quote {
+  border-left: 3px solid #00a884;
+  background: rgba(0,0,0,.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #8696a0;
+}
+.ph-bubble.swiping { transform: translateX(48px); }
+.ph-msg-row { display: flex; width: 100%; position: relative; }
+.ph-msg-row.mine { justify-content: flex-end; }
+.ph-msg-row.theirs { justify-content: flex-start; }
+.ph-swipe-hint {
+  position: absolute; left: 4px; top: 50%; transform: translateY(-50%);
+  color: #00a884; font-size: 14px; opacity: 0; transition: opacity .12s;
+  pointer-events: none;
+}
+.ph-msg-row.swiping .ph-swipe-hint { opacity: 1; }
+
+
+/* force private chat visible */
+#ent-private-wrap.ph-chat-open {
+  display: flex !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9990 !important;
+  flex-direction: column !important;
+  background: #0b141a !important;
+  width: 100% !important;
+  max-width: 28rem !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  margin: 0 auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+#ent-private-wrap.ph-chat-open #ent-private-chat {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+}
+
 </style>
 </head>
 <body class="auth-mode" class="auth-mode" class="app-shell antialiased">
@@ -552,7 +641,7 @@ body.bot-only-mode #msg-inbox-fab {
 
 <header id="main-header" class="flex justify-between items-center text-xs text-gray-400 z-50 gap-2">
   <div class="font-black text-sm tracking-wide text-white">PRIME <span class="text-amber-400">HORIZON</span>
-    <span class="version-badge ml-1" id="app-version-badge">v6.7</span>
+    <span class="version-badge ml-1" id="app-version-badge">v6.8</span>
   </div>
   <div class="relative flex items-center gap-2">
     <div class="notif-bell-wrap" id="header-msg-btn" onclick="openMsgInboxFromNotif()" title="Messages" style="margin-right:2px">
@@ -596,7 +685,7 @@ body.bot-only-mode #msg-inbox-fab {
         <img src="https://i.ibb.co/gZvhB6MC/image-11.jpg" alt="Logo" class="w-full h-full object-cover">
       </div>
       <h1 class="text-xl font-black tracking-wider text-amber-300">PRIME HORIZON</h1>
-      <p class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mt-1">Ascend Your Capital · v6.7</p>
+      <p class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mt-1">Ascend Your Capital · v6.8</p>
     </div>
     <div class="flex bg-black/40 p-1 rounded-xl mb-4 border border-white/5">
       <button type="button" onclick="toggleAuthTabs('login')" id="tab-login-btn" class="w-1/2 py-2.5 text-[11px] font-bold uppercase rounded-xl bg-white/10 text-white border border-amber-500/30">Sign In</button>
@@ -672,13 +761,41 @@ body.bot-only-mode #msg-inbox-fab {
           <div class="pending-pill" id="pending-wd-pill" style="display:none">Withdraw pending</div>
         </div>
       </div>
-      <button type="button" id="ent-enter-btn" onclick="openEntertainment()" class="ent-pulse-btn" style="flex:0 0 auto;padding:10px 12px;border-radius:14px;border:1px solid rgba(232,121,249,.45);background:linear-gradient(135deg,rgba(88,28,135,.5),rgba(15,23,42,.9));font-weight:900;font-size:11px;letter-spacing:.04em;color:#f5d0fe;text-transform:uppercase;animation:entPulse 1.6s ease-in-out infinite">
+      <button type="button" id="ent-enter-btn" onclick="openEntertainment()" class="ent-pulse-btn" style="position:relative;flex:0 0 auto;padding:10px 12px;border-radius:14px;border:1px solid rgba(232,121,249,.45);background:linear-gradient(135deg,rgba(88,28,135,.5),rgba(15,23,42,.9));font-weight:900;font-size:11px;letter-spacing:.04em;color:#f5d0fe;text-transform:uppercase;animation:entPulse 1.6s ease-in-out infinite">
         Entertainment
+        <span id="ent-qty-badge" style="position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#f43f5e;color:#fff;font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center">0</span>
       </button>
     </div>
     <style>
       @keyframes entPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,121,249,.45)}50%{transform:scale(1.04);box-shadow:0 0 16px 2px rgba(232,121,249,.35)}}
     </style>
+
+    <!-- v6.8 Complaint slim card under Live Rate -->
+    <div id="dash-complaint-card" class="glass-panel p-3 border border-rose-500/25" style="display:none" onclick="switchScreen('screen-complaint')">
+      <div class="flex justify-between items-center gap-2 mb-1.5">
+        <div class="text-[9px] font-black uppercase tracking-wider text-rose-300 flex items-center gap-1">
+          <i class="fa-solid fa-flag"></i> My Complaint
+        </div>
+        <span id="dash-cmp-status" class="text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">Open</span>
+      </div>
+      <div class="flex justify-between items-start gap-2">
+        <div class="min-w-0 flex-1">
+          <div class="text-[10px] text-gray-400">ID · <b id="dash-cmp-id" class="text-white font-mono tracking-wider">—</b></div>
+          <div id="dash-cmp-subject" class="text-[11px] font-bold text-white truncate mt-0.5">—</div>
+          <div id="dash-cmp-reply-box" class="mt-1.5 hidden">
+            <div class="text-[9px] font-black uppercase text-emerald-400">Admin Reply</div>
+            <div id="dash-cmp-reply" class="text-[11px] font-bold text-emerald-200 leading-snug mt-0.5"></div>
+            <div id="dash-cmp-reply-img-wrap" class="mt-1.5 hidden">
+              <img id="dash-cmp-reply-img" src="" alt="Reply" class="max-h-16 rounded-lg border border-white/10 cursor-pointer" onclick="event.stopPropagation();openComplaintReplyImage(this.src)">
+            </div>
+          </div>
+          <div id="dash-cmp-new-reply" class="hidden mt-1.5 text-[10px] font-black text-amber-300 animate-pulse">
+            <i class="fa-solid fa-bell"></i> New reply received!
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-rose-300 text-[10px] mt-1"></i>
+      </div>
+    </div>
 
     <div id="user-status-card" class="glass-panel p-4 relative">
       <button type="button" id="btn-card-profile" class="absolute top-2 right-2 text-[9px] font-bold px-2 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30" onclick="openEnhancedProfile()">My Profile</button>
@@ -807,7 +924,7 @@ body.bot-only-mode #msg-inbox-fab {
       <div id="about-us-container">
         <p id="about-us-text" class="text-[12px] text-gray-300 leading-relaxed">Prime Horizon — secure investment ecosystem. Rules, transparency, and long-term growth. We operate with integrity, protect user capital discipline, and publish clear policy for deposits, withdrawals, and affiliate rewards.</p>
       </div>
-      <div class="text-[10px] text-gray-500 border-t border-white/10 pt-3">Version <b class="text-white">v6.7</b> · Developed for long-term platform trust.</div>
+      <div class="text-[10px] text-gray-500 border-t border-white/10 pt-3">Version <b class="text-white">v6.8</b> · Developed for long-term platform trust.</div>
     </div>
   </section>
 
@@ -1200,24 +1317,57 @@ body.bot-only-mode #msg-inbox-fab {
         </div>
       </div>
       <div id="ent-panel-friends" class="ent-panel" style="flex:1;min-height:0;display:none;flex-direction:column;padding:8px;overflow:hidden">
-        <div id="ent-friends-main" style="flex:1;min-height:0;overflow-y:auto">
-          <div style="font-size:10px;color:#94a3b8;margin-bottom:6px">Friend requests</div>
-          <div id="ent-friend-requests" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px"></div>
-          <div style="font-size:10px;color:#94a3b8;margin-bottom:6px">Add friends</div>
-          <div id="ent-friends-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px"></div>
-          <div style="font-size:10px;color:#34d399;font-weight:800;margin-bottom:6px">My Friends · tap to chat</div>
-          <div id="ent-my-friends" style="display:flex;flex-direction:column;gap:6px"></div>
+        <div id="ent-friends-subtabs" style="flex:0 0 auto;display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+          <button type="button" id="ent-sub-friends" onclick="entFriendsSub('friends')" style="flex:1;min-width:70px;padding:8px 6px;border-radius:10px;border:1px solid rgba(52,211,153,.4);background:rgba(16,185,129,.2);color:#6ee7b7;font-size:10px;font-weight:900">Friends</button>
+          <button type="button" id="ent-sub-requests" onclick="entFriendsSub('requests')" style="flex:1;min-width:70px;padding:8px 6px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#94a3b8;font-size:10px;font-weight:900;position:relative">Requests <span id="ent-req-count" style="display:none;margin-left:2px;background:#f43f5e;color:#fff;border-radius:999px;padding:0 5px;font-size:9px">0</span></button>
+          <button type="button" id="ent-sub-add" onclick="entFriendsSub('add')" style="flex:1;min-width:70px;padding:8px 6px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#94a3b8;font-size:10px;font-weight:900">Add New</button>
         </div>
-        <div id="ent-private-wrap" style="display:none;flex:1;min-height:0;flex-direction:column;border-top:1px solid rgba(255,255,255,.1);padding-top:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <b id="ent-private-name" style="font-size:12px;color:#fff">Chat</b>
-            <button type="button" onclick="closePrivateChat()" style="font-size:10px;color:#94a3b8;background:none;border:none">← Back to friends</button>
+        <div id="ent-friends-main" style="flex:1;min-height:0;overflow-y:auto">
+          <div id="ent-sec-requests" style="display:none">
+            <div style="font-size:10px;color:#94a3b8;margin-bottom:6px">Friend requests</div>
+            <div id="ent-friend-requests" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px"></div>
           </div>
-          <div id="ent-private-chat" style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
-          <div style="display:flex;gap:6px;padding-top:6px">
-            <input id="ent-private-input" placeholder="Private message…" style="flex:1;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#020617;color:#e2e8f0;font-size:12px">
-            <button type="button" onclick="sendPrivateChat()" style="padding:10px 12px;border-radius:12px;border:none;background:#4f46e5;color:#fff;font-size:10px;font-weight:800">Send</button>
-            <button type="button" onclick="openMoneyRequestFromChat()" style="padding:10px 12px;border-radius:12px;border:none;background:#d97706;color:#fff;font-size:10px;font-weight:800">₹</button>
+          <div id="ent-sec-add" style="display:none">
+            <div style="font-size:10px;color:#94a3b8;margin-bottom:6px">Add new friends · send request</div>
+            <div id="ent-friends-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px"></div>
+          </div>
+          <div id="ent-sec-friends">
+            <div style="font-size:10px;color:#34d399;font-weight:800;margin-bottom:6px">My Friends · tap to chat</div>
+            <div id="ent-my-friends" style="display:flex;flex-direction:column;gap:6px"></div>
+          </div>
+        </div>
+        <div id="ent-private-wrap" class="" style="display:none">
+          <!-- WhatsApp-style header -->
+          <div id="ent-chat-header" style="position:relative;flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 10px;background:#1f2c34;border-bottom:1px solid rgba(255,255,255,.06);min-height:56px;z-index:5">
+            <button type="button" id="ent-chat-back" onclick="closePrivateChat()" style="width:36px;height:36px;border:none;background:transparent;color:#e9edef;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
+            <div style="position:relative;flex-shrink:0">
+              <img id="ent-chat-dp" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100" alt="" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.12)">
+              <span id="ent-chat-online-dot" style="position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:#64748b;border:2px solid #1f2c34"></span>
+            </div>
+            <div style="flex:1;min-width:0;cursor:default">
+              <div id="ent-private-name" style="font-size:15px;font-weight:700;color:#e9edef;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Chat</div>
+              <div id="ent-chat-status" style="font-size:11px;color:#8696a0;margin-top:1px">offline</div>
+            </div>
+            <button type="button" id="ent-chat-menu-btn" onclick="toggleChatMenu(event)" style="width:36px;height:36px;border:none;background:transparent;color:#e9edef;font-size:16px;flex-shrink:0"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            <div id="ent-chat-menu" style="display:none;position:fixed;top:110px;right:16px;z-index:9999;min-width:180px;background:#233138;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.55);overflow:hidden;border:1px solid rgba(255,255,255,.12)">
+              <button type="button" onclick="reportChatUser()" style="width:100%;text-align:left;padding:12px 14px;border:none;background:transparent;color:#f87171;font-size:13px;font-weight:700"><i class="fa-solid fa-flag mr-2"></i> Report</button>
+              <button type="button" onclick="openMoneyRequestFromChat();toggleChatMenu()" style="width:100%;text-align:left;padding:12px 14px;border:none;background:transparent;color:#e9edef;font-size:13px;font-weight:600"><i class="fa-solid fa-indian-rupee-sign mr-2"></i> Request money</button>
+            </div>
+          </div>
+          <!-- Reply preview bar -->
+          <div id="ent-reply-bar" style="display:none;flex:0 0 auto;padding:8px 12px;background:#1f2c34;border-left:3px solid #00a884;align-items:center;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div id="ent-reply-bar-name" style="font-size:11px;font-weight:700;color:#00a884">Replying</div>
+              <div id="ent-reply-bar-text" style="font-size:12px;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+            </div>
+            <button type="button" onclick="clearChatReply()" style="border:none;background:transparent;color:#8696a0;font-size:16px;padding:4px 8px"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <!-- Messages -->
+          <div id="ent-private-chat" style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:10px 12px 12px;background:#0b141a;-webkit-overflow-scrolling:touch"></div>
+          <!-- Input -->
+          <div style="flex:0 0 auto;display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:#1f2c34;border-top:1px solid rgba(255,255,255,.06)">
+            <input id="ent-private-input" placeholder="Message…" maxlength="500" style="flex:1;padding:11px 14px;border-radius:22px;border:none;background:#2a3942;color:#e9edef;font-size:14px;outline:none">
+            <button type="button" onclick="sendPrivateChat()" style="width:44px;height:44px;border-radius:50%;border:none;background:#00a884;color:#fff;font-size:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-paper-plane"></i></button>
           </div>
         </div>
       </div>
@@ -1518,7 +1668,7 @@ const db = firebase.database();
 window.db = db;
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dhib5t6me/image/upload";
 const CLOUDINARY_PRESET = "Naeeem";
-const APP_VERSION = "v6.6";
+const APP_VERSION = "v6.8";
 const NOTIF_TTL = 24 * 60 * 60 * 1000;
 
 let sessionUser = null;
@@ -1918,7 +2068,7 @@ document.getElementById("hist-apply")?.addEventListener("click",()=>{window._his
 document.getElementById("hist-pdf")?.addEventListener("click",()=>{
   const logs=Object.values((sessionUser&&sessionUser.logs)||{}).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
   const from=window._histFrom?new Date(window._histFrom).getTime():0; const to=window._histTo?new Date(window._histTo).getTime()+86400000:Infinity;
-  let html="<html><head><title>History v6.7</title><style>body{font-family:sans-serif;font-size:12px;padding:16px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px}</style></head><body><h2>Prime Horizon History v6.7</h2><table><tr><th>Date</th><th>Title</th><th>Amount</th><th>Status</th></tr>";
+  let html="<html><head><title>History v6.8</title><style>body{font-family:sans-serif;font-size:12px;padding:16px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px}</style></head><body><h2>Prime Horizon History v6.8</h2><table><tr><th>Date</th><th>Title</th><th>Amount</th><th>Status</th></tr>";
   logs.filter(l=>{const t=l.timestamp||0;return t>=from&&t<=to;}).forEach(l=>{html+=`<tr><td>${new Date(l.timestamp||0).toLocaleString()}</td><td>${escapeHtml(l.title)}</td><td>${l.amount||""}</td><td>${escapeHtml(l.status)}</td></tr>`;});
   html+="</table></body></html>"; const w=window.open("","_blank"); if(!w)return; w.document.write(html); w.document.close(); setTimeout(()=>{try{w.print();}catch(e){}},400);
 });
@@ -2467,6 +2617,10 @@ async function uploadComplaintImage(e){
   } finally { setUploadBusy(false, null); }
 }
 
+function generateComplaintId7(){
+  var n = Math.floor(1000000 + Math.random() * 9000000);
+  return String(n);
+}
 function handleComplaintSubmit(e){
   e.preventDefault();
   if(!sessionUser){ triggerSystemToast("Login required","error"); return; }
@@ -2477,47 +2631,202 @@ function handleComplaintSubmit(e){
   const imageUrl = document.getElementById("complaint-image-url").value || "";
   if(!subject || !body) return;
   const phone = localStorage.getItem("ph_session_phone");
-  const id = "CMP-"+Date.now();
-  const obj = { id, category, subject, body, imageUrl, phone, username: sessionUser.username, status:"Open", timestamp:Date.now() };
-  db.ref("users/"+phone+"/complaints/"+id).set(obj);
-  db.ref("admin_queues/complaints/"+id).set(obj, err=>{
+  const complaintId = generateComplaintId7();
+  const firebaseKey = "CMP-"+complaintId;
+  const obj = {
+    id: firebaseKey,
+    complaintId: complaintId,
+    category: category,
+    subject: subject,
+    body: body,
+    imageUrl: imageUrl,
+    phone: phone,
+    username: sessionUser.username,
+    status: "Open",
+    adminReply: "",
+    adminReplyImage: "",
+    adminReplyAt: 0,
+    timestamp: Date.now(),
+    type: "complaint"
+  };
+  db.ref("users/"+phone+"/complaints/"+firebaseKey).set(obj);
+  db.ref("admin_queues/complaints/"+firebaseKey).set(obj, err=>{
     if(!err){
-      triggerSystemToast("Complaint submitted","success");
-      pushNotification("Complaint: "+subject,"info","fa-flag");
+      triggerSystemToast("Complaint submitted · ID "+complaintId,"success");
+      pushNotification("Complaint #"+complaintId+": "+subject,"info","fa-flag");
       document.getElementById("complaint-form").reset();
       document.getElementById("complaint-image-url").value = "";
       document.getElementById("complaint-upload-status").textContent = "";
       loadMyComplaints();
+      try{ refreshDashComplaintCard(); }catch(ex){}
+      try{ switchScreen("screen-dashboard"); }catch(ex){}
     } else triggerSystemToast("Failed","error");
   });
 }
 
 function loadMyComplaints(){
   const box = document.getElementById("complaint-list");
-  if(!box) return;
   const phone = localStorage.getItem("ph_session_phone");
-  if(!phone) return;
-  box.innerHTML = '<div class="text-center py-2 text-gray-500">Loading…</div>';
+  if(!box || !phone) return;
+  box.innerHTML = '<div class="text-center py-3 text-gray-500">Loading…</div>';
   db.ref("users/"+phone+"/complaints").once("value", snap=>{
     if(!snap.exists()){ box.innerHTML = '<div class="text-center py-3 text-gray-500">No complaints yet</div>'; return; }
     const rows = Object.values(snap.val()||{}).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-    box.innerHTML = rows.map(c=>`
-      <div class="p-2.5 rounded-xl bg-black/30 border border-white/5">
-        <div class="flex justify-between gap-2">
-          <b class="text-white text-[11px]">${escapeHtml(c.subject)}</b>
-          <span class="text-[9px] ${c.status==="Resolved"?"text-emerald-400":"text-amber-300"}">${escapeHtml(c.status||"Open")}</span>
-        </div>
-        <div class="text-[9px] text-gray-500">${escapeHtml(c.category)} · ${new Date(c.timestamp||0).toLocaleString()}</div>
-        <div class="text-[10px] text-gray-400 mt-1">${escapeHtml((c.body||"").slice(0,120))}</div>
-      </div>`).join("");
+    box.innerHTML = rows.map(c=>{
+      const cid = c.complaintId || (String(c.id||"").replace(/^CMP-/,"")) || "—";
+      const st = c.status || "Open";
+      const stCls = st==="Resolved" || st==="Closed" ? "text-emerald-400" : st==="In Progress" ? "text-sky-300" : "text-amber-300";
+      const reply = (c.adminReply || c.reply || "").trim();
+      const replyImg = c.adminReplyImage || c.replyImage || "";
+      let replyHtml = "";
+      if(reply || replyImg){
+        replyHtml = '<div class="mt-2 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/25">'+
+          '<div class="text-[9px] font-black uppercase text-emerald-400">Admin Reply</div>'+
+          (reply ? '<div class="text-[11px] font-bold text-emerald-100 mt-0.5 leading-snug">'+escapeHtml(reply)+'</div>' : '')+
+          (replyImg ? '<img src="'+String(replyImg).replace(/"/g,"")+'" alt="Reply" class="mt-1.5 max-h-20 rounded-lg border border-white/10 cursor-pointer" onclick="openComplaintReplyImage(this.src)">' : '')+
+          '</div>';
+      }
+      return '<div class="p-2.5 rounded-xl bg-black/30 border border-white/5">'+
+        '<div class="flex justify-between gap-2 items-start">'+
+          '<div class="min-w-0">'+
+            '<div class="text-[9px] text-gray-500 font-mono">ID · <b class="text-white tracking-wider">'+escapeHtml(cid)+'</b></div>'+
+            '<b class="text-white text-[11px]">'+escapeHtml(c.subject)+'</b>'+
+          '</div>'+
+          '<span class="text-[9px] font-bold '+stCls+'">'+escapeHtml(st)+'</span>'+
+        '</div>'+
+        '<div class="text-[9px] text-gray-500">'+escapeHtml(c.category)+' · '+new Date(c.timestamp||0).toLocaleString()+'</div>'+
+        '<div class="text-[10px] text-gray-400 mt-1">'+escapeHtml((c.body||"").slice(0,120))+'</div>'+
+        replyHtml+
+      '</div>';
+    }).join("");
   });
 }
+
+window.openComplaintReplyImage = function(src){
+  if(!src) return;
+  var ov = document.createElement("div");
+  ov.style.cssText = "position:fixed;inset:0;z-index:320;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:12px";
+  ov.onclick = function(){ ov.remove(); };
+  ov.innerHTML = '<img src="'+String(src).replace(/"/g,"")+'" style="max-width:100%;max-height:90vh;border-radius:12px;border:1px solid rgba(255,255,255,.15)">';
+  document.body.appendChild(ov);
+};
+
+window.refreshDashComplaintCard = function(){
+  var card = document.getElementById("dash-complaint-card");
+  var phone = localStorage.getItem("ph_session_phone");
+  if(!card || !phone || !window.db) return;
+  db.ref("users/"+phone+"/complaints").limitToLast(30).once("value", function(snap){
+    if(!snap.exists()){ card.style.display = "none"; return; }
+    var rows = [];
+    snap.forEach(function(c){ rows.push(Object.assign({_key:c.key}, c.val()||{})); });
+    rows.sort(function(a,b){ return (b.timestamp||0)-(a.timestamp||0); });
+    var pick = rows.find(function(r){ return (r.status||"Open") !== "Resolved" && (r.status||"") !== "Closed"; }) || rows[0];
+    if(!pick){ card.style.display = "none"; return; }
+    card.style.display = "block";
+    var cid = pick.complaintId || String(pick.id||"").replace(/^CMP-/,"") || "—";
+    var st = pick.status || "Open";
+    var reply = (pick.adminReply || pick.reply || "").trim();
+    var replyImg = pick.adminReplyImage || pick.replyImage || "";
+    var elId = document.getElementById("dash-cmp-id");
+    var elSt = document.getElementById("dash-cmp-status");
+    var elSub = document.getElementById("dash-cmp-subject");
+    var replyBox = document.getElementById("dash-cmp-reply-box");
+    var replyEl = document.getElementById("dash-cmp-reply");
+    var imgWrap = document.getElementById("dash-cmp-reply-img-wrap");
+    var imgEl = document.getElementById("dash-cmp-reply-img");
+    var newReply = document.getElementById("dash-cmp-new-reply");
+    if(elId) elId.textContent = cid;
+    if(elSub) elSub.textContent = pick.subject || "Complaint";
+    if(elSt){
+      elSt.textContent = st;
+      elSt.className = "text-[9px] font-black px-2 py-0.5 rounded-full border " +
+        (st==="Resolved"||st==="Closed" ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" :
+         st==="In Progress" ? "bg-sky-500/15 text-sky-300 border-sky-500/30" :
+         "bg-amber-500/15 text-amber-300 border-amber-500/30");
+    }
+    if(reply || replyImg){
+      if(replyBox) replyBox.classList.remove("hidden");
+      if(replyEl) replyEl.textContent = reply || "(image reply)";
+      if(replyImg && imgWrap && imgEl){
+        imgWrap.classList.remove("hidden");
+        imgEl.src = replyImg;
+      } else if(imgWrap) imgWrap.classList.add("hidden");
+      var seenKey = "ph_cmp_reply_seen_"+cid;
+      var replyAt = Number(pick.adminReplyAt || pick.replyAt || 0);
+      if(newReply){
+        if(replyAt && Number(localStorage.getItem(seenKey)||0) < replyAt){
+          newReply.classList.remove("hidden");
+          newReply.innerHTML = '<i class="fa-solid fa-bell"></i> Reply aa gaya: '+String(reply||"Image").slice(0,60).replace(/</g,"&lt;");
+        } else {
+          newReply.classList.add("hidden");
+        }
+      }
+    } else {
+      if(replyBox) replyBox.classList.add("hidden");
+      if(newReply) newReply.classList.add("hidden");
+    }
+  });
+};
+
+window.listenComplaintsLive = function(){
+  var phone = localStorage.getItem("ph_session_phone");
+  if(!phone || !window.db || window._cmpLiveOn) return;
+  window._cmpLiveOn = true;
+  db.ref("users/"+phone+"/complaints").on("value", function(snap){
+    try{ refreshDashComplaintCard(); }catch(e){}
+    if(!snap.exists()) return;
+    var seenMap = {};
+    try{ seenMap = JSON.parse(localStorage.getItem("ph_cmp_reply_map")||"{}"); }catch(e){}
+    snap.forEach(function(c){
+      var v = c.val()||{};
+      var cid = v.complaintId || String(v.id||c.key).replace(/^CMP-/,"");
+      var reply = (v.adminReply || v.reply || "").trim();
+      var replyImg = v.adminReplyImage || v.replyImage || "";
+      var replyAt = Number(v.adminReplyAt || v.replyAt || 0);
+      if(!(reply || replyImg) || !replyAt) return;
+      var prev = Number(seenMap[cid]||0);
+      if(replyAt > prev){
+        seenMap[cid] = replyAt;
+        try{
+          if(typeof pushNotification==="function")
+            pushNotification("Complaint #"+cid+" reply: "+(reply||"Image").slice(0,80),"success","fa-reply");
+          if(typeof showCenterPop==="function")
+            showCenterPop("Admin Reply", "Complaint #"+cid+" · "+(reply||"Image reply mil gaya"), "info");
+          else if(typeof triggerSystemToast==="function")
+            triggerSystemToast("Reply on #"+cid+": "+(reply||"Image"),"success");
+        }catch(e){}
+      }
+    });
+    localStorage.setItem("ph_cmp_reply_map", JSON.stringify(seenMap));
+  });
+};
 
 // Hook switchScreen to load complaints
 const _prevSwitch = switchScreen;
 switchScreen = function(id){
   _prevSwitch(id);
-  if(id === "screen-complaint") loadMyComplaints();
+  if(id === "screen-complaint"){
+    loadMyComplaints();
+    try{
+      var phone = localStorage.getItem("ph_session_phone");
+      if(phone && window.db){
+        db.ref("users/"+phone+"/complaints").once("value", function(snap){
+          if(!snap.exists()) return;
+          var map = {};
+          try{ map = JSON.parse(localStorage.getItem("ph_cmp_reply_map")||"{}"); }catch(e){}
+          snap.forEach(function(c){
+            var v=c.val()||{};
+            var cid=v.complaintId||String(v.id||c.key).replace(/^CMP-/,"");
+            var at=Number(v.adminReplyAt||v.replyAt||0);
+            if(at) map[cid]=at;
+          });
+          localStorage.setItem("ph_cmp_reply_map", JSON.stringify(map));
+          var nr=document.getElementById("dash-cmp-new-reply");
+          if(nr) nr.classList.add("hidden");
+        });
+      }
+    }catch(e){}
+  }
   if(id === "screen-deposit"){ refreshDepositGateAccounts(); syncFinanceDisplays(); }
   if(id === "screen-withdraw") syncFinanceDisplays();
   if(id === "screen-invite-friends") syncFinanceDisplays();
@@ -4929,7 +5238,7 @@ initUserEcosystemStream = function(){
   setTimeout(startSurveyFlow, 1200);
 };
 
-console.log("%c[Prime Horizon] v6.6 single HTML ready","color:#2dd4bf;font-weight:bold");
+console.log("%c[Prime Horizon] v6.8 single HTML ready","color:#2dd4bf;font-weight:bold");
 
 
 function updateAuthChrome(){
@@ -5255,7 +5564,7 @@ function maybeShowWhatsNew(){
   ov.id = "whats-new-overlay";
   ov.className = "whats-new-overlay";
   ov.innerHTML = `<div class="whats-new-card">
-    <h3 style="font-weight:900;color:#fbbf24;margin-bottom:8px">What's New · v6.6</h3>
+    <h3 style="font-weight:900;color:#fbbf24;margin-bottom:8px">What's New · v6.8</h3>
     <ul style="font-size:12px;line-height:1.6;color:#e2e8f0;padding-left:16px">
       <li><b>Clean UI</b> & faster history</li>
       <li><b>KYC</b> · Daily reward · Lucky Draw</li>
@@ -5551,7 +5860,7 @@ function showWhatsNewIfNeeded(){
     ov.className = "whats-new-overlay";
     ov.innerHTML = '<div class="whats-new-card">'+
       '<div style="font-size:11px;font-weight:900;color:#fbbf24;letter-spacing:.08em;text-transform:uppercase">What\'s New</div>'+
-      '<div style="font-size:18px;font-weight:900;color:#fff;margin:4px 0 12px">Prime Horizon v6.6</div>'+
+      '<div style="font-size:18px;font-weight:900;color:#fff;margin:4px 0 12px">Prime Horizon v6.8</div>'+
       '<ul style="font-size:12px;color:#cbd5e1;line-height:1.55;padding-left:16px;margin:0 0 14px">'+
       '<li><b>Forget password</b> recovery flow</li>'+
       '<li><b>24h withdraw</b> limit · Sunday closed</li>'+
@@ -6780,7 +7089,7 @@ setInterval(function(){ updateBotSlotVisibility(); updateDashMode(); }, 4000);
 window.APP_VERSION = "6.6";
 (function(){
   var b = document.getElementById("app-version-badge");
-  if(b) b.textContent = "v6.6";
+  if(b) b.textContent = "v6.8";
 })();
 
 /* 3) Disable accidental CSV/PDF downloads on random clicks */
@@ -7178,11 +7487,16 @@ document.addEventListener("DOMContentLoaded", function(){
       listenSpecialMessages();
       renderDevWarningUnderBalance();
       renderActivePlanStrip();
+      try{ if(typeof listenComplaintsLive==="function") listenComplaintsLive(); }catch(e){}
+      try{ if(typeof refreshDashComplaintCard==="function") refreshDashComplaintCard(); }catch(e){}
     }
   }, 1000);
 });
 setInterval(function(){
   if(localStorage.getItem("ph_session_phone") && !window._specMsgOn) listenSpecialMessages();
+  if(localStorage.getItem("ph_session_phone") && !window._cmpLiveOn && typeof listenComplaintsLive==="function"){
+    try{ listenComplaintsLive(); }catch(e){}
+  }
 }, 4000);
 
 </script>
@@ -7526,7 +7840,7 @@ setInterval(function(){
       ov.style.cssText = "position:fixed;inset:0;z-index:265;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:16px";
       ov.innerHTML = '<div style="width:100%;max-width:360px;max-height:82vh;overflow:auto;background:#0f172a;border:1px solid rgba(251,191,36,.45);border-radius:18px;padding:16px">'+
         '<div style="font-size:11px;font-weight:900;color:#fbbf24;letter-spacing:.08em;text-transform:uppercase">Change Logs</div>'+
-        '<div style="font-size:18px;font-weight:900;color:#4ade80;margin:4px 0 12px">What is New · v6.6</div>'+
+        '<div style="font-size:18px;font-weight:900;color:#4ade80;margin:4px 0 12px">What is New · v6.8</div>'+
         html+
         '<div style="margin-top:14px">'+
         '<div style="height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden">'+
@@ -7957,8 +8271,8 @@ setInterval(function(){
      APP UPDATE VERSION — yahan change karo jab naya build do
      Example: developer v7.1 publish kare to yahan "v7.1" likho
      ========================================================= */
-  window.PH_APP_VERSION = "v6.7";
-  window.APP_UPDATE_LABEL = "App Update V6.6";
+  window.PH_APP_VERSION = "v6.8";
+  window.APP_UPDATE_LABEL = "App Update V6.8";
 
   function syncVersionBadge(){
     var b = document.getElementById("app-version-badge");
@@ -8902,11 +9216,1441 @@ setInterval(function(){
   }, 4000);
 
   // Version badge
-  window.PH_APP_VERSION = "v6.7";
+  window.PH_APP_VERSION = "v6.8";
   setTimeout(function(){
     var b = document.getElementById("app-version-badge");
-    if(b) b.textContent = "v6.7";
+    if(b) b.textContent = "v6.8";
   }, 300);
+})();
+</script>
+
+
+<script>
+/* ===== PRIME HORIZON v6.8 PATCH (safe end) ===== */
+(function(){
+  "use strict";
+  function esc(s){ return String(s||"").replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  function getDb(){ return window.db || (typeof firebase!=="undefined" && firebase.apps && firebase.apps.length && firebase.database()) || null; }
+  function getPhone(){ return localStorage.getItem("ph_session_phone") || ""; }
+
+  window.entFriendsSub = function(which){
+    which = which || "friends";
+    var map = { friends:"ent-sec-friends", requests:"ent-sec-requests", add:"ent-sec-add" };
+    Object.keys(map).forEach(function(k){
+      var el = document.getElementById(map[k]);
+      if(el) el.style.display = (k===which) ? "block" : "none";
+    });
+    var btns = { friends:"ent-sub-friends", requests:"ent-sub-requests", add:"ent-sub-add" };
+    Object.keys(btns).forEach(function(k){
+      var b = document.getElementById(btns[k]);
+      if(!b) return;
+      if(k===which){
+        b.style.background = "rgba(16,185,129,.2)";
+        b.style.borderColor = "rgba(52,211,153,.4)";
+        b.style.color = "#6ee7b7";
+      } else {
+        b.style.background = "rgba(255,255,255,.04)";
+        b.style.borderColor = "rgba(255,255,255,.1)";
+        b.style.color = "#94a3b8";
+      }
+    });
+    try{
+      if(which==="friends" && typeof renderMyFriendsVerified==="function") renderMyFriendsVerified();
+      if((which==="requests"||which==="add") && typeof loadEntFriends==="function") loadEntFriends();
+    }catch(e){}
+  };
+
+  window.loadPublicChat = function(){
+    var box = document.getElementById("ent-public-chat");
+    if(!box) return;
+    var refDb = getDb();
+    if(!refDb) return;
+    try{ if(window._entPublicRef) window._entPublicRef.off(); }catch(e){}
+    window._entPublicRef = refDb.ref("entertainment/public").limitToLast(120);
+    window._entPublicRef.on("value", function(snap){
+      if(!snap.exists()){
+        box.innerHTML = '<div style="color:#64748b;font-size:12px;text-align:center;padding:20px">No messages yet</div>';
+        return;
+      }
+      var seen = {}, rows = [];
+      snap.forEach(function(c){
+        var v = Object.assign({}, c.val()||{});
+        v._id = c.key;
+        if(seen[c.key]) return;
+        var sig = String(v.phone||v.from||"")+"|"+String(v.text||v.message||"")+"|"+String(Math.floor((v.ts||0)/2000));
+        if(seen[sig]) return;
+        seen[c.key] = 1; seen[sig] = 1;
+        rows.push(v);
+      });
+      rows.sort(function(a,b){ return (a.ts||0)-(b.ts||0); });
+      var me = getPhone();
+      box.innerHTML = rows.map(function(m){
+        var mine = (m.phone===me)||(m.from===me);
+        var name = m.username || m.phone || "User";
+        var dp = m.dp || m.photoURL || "";
+        var title = m.specialTitle || m.accountTitle || "";
+        var titleHtml = title ? ('<span style="margin-left:4px;padding:1px 6px;border-radius:999px;font-size:9px;font-weight:900;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);color:#7dd3fc">'+esc(title)+'</span>') : "";
+        var av = dp
+          ? '<img src="'+String(dp).replace(/"/g,"")+'" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.2);flex-shrink:0">'
+          : '<div style="width:22px;height:22px;border-radius:50%;background:#334155;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px">?</div>';
+        var delBtn = (window._isSpecialAccount && m._id) ? ('<button type="button" onclick="event.stopPropagation();db.ref(\'entertainment/public/'+m._id+'\').remove()" style="font-size:9px;color:#f87171;margin-left:6px;background:none;border:none">Delete</button>') : "";
+        return '<div style="display:flex;justify-content:'+(mine?"flex-end":"flex-start")+';gap:6px;align-items:flex-end">'+
+          (mine?"":av)+
+          '<div style="max-width:78%;border-radius:14px;padding:8px 12px;background:'+(mine?"rgba(192,132,252,.25)":"rgba(30,41,59,.95)")+';border:1px solid rgba(255,255,255,.08)">'+
+          '<div style="font-size:10px;font-weight:800;color:'+(mine?"#e9d5ff":"#7dd3fc")+';display:flex;align-items:center;flex-wrap:wrap;gap:2px">'+esc(name)+titleHtml+delBtn+'</div>'+
+          '<div style="font-size:13px;color:#f1f5f9;margin-top:2px;word-break:break-word">'+esc(m.text||m.message||"")+'</div>'+
+          '<div style="font-size:9px;color:#64748b;margin-top:4px">'+(m.ts?new Date(m.ts).toLocaleTimeString():"")+'</div>'+
+          '</div>'+(mine?av:"")+
+          '</div>';
+      }).join("");
+      try{ box.scrollTop = box.scrollHeight; }catch(e){}
+    });
+  };
+
+  window.sendPublicChat = function(){
+    if(!window.sessionUser){ try{triggerSystemToast("Login first","error");}catch(e){} return; }
+    var input = document.getElementById("ent-public-input");
+    var textMsg = (input && input.value || "").trim();
+    if(!textMsg) return;
+    if(typeof containsBannedContent === "function"){
+      var bad = containsBannedContent(textMsg);
+      if(bad){ if(typeof chatWarnOrBan==="function") chatWarnOrBan(bad); if(input) input.value=""; return; }
+    }
+    var phone = getPhone();
+    var u = window.sessionUser || {};
+    if(window._pubSendLock) return;
+    window._pubSendLock = true;
+    getDb().ref("entertainment/public").push({
+      phone: phone,
+      username: u.username || phone,
+      text: textMsg,
+      ts: Date.now(),
+      dp: u.photoURL || u.dp || "",
+      specialTitle: u.accountTitle || u.specialTitle || "",
+      accountTitle: u.accountTitle || ""
+    }, function(err){
+      window._pubSendLock = false;
+      if(err){ try{triggerSystemToast("Send failed","error");}catch(e){} return; }
+      if(input) input.value = "";
+    });
+  };
+
+  function threadKey(a,b){ return [String(a),String(b)].sort().join("_"); }
+
+  function loadPrivateChatDeduped(friendPhone){
+    var box = document.getElementById("ent-private-chat");
+    if(!box) return;
+    var me = getPhone();
+    if(!me || !friendPhone) return;
+    var key = threadKey(me, friendPhone);
+    try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+    window._entPrivateRef = getDb().ref("entertainment/direct/"+key).limitToLast(100);
+    window._entPrivateRef.on("value", function(snap){
+      if(!snap.exists()){
+        box.innerHTML = '<div style="color:#64748b;font-size:11px;text-align:center;padding:12px">No messages</div>';
+        return;
+      }
+      var seen={}, rows=[];
+      snap.forEach(function(c){
+        var v=Object.assign({},c.val()||{});
+        v._id=c.key;
+        if(seen[c.key]) return;
+        var sig=String(v.from||"")+"|"+String(v.text||"")+"|"+String(Math.floor((v.ts||0)/2000));
+        if(seen[sig]) return;
+        seen[c.key]=1; seen[sig]=1; rows.push(v);
+      });
+      rows.sort(function(a,b){return (a.ts||0)-(b.ts||0);});
+      box.innerHTML = rows.map(function(m){
+        var mine = m.from===me;
+        return '<div style="display:flex;justify-content:'+(mine?"flex-end":"flex-start")+'">'+
+          '<div style="max-width:80%;border-radius:12px;padding:8px 10px;background:'+(mine?"rgba(79,70,229,.35)":"rgba(30,41,59,.95)")+';border:1px solid rgba(255,255,255,.08)">'+
+          '<div style="font-size:12px;color:#f1f5f9;word-break:break-word">'+esc(m.text||m.message||"")+'</div>'+
+          '<div style="font-size:9px;color:#64748b;margin-top:3px">'+(m.ts?new Date(m.ts).toLocaleTimeString():"")+'</div></div></div>';
+      }).join("");
+      try{ box.scrollTop = box.scrollHeight; }catch(e){}
+    });
+  }
+
+  var _origOpenPrivate = window.openPrivateChat;
+  window.openPrivateChat = function(friendPhone, friendName){
+    if(typeof _origOpenPrivate === "function"){
+      try{ _origOpenPrivate(friendPhone, friendName); }catch(e){}
+    }
+    window._privateChatWith = friendPhone;
+    var wrap = document.getElementById("ent-private-wrap");
+    var main = document.getElementById("ent-friends-main");
+    if(wrap) wrap.style.display = "flex";
+    if(main) main.style.display = "none";
+    var nameEl = document.getElementById("ent-private-name");
+    if(nameEl) nameEl.textContent = friendName || friendPhone || "Chat";
+    loadPrivateChatDeduped(friendPhone);
+  };
+
+  window.sendPrivateChat = function(){
+    if(!window.sessionUser) return;
+    var input = document.getElementById("ent-private-input");
+    var textMsg = (input && input.value || "").trim();
+    if(!textMsg || !window._privateChatWith) return;
+    var me = getPhone();
+    var key = threadKey(me, window._privateChatWith);
+    if(window._privSendLock) return;
+    window._privSendLock = true;
+    getDb().ref("entertainment/direct/"+key).push({
+      from: me, to: window._privateChatWith,
+      username: (sessionUser && sessionUser.username) || me,
+      text: textMsg, ts: Date.now(),
+      dp: (sessionUser && (sessionUser.photoURL||sessionUser.dp)) || ""
+    }, function(err){
+      window._privSendLock = false;
+      if(err){ try{triggerSystemToast("Send failed","error");}catch(e){} return; }
+      if(input) input.value = "";
+    });
+  };
+
+  window.renderFriendRowV68 = function(u, phone, opts){
+    opts = opts || {};
+    u = u || {};
+    var name = u.username || phone || "User";
+    var dp = u.photoURL || u.dp || "";
+    var title = u.accountTitle || (typeof u.specialTitle==="string"?u.specialTitle:"") || (u.specialTitle&&u.specialTitle.title) || "";
+    var verified = u.isVerifiedAccount || u.verified || (u.specialTitle && u.specialTitle.verified);
+    var av = dp
+      ? '<img src="'+String(dp).replace(/"/g,"")+'" style="width:36px;height:36px;border-radius:12px;object-fit:cover;border:1px solid rgba(251,191,36,.35)">'
+      : '<div style="width:36px;height:36px;border-radius:12px;background:#334155;display:flex;align-items:center;justify-content:center">?</div>';
+    var titleChip = title ? '<span style="display:inline-block;margin-top:2px;padding:1px 7px;border-radius:999px;font-size:9px;font-weight:900;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);color:#7dd3fc">'+esc(title)+'</span>' : "";
+    var tick = verified ? ' <i class="fa-solid fa-circle-check" style="color:#38bdf8"></i>' : "";
+    var actions = opts.actions || "";
+    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)">'+
+      av+'<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:900;color:#fff">'+esc(name)+tick+'</div>'+titleChip+
+      '</div>'+actions+'</div>';
+  };
+
+  window.renderMyFriendsVerified = function(){
+    var box = document.getElementById("ent-my-friends");
+    if(!box) return;
+    var me = getPhone();
+    if(!me || !getDb()){ box.innerHTML = '<div style="color:#64748b;font-size:11px">Login required</div>'; return; }
+    getDb().ref("users/"+me+"/friends").once("value", function(snap){
+      var phones = [];
+      if(snap.exists()) snap.forEach(function(c){ phones.push(c.key); });
+      if(!phones.length){
+        box.innerHTML = '<div style="color:#64748b;font-size:11px;text-align:center;padding:12px">No friends yet</div>';
+        return;
+      }
+      var left = phones.length, parts = {};
+      phones.forEach(function(ph){
+        getDb().ref("users/"+ph).once("value", function(us){
+          var u = us.val()||{};
+          var name = u.username || ph;
+          var actions = '';
+          parts[ph] = renderFriendRowV68(u, ph, {actions:actions});
+          left--;
+          if(left<=0) box.innerHTML = phones.map(function(p){ return parts[p]||""; }).join("");
+        });
+      });
+    });
+  };
+
+  window.updateEntQtyBadge = function(n){
+    n = Number(n||0);
+    var badge = document.getElementById("ent-qty-badge");
+    if(!badge) return;
+    if(n > 0){
+      badge.style.display = "flex";
+      badge.textContent = n > 9 ? "9+" : String(n);
+    } else {
+      badge.style.display = "none";
+    }
+  };
+
+  function listenEntNotifications(){
+    var phone = getPhone();
+    var refDb = getDb();
+    if(!phone || !refDb || window._entNotifOn) return;
+    window._entNotifOn = true;
+    var reqCount = 0, msgCount = 0;
+    function paint(){
+      updateEntQtyBadge(reqCount + msgCount);
+      var rc = document.getElementById("ent-req-count");
+      if(rc){
+        if(reqCount>0){ rc.style.display="inline"; rc.textContent=String(reqCount); }
+        else rc.style.display="none";
+      }
+    }
+    refDb.ref("users/"+phone+"/friendRequests").on("value", function(snap){
+      reqCount = 0;
+      if(snap.exists()) snap.forEach(function(){ reqCount++; });
+      paint();
+    });
+    refDb.ref("entertainment/friend_requests/"+phone).on("value", function(snap){
+      var n = 0;
+      if(snap.exists()) snap.forEach(function(){ n++; });
+      if(n > reqCount){ reqCount = n; paint(); }
+    });
+    refDb.ref("entertainment/direct").on("value", function(snap){
+      if(!snap.exists()){ msgCount=0; paint(); return; }
+      var lastSeen = Number(localStorage.getItem("ph_dm_seen_"+phone)||0);
+      var unread = 0;
+      snap.forEach(function(thread){
+        var key = thread.key||"";
+        if(key.indexOf(phone)===-1) return;
+        thread.forEach(function(m){
+          var v=m.val()||{};
+          if(v.from && v.from!==phone && (v.ts||0)>lastSeen) unread++;
+        });
+      });
+      msgCount = unread;
+      paint();
+    });
+  }
+
+  var _oe = window.openEntertainment;
+  window.openEntertainment = function(tab){
+    if(typeof _oe==="function") _oe(tab);
+    setTimeout(function(){
+      try{ loadPublicChat(); }catch(e){}
+      try{ if(typeof loadEntFriends==="function") loadEntFriends(); }catch(e){}
+      try{ if(typeof renderMyFriendsVerified==="function") renderMyFriendsVerified(); }catch(e){}
+      try{ entFriendsSub("friends"); }catch(e){}
+      if(tab==="friends" || tab==="money"){
+        var phone = getPhone();
+        if(phone) localStorage.setItem("ph_dm_seen_"+phone, String(Date.now()));
+        updateEntQtyBadge(0);
+      }
+      listenEntNotifications();
+    }, 250);
+  };
+
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(function(){
+      if(getPhone()){
+        try{ listenEntNotifications(); }catch(e){}
+        try{ if(typeof listenComplaintsLive==="function") listenComplaintsLive(); }catch(e){}
+        try{ if(typeof refreshDashComplaintCard==="function") refreshDashComplaintCard(); }catch(e){}
+      }
+    }, 1200);
+  });
+  setInterval(function(){
+    if(getPhone() && !window._entNotifOn) try{ listenEntNotifications(); }catch(e){}
+  }, 5000);
+
+  window.PH_APP_VERSION = "v6.8";
+  var b = document.getElementById("app-version-badge");
+  if(b) b.textContent = "v6.8";
+})();
+</script>
+
+
+<script>
+/* ===== v6.8 WhatsApp-style private chat + friends DP ===== */
+(function(){
+  "use strict";
+  function esc(s){ return String(s||"").replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  function getDb(){ return window.db || (typeof firebase!=="undefined" && firebase.apps && firebase.apps.length && firebase.database()) || null; }
+  function getPhone(){ return localStorage.getItem("ph_session_phone") || ""; }
+  function threadKey(a,b){ return [String(a),String(b)].sort().join("_"); }
+  function defaultDp(){ return "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100"; }
+
+  function formatLastSeen(ts){
+    if(!ts) return "offline";
+    var d = new Date(Number(ts));
+    if(isNaN(d.getTime())) return "offline";
+    var now = Date.now();
+    var diff = now - d.getTime();
+    if(diff < 2*60*1000) return "online";
+    if(diff < 60*60*1000) return "last seen "+Math.floor(diff/60000)+" min ago";
+    var today = new Date(); today.setHours(0,0,0,0);
+    var yest = new Date(today); yest.setDate(yest.getDate()-1);
+    var t = d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+    if(d >= today) return "last seen today at "+t;
+    if(d >= yest) return "last seen yesterday at "+t;
+    return "last seen "+d.toLocaleDateString()+" "+t;
+  }
+
+  window.toggleChatMenu = function(e){
+    if(e) e.stopPropagation();
+    var m = document.getElementById("ent-chat-menu");
+    if(!m) return;
+    m.style.display = m.style.display === "block" ? "none" : "block";
+  };
+  document.addEventListener("click", function(e){
+    var m = document.getElementById("ent-chat-menu");
+    var btn = document.getElementById("ent-chat-menu-btn");
+    if(m && m.style.display==="block" && btn && !btn.contains(e.target) && !m.contains(e.target))
+      m.style.display = "none";
+  });
+
+  window.clearChatReply = function(){
+    window._chatReplyTo = null;
+    var bar = document.getElementById("ent-reply-bar");
+    if(bar) bar.style.display = "none";
+  };
+
+  window.setChatReply = function(msg){
+    window._chatReplyTo = msg;
+    var bar = document.getElementById("ent-reply-bar");
+    var nm = document.getElementById("ent-reply-bar-name");
+    var tx = document.getElementById("ent-reply-bar-text");
+    if(bar) bar.style.display = "flex";
+    var me = getPhone();
+    if(nm) nm.textContent = (msg.from === me) ? "You" : (msg.username || "User");
+    if(tx) tx.textContent = msg.text || msg.message || "";
+    var input = document.getElementById("ent-private-input");
+    if(input) input.focus();
+  };
+
+  window.reportChatUser = function(){
+    var m = document.getElementById("ent-chat-menu");
+    if(m) m.style.display = "none";
+    var to = window._privateChatWith;
+    if(!to) return;
+    var reason = prompt("Report reason (spam / abuse / other):");
+    if(!reason || !reason.trim()) return;
+    var me = getPhone();
+    var id = "RPT-"+Date.now();
+    var payload = {
+      id: id, from: me, against: to,
+      reason: reason.trim(),
+      username: (window.sessionUser && sessionUser.username) || me,
+      targetName: window._privateChatName || to,
+      ts: Date.now(), status: "open", type: "chat_report"
+    };
+    var dbRef = getDb();
+    if(!dbRef){ try{triggerSystemToast("Not ready","error");}catch(e){} return; }
+    dbRef.ref("admin_queues/chat_reports/"+id).set(payload);
+    dbRef.ref("users/"+me+"/reportsSent/"+id).set(payload);
+    try{
+      if(typeof showCenterPop==="function") showCenterPop("Reported","Report bhej diya gaya. Admin review karega.","success");
+      else if(typeof triggerSystemToast==="function") triggerSystemToast("Report submitted","success");
+    }catch(e){}
+  };
+
+  function updatePresenceHeader(u){
+    u = u || {};
+    var online = !!u.online || (u.lastActive && (Date.now()-Number(u.lastActive)) < 2*60*1000) || (u.lastSeen && (Date.now()-Number(u.lastSeen)) < 2*60*1000);
+    var last = u.lastActive || u.lastSeen || u.lastLogin || 0;
+    var dot = document.getElementById("ent-chat-online-dot");
+    var st = document.getElementById("ent-chat-status");
+    if(dot){
+      dot.style.background = online ? "#25d366" : "#64748b";
+    }
+    if(st){
+      st.textContent = online ? "online" : formatLastSeen(last);
+      st.style.color = online ? "#25d366" : "#8696a0";
+    }
+  }
+
+  function listenFriendPresence(phone){
+    try{ if(window._presenceRef) window._presenceRef.off(); }catch(e){}
+    var dbRef = getDb();
+    if(!dbRef || !phone) return;
+    window._presenceRef = dbRef.ref("users/"+phone);
+    window._presenceRef.on("value", function(snap){
+      updatePresenceHeader(snap.val()||{});
+    });
+  }
+
+  // Mark self online while in app
+  function pulseMyPresence(){
+    var me = getPhone();
+    var dbRef = getDb();
+    if(!me || !dbRef) return;
+    try{
+      dbRef.ref("users/"+me).update({ online: true, lastActive: Date.now(), lastSeen: Date.now() });
+    }catch(e){}
+  }
+  setInterval(function(){
+    if(getPhone() && !document.body.classList.contains("auth-mode")) pulseMyPresence();
+  }, 45000);
+  document.addEventListener("visibilitychange", function(){
+    var me = getPhone();
+    var dbRef = getDb();
+    if(!me || !dbRef) return;
+    if(document.hidden){
+      try{ dbRef.ref("users/"+me).update({ online: false, lastSeen: Date.now() }); }catch(e){}
+    } else pulseMyPresence();
+  });
+
+  function bindSwipeReply(row, msg){
+    var startX = 0, dx = 0, active = false;
+    row.addEventListener("touchstart", function(e){
+      if(!e.touches || !e.touches[0]) return;
+      startX = e.touches[0].clientX;
+      dx = 0; active = true;
+      row.classList.remove("swiping");
+      var b = row.querySelector(".ph-bubble");
+      if(b) b.classList.remove("swiping");
+    }, {passive:true});
+    row.addEventListener("touchmove", function(e){
+      if(!active || !e.touches || !e.touches[0]) return;
+      dx = e.touches[0].clientX - startX;
+      if(dx > 0){
+        var t = Math.min(72, dx);
+        row.classList.add("swiping");
+        var b = row.querySelector(".ph-bubble");
+        if(b){ b.classList.add("swiping"); b.style.transform = "translateX("+t+"px)"; }
+      }
+    }, {passive:true});
+    row.addEventListener("touchend", function(){
+      if(!active) return;
+      active = false;
+      var b = row.querySelector(".ph-bubble");
+      if(dx > 56){
+        setChatReply(msg);
+      }
+      row.classList.remove("swiping");
+      if(b){ b.classList.remove("swiping"); b.style.transform = ""; }
+      dx = 0;
+    });
+  }
+
+  function renderPrivateMessages(rows){
+    var box = document.getElementById("ent-private-chat");
+    if(!box) return;
+    var me = getPhone();
+    if(!rows.length){
+      box.innerHTML = '<div style="color:#8696a0;font-size:13px;text-align:center;padding:24px">No messages yet. Say salaam 👋</div>';
+      return;
+    }
+    box.innerHTML = "";
+    rows.forEach(function(m){
+      var mine = m.from === me;
+      var row = document.createElement("div");
+      row.className = "ph-msg-row "+(mine?"mine":"theirs");
+      var replyHtml = "";
+      if(m.replyTo && (m.replyTo.text || m.replyTo.message)){
+        var rn = (m.replyTo.from === me) ? "You" : (m.replyTo.username || "User");
+        replyHtml = '<div class="ph-reply-quote"><b style="color:#00a884">'+esc(rn)+'</b><br>'+esc((m.replyTo.text||m.replyTo.message||"").slice(0,80))+'</div>';
+      }
+      var uname = mine ? "" : ('<div class="ph-uname">'+esc(m.username || "User")+'</div>');
+      var time = m.ts ? new Date(m.ts).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) : "";
+      row.innerHTML =
+        '<div class="ph-swipe-hint"><i class="fa-solid fa-reply"></i></div>'+
+        '<div class="ph-bubble '+(mine?"mine":"theirs")+'">'+
+        uname + replyHtml +
+        '<div class="ph-text">'+esc(m.text||m.message||"")+'</div>'+
+        '<div class="ph-meta"><span>'+time+'</span>'+(mine?'<i class="fa-solid fa-check-double" style="font-size:11px;color:#53bdeb"></i>':'')+'</div>'+
+        '</div>';
+      bindSwipeReply(row, m);
+      box.appendChild(row);
+    });
+    try{ box.scrollTop = box.scrollHeight; }catch(e){}
+  }
+
+  function loadPrivateChatWA(friendPhone){
+    var box = document.getElementById("ent-private-chat");
+    if(!box) return;
+    var me = getPhone();
+    if(!me || !friendPhone) return;
+    var key = threadKey(me, friendPhone);
+    try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+    var dbRef = getDb();
+    if(!dbRef) return;
+    window._entPrivateRef = dbRef.ref("entertainment/direct/"+key).limitToLast(120);
+    window._entPrivateRef.on("value", function(snap){
+      var seen={}, rows=[];
+      if(snap.exists()){
+        snap.forEach(function(c){
+          var v=Object.assign({},c.val()||{});
+          v._id=c.key;
+          if(seen[c.key]) return;
+          var sig=String(v.from||"")+"|"+String(v.text||"")+"|"+String(Math.floor((v.ts||0)/2000));
+          if(seen[sig]) return;
+          seen[c.key]=1; seen[sig]=1; rows.push(v);
+        });
+      }
+      rows.sort(function(a,b){return (a.ts||0)-(b.ts||0);});
+      renderPrivateMessages(rows);
+    });
+  }
+
+  window.openPrivateChat = function(friendPhone, friendName){
+    window._privateChatWith = friendPhone;
+    window._privateChatName = friendName || "User";
+    clearChatReply();
+    var wrap = document.getElementById("ent-private-wrap");
+    var main = document.getElementById("ent-friends-main");
+    var sub = document.getElementById("ent-friends-subtabs");
+    if(wrap){
+      wrap.style.display = "flex";
+      wrap.classList.add("open-chat");
+    }
+    if(main) main.style.display = "none";
+    if(sub) sub.style.display = "none";
+    document.body.classList.add("chat-mode");
+
+    // hide entertainment top bar tabs while in chat
+    var tabs = document.querySelectorAll("#screen-entertainment .ent-tab-btn");
+    tabs.forEach(function(t){ t.style.display = "none"; });
+    var hello = document.getElementById("ent-hello");
+    if(hello) hello.style.display = "none";
+    // hide entertainment top back row
+    var topBar = document.querySelector("#screen-entertainment > div > div");
+    // safer: hide first header inside screen-entertainment
+    var entTop = document.querySelector('#screen-entertainment [style*="border-bottom"]');
+    // set name + dp from user profile
+    var nameEl = document.getElementById("ent-private-name");
+    if(nameEl) nameEl.textContent = friendName || "User";
+    var dpEl = document.getElementById("ent-chat-dp");
+    if(dpEl) dpEl.src = defaultDp();
+    updatePresenceHeader({});
+
+    var dbRef = getDb();
+    if(dbRef && friendPhone){
+      dbRef.ref("users/"+friendPhone).once("value", function(snap){
+        var u = snap.val()||{};
+        var nm = u.username || friendName || "User";
+        window._privateChatName = nm;
+        if(nameEl) nameEl.textContent = nm;
+        var dp = u.photoURL || u.dp || "";
+        if(dpEl && dp) dpEl.src = dp;
+        updatePresenceHeader(u);
+      });
+      listenFriendPresence(friendPhone);
+    }
+    loadPrivateChatWA(friendPhone);
+    pulseMyPresence();
+    var input = document.getElementById("ent-private-input");
+    if(input) setTimeout(function(){ input.focus(); }, 200);
+  };
+
+  window.closePrivateChat = function(){
+    window._privateChatWith = null;
+    clearChatReply();
+    try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+    try{ if(window._presenceRef) window._presenceRef.off(); }catch(e){}
+    var wrap = document.getElementById("ent-private-wrap");
+    var main = document.getElementById("ent-friends-main");
+    var sub = document.getElementById("ent-friends-subtabs");
+    if(wrap){
+      wrap.style.display = "none";
+      wrap.classList.remove("open-chat");
+    }
+    if(main) main.style.display = "block";
+    if(sub) sub.style.display = "flex";
+    document.body.classList.remove("chat-mode");
+    document.querySelectorAll("#screen-entertainment .ent-tab-btn").forEach(function(t){
+      t.style.display = "";
+    });
+    var hello = document.getElementById("ent-hello");
+    if(hello) hello.style.display = "";
+    var menu = document.getElementById("ent-chat-menu");
+    if(menu) menu.style.display = "none";
+  };
+
+  window.sendPrivateChat = function(){
+    if(!window.sessionUser) return;
+    var input = document.getElementById("ent-private-input");
+    var textMsg = (input && input.value || "").trim();
+    if(!textMsg || !window._privateChatWith) return;
+    var me = getPhone();
+    var key = threadKey(me, window._privateChatWith);
+    if(window._privSendLock) return;
+    window._privSendLock = true;
+    var payload = {
+      from: me,
+      to: window._privateChatWith,
+      username: (sessionUser && sessionUser.username) || me,
+      text: textMsg,
+      ts: Date.now(),
+      dp: (sessionUser && (sessionUser.photoURL||sessionUser.dp)) || ""
+    };
+    if(window._chatReplyTo){
+      payload.replyTo = {
+        from: window._chatReplyTo.from,
+        username: window._chatReplyTo.username || "",
+        text: window._chatReplyTo.text || window._chatReplyTo.message || "",
+        ts: window._chatReplyTo.ts || 0
+      };
+    }
+    getDb().ref("entertainment/direct/"+key).push(payload, function(err){
+      window._privSendLock = false;
+      if(err){ try{triggerSystemToast("Send failed","error");}catch(e){} return; }
+      if(input) input.value = "";
+      clearChatReply();
+    });
+  };
+
+  // Friends list: real DP, no phone number
+  window.renderFriendRowV68 = function(u, phone, opts){
+    opts = opts || {};
+    u = u || {};
+    var name = u.username || "User";
+    var dp = u.photoURL || u.dp || defaultDp();
+    var title = u.accountTitle || (typeof u.specialTitle==="string"?u.specialTitle:"") || (u.specialTitle&&u.specialTitle.title) || "";
+    var verified = u.isVerifiedAccount || u.verified || (u.specialTitle && u.specialTitle.verified);
+    var online = !!u.online || (u.lastActive && (Date.now()-Number(u.lastActive)) < 2*60*1000);
+    var av = '<div style="position:relative;flex-shrink:0">'+
+      '<img src="'+String(dp).replace(/"/g,"")+'" onerror="this.src=\''+defaultDp()+'\'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.12)">'+
+      '<span style="position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:'+(online?"#25d366":"#64748b")+';border:2px solid #0b1220"></span></div>';
+    var titleChip = title ? '<span style="display:inline-block;margin-top:2px;padding:1px 7px;border-radius:999px;font-size:9px;font-weight:900;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);color:#7dd3fc">'+esc(title)+'</span>' : "";
+    var tick = verified ? ' <i class="fa-solid fa-circle-check" style="color:#38bdf8;font-size:12px"></i>' : "";
+    var actions = opts.actions || "";
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)">'+
+      av+'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:900;color:#fff">'+esc(name)+tick+'</div>'+titleChip+
+      '</div>'+actions+'</div>';
+  };
+
+  window.renderMyFriendsVerified = function(){
+    var box = document.getElementById("ent-my-friends");
+    if(!box) return;
+    var me = getPhone();
+    if(!me || !getDb()){ box.innerHTML = '<div style="color:#64748b;font-size:11px">Login required</div>'; return; }
+    getDb().ref("users/"+me+"/friends").once("value", function(snap){
+      var phones = [];
+      if(snap.exists()) snap.forEach(function(c){ phones.push(c.key); });
+      if(!phones.length){
+        box.innerHTML = '<div style="color:#64748b;font-size:11px;text-align:center;padding:12px">No friends yet</div>';
+        return;
+      }
+      var left = phones.length, parts = {};
+      phones.forEach(function(ph){
+        getDb().ref("users/"+ph).once("value", function(us){
+          var u = us.val()||{};
+          var name = u.username || "User";
+          var actions = '<button type="button" data-ph="'+esc(ph)+'" data-nm="'+esc(name)+'" class="ph-open-chat-btn" style="padding:8px 12px;border-radius:20px;border:none;background:#00a884;color:#fff;font-size:11px;font-weight:900">Chat</button>';
+          parts[ph] = renderFriendRowV68(u, ph, {actions:actions});
+          left--;
+          if(left<=0){
+            box.innerHTML = phones.map(function(p){ return parts[p]||""; }).join("");
+            box.querySelectorAll(".ph-open-chat-btn").forEach(function(btn){
+              btn.onclick = function(){
+                openPrivateChat(btn.getAttribute("data-ph"), btn.getAttribute("data-nm"));
+              };
+            });
+          }
+        });
+      });
+    });
+  };
+
+  // Enter key send
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && document.getElementById("ent-private-wrap") && document.getElementById("ent-private-wrap").style.display === "flex"){
+      var t = e.target;
+      if(t && t.id === "ent-private-input"){
+        e.preventDefault();
+        sendPrivateChat();
+      }
+    }
+  });
+})();
+</script>
+
+
+<script>
+/* v6.8.1 force: no phone in friends, chat fit, menu works */
+(function(){
+  "use strict";
+  function esc(s){ return String(s||"").replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  function getDb(){ return window.db || (typeof firebase!=="undefined" && firebase.apps && firebase.apps.length && firebase.database()) || null; }
+  function getPhone(){ return localStorage.getItem("ph_session_phone") || ""; }
+  function defaultDp(){ return "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100"; }
+  function isPhoneLike(s){
+    s = String(s||"").replace(/\s/g,"");
+    return /^(03\d{9}|\+?92\d{10}|\d{10,13})$/.test(s);
+  }
+  function displayName(u, ph){
+    u = u || {};
+    var n = u.username || u.name || u.fullName || "";
+    if(!n || isPhoneLike(n)) n = "User";
+    return n;
+  }
+
+  window.renderFriendRowV68 = function(u, phone, opts){
+    opts = opts || {};
+    u = u || {};
+    var name = displayName(u, phone);
+    var dp = u.photoURL || u.dp || defaultDp();
+    var title = u.accountTitle || (typeof u.specialTitle==="string"?u.specialTitle:"") || (u.specialTitle&&u.specialTitle.title) || "";
+    var verified = u.isVerifiedAccount || u.verified || (u.specialTitle && u.specialTitle.verified);
+    var online = !!u.online || (u.lastActive && (Date.now()-Number(u.lastActive)) < 2*60*1000);
+    var av = '<div style="position:relative;flex-shrink:0">'+
+      '<img src="'+String(dp).replace(/"/g,"")+'" onerror="this.onerror=null;this.src=\''+defaultDp()+'\'" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.12);background:#1e293b">'+
+      '<span style="position:absolute;right:0;bottom:0;width:12px;height:12px;border-radius:50%;background:'+(online?"#25d366":"#64748b")+';border:2px solid #0b1220"></span></div>';
+    var titleChip = title ? '<div style="margin-top:3px"><span style="display:inline-block;padding:1px 7px;border-radius:999px;font-size:9px;font-weight:900;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);color:#7dd3fc">'+esc(title)+'</span></div>' : "";
+    var tick = verified ? ' <i class="fa-solid fa-circle-check" style="color:#38bdf8;font-size:12px"></i>' : "";
+    var actions = opts.actions || "";
+    return '<div class="ph-friend-row" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)">'+
+      av+'<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(name)+tick+'</div>'+titleChip+
+      '</div>'+actions+'</div>';
+  };
+
+  window.renderMyFriendsVerified = function(){
+    var box = document.getElementById("ent-my-friends");
+    if(!box) return;
+    var me = getPhone();
+    if(!me || !getDb()){ box.innerHTML = '<div style="color:#64748b;font-size:11px">Login required</div>'; return; }
+    getDb().ref("users/"+me+"/friends").once("value", function(snap){
+      var phones = [];
+      if(snap.exists()) snap.forEach(function(c){ phones.push(c.key); });
+      if(!phones.length){
+        box.innerHTML = '<div style="color:#64748b;font-size:11px;text-align:center;padding:12px">No friends yet</div>';
+        return;
+      }
+      var left = phones.length, parts = {};
+      phones.forEach(function(ph){
+        getDb().ref("users/"+ph).once("value", function(us){
+          var u = us.val()||{};
+          var name = displayName(u, ph);
+          var actions = '<button type="button" data-ph="'+esc(ph)+'" data-nm="'+esc(name)+'" class="ph-open-chat-btn" style="padding:9px 14px;border-radius:20px;border:none;background:#00a884;color:#fff;font-size:12px;font-weight:900">Chat</button>';
+          parts[ph] = renderFriendRowV68(u, ph, {actions:actions});
+          left--;
+          if(left<=0){
+            box.innerHTML = phones.map(function(p){ return parts[p]||""; }).join("");
+            box.querySelectorAll(".ph-open-chat-btn").forEach(function(btn){
+              btn.onclick = function(){ openPrivateChat(btn.getAttribute("data-ph"), btn.getAttribute("data-nm")); };
+            });
+            stripPhonesFromFriendsDom();
+          }
+        });
+      });
+    });
+  };
+
+  function stripPhonesFromFriendsDom(){
+    ["ent-my-friends","ent-friends-list","ent-friend-requests"].forEach(function(id){
+      var box = document.getElementById(id);
+      if(!box) return;
+      box.querySelectorAll("div, span, p, small").forEach(function(el){
+        if(el.children && el.children.length) return;
+        var t = (el.textContent||"").trim();
+        if(isPhoneLike(t)){
+          el.style.display = "none";
+          el.textContent = "";
+        }
+      });
+    });
+  }
+
+  // Keep stripping if older code re-paints
+  setInterval(stripPhonesFromFriendsDom, 1500);
+
+  // Override loadFriendsPanel to never paint numbers
+  var _lfp = window.loadFriendsPanel;
+  window.loadFriendsPanel = function(){
+    if(typeof _lfp === "function"){
+      try{ _lfp(); }catch(e){}
+    }
+    setTimeout(function(){
+      try{ renderMyFriendsVerified(); }catch(e){}
+      stripPhonesFromFriendsDom();
+    }, 300);
+  };
+
+  // ---- Chat menu fix ----
+  window.toggleChatMenu = function(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    var m = document.getElementById("ent-chat-menu");
+    if(!m) return;
+    var open = m.style.display === "block";
+    m.style.display = open ? "none" : "block";
+    if(!open){
+      // position near button
+      var btn = document.getElementById("ent-chat-menu-btn");
+      if(btn){
+        var r = btn.getBoundingClientRect();
+        m.style.top = Math.min(window.innerHeight - 120, r.bottom + 6) + "px";
+        m.style.right = Math.max(8, window.innerWidth - r.right) + "px";
+        m.style.left = "auto";
+      }
+    }
+  };
+
+  // ---- Chat open: full screen fit ----
+  var _opc = window.openPrivateChat;
+  window.openPrivateChat = function(friendPhone, friendName){
+    if(typeof _opc === "function"){
+      try{ _opc(friendPhone, friendName); }catch(e){}
+    }
+    var wrap = document.getElementById("ent-private-wrap");
+    if(wrap){
+      wrap.style.display = "flex";
+      wrap.style.position = "fixed";
+      wrap.style.inset = "0";
+      wrap.style.zIndex = "500";
+      wrap.style.height = "100dvh";
+      wrap.style.maxHeight = "100dvh";
+      wrap.style.width = "100%";
+      wrap.style.maxWidth = "28rem";
+      wrap.style.margin = "0 auto";
+      wrap.style.left = "0";
+      wrap.style.right = "0";
+      wrap.style.flexDirection = "column";
+      wrap.style.background = "#0b141a";
+    }
+    document.body.classList.add("chat-mode");
+    document.body.style.overflow = "hidden";
+    // ensure input visible
+    var chat = document.getElementById("ent-private-chat");
+    if(chat){
+      chat.style.flex = "1";
+      chat.style.minHeight = "0";
+      chat.style.overflowY = "auto";
+    }
+    setTimeout(function(){
+      var input = document.getElementById("ent-private-input");
+      if(input) input.scrollIntoView({block:"end"});
+    }, 100);
+  };
+
+  var _cpc = window.closePrivateChat;
+  window.closePrivateChat = function(){
+    if(typeof _cpc === "function"){
+      try{ _cpc(); }catch(e){}
+    }
+    document.body.classList.remove("chat-mode");
+    document.body.style.overflow = "";
+    var m = document.getElementById("ent-chat-menu");
+    if(m) m.style.display = "none";
+  };
+
+  // Extra CSS for fit
+  if(!document.getElementById("ph-chat-fit-css")){
+    var st = document.createElement("style");
+    st.id = "ph-chat-fit-css";
+    st.textContent = [
+      "body.chat-mode #main-header, body.chat-mode #main-footer, body.chat-mode #ph-timer-banner, body.chat-mode #top-security-alert { display:none !important; }",
+      "body.chat-mode #screen-entertainment { padding:0 !important; margin:0 !important; }",
+      "#ent-private-wrap { box-sizing:border-box; }",
+      "#ent-private-wrap.ph-chat-open, #ent-private-wrap.open-chat { display:flex !important; }",
+      "#ent-private-wrap:not(.ph-chat-open):not(.open-chat) { display:none !important; }",
+      "#ent-chat-menu { z-index:9999 !important; }",
+      "#ent-private-input { font-size:16px !important; }" /* prevent iOS zoom */
+    ].join("\n");
+    document.head.appendChild(st);
+  }
+})();
+</script>
+
+
+<script>
+/* ===== HARD FIX: Chat MUST open ===== */
+(function(){
+  "use strict";
+  function esc(s){ return String(s||"").replace(/[<>&"]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;","\"":"&quot;"}[c];}); }
+  function getDb(){
+    try { return window.db || (firebase && firebase.database && firebase.database()) || null; } catch(e){ return null; }
+  }
+  function getPhone(){ return localStorage.getItem("ph_session_phone") || ""; }
+  function threadKey(a,b){ return [String(a),String(b)].sort().join("_"); }
+  function defaultDp(){ return "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100"; }
+
+  function ensureChatShell(){
+    var wrap = document.getElementById("ent-private-wrap");
+    if(!wrap){
+      wrap = document.createElement("div");
+      wrap.id = "ent-private-wrap";
+      wrap.innerHTML =
+        '<div id="ent-chat-header" style="position:relative;flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:10px 12px;background:#1f2c34;min-height:56px;z-index:5">'+
+        '<button type="button" id="ent-chat-back" style="width:40px;height:40px;border:none;background:transparent;color:#e9edef;font-size:18px"><i class="fa-solid fa-arrow-left"></i></button>'+
+        '<div style="position:relative;flex-shrink:0"><img id="ent-chat-dp" src="'+defaultDp()+'" style="width:40px;height:40px;border-radius:50%;object-fit:cover"><span id="ent-chat-online-dot" style="position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:#64748b;border:2px solid #1f2c34"></span></div>'+
+        '<div style="flex:1;min-width:0"><div id="ent-private-name" style="font-size:15px;font-weight:700;color:#e9edef">Chat</div><div id="ent-chat-status" style="font-size:11px;color:#8696a0">offline</div></div>'+
+        '<button type="button" id="ent-chat-menu-btn" style="width:40px;height:40px;border:none;background:transparent;color:#e9edef;font-size:16px"><i class="fa-solid fa-ellipsis-vertical"></i></button>'+
+        '<div id="ent-chat-menu" style="display:none;position:fixed;top:110px;right:16px;z-index:9999;min-width:180px;background:#233138;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.12)">'+
+        '<button type="button" id="ent-chat-report-btn" style="width:100%;text-align:left;padding:12px 14px;border:none;background:transparent;color:#f87171;font-size:13px;font-weight:700">Report</button></div></div>'+
+        '<div id="ent-reply-bar" style="display:none;flex:0 0 auto;padding:8px 12px;background:#1f2c34;border-left:3px solid #00a884"></div>'+
+        '<div id="ent-private-chat" style="flex:1;min-height:0;overflow-y:auto;padding:10px 12px;background:#0b141a"></div>'+
+        '<div style="flex:0 0 auto;display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#1f2c34">'+
+        '<input id="ent-private-input" placeholder="Message…" maxlength="500" style="flex:1;padding:12px 14px;border-radius:22px;border:none;background:#2a3942;color:#e9edef;font-size:16px">'+
+        '<button type="button" id="ent-chat-send-btn" style="width:46px;height:46px;border-radius:50%;border:none;background:#00a884;color:#fff;font-size:16px"><i class="fa-solid fa-paper-plane"></i></button></div>';
+      document.body.appendChild(wrap);
+    } else {
+      // move to body so parent display:none cannot hide it
+      if(wrap.parentNode !== document.body){
+        document.body.appendChild(wrap);
+      }
+    }
+    // bind buttons once
+    var back = document.getElementById("ent-chat-back");
+    if(back && !back._phBound){
+      back._phBound = true;
+      back.onclick = function(e){ e.preventDefault(); window.closePrivateChat(); };
+    }
+    var send = document.getElementById("ent-chat-send-btn");
+    if(send && !send._phBound){
+      send._phBound = true;
+      send.onclick = function(e){ e.preventDefault(); window.sendPrivateChat(); };
+    }
+    var menuBtn = document.getElementById("ent-chat-menu-btn");
+    if(menuBtn && !menuBtn._phBound){
+      menuBtn._phBound = true;
+      menuBtn.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        var m = document.getElementById("ent-chat-menu");
+        if(!m) return;
+        m.style.display = (m.style.display === "block") ? "none" : "block";
+      };
+    }
+    var report = document.getElementById("ent-chat-report-btn");
+    if(report && !report._phBound){
+      report._phBound = true;
+      report.onclick = function(){ if(typeof reportChatUser==="function") reportChatUser(); };
+    }
+    var input = document.getElementById("ent-private-input");
+    if(input && !input._phBound){
+      input._phBound = true;
+      input.addEventListener("keydown", function(e){
+        if(e.key === "Enter"){ e.preventDefault(); window.sendPrivateChat(); }
+      });
+    }
+    return wrap;
+  }
+
+  function showChatUI(){
+    var wrap = ensureChatShell();
+    wrap.classList.add("ph-chat-open");
+    wrap.classList.remove("hidden");
+    wrap.style.cssText = "display:flex !important;position:fixed;inset:0;z-index:9990;flex-direction:column;background:#0b141a;width:100%;max-width:28rem;height:100dvh;max-height:100dvh;margin:0 auto;left:0;right:0;visibility:visible;opacity:1;";
+    document.body.classList.add("chat-mode");
+    document.body.style.overflow = "hidden";
+    return wrap;
+  }
+
+  function hideChatUI(){
+    var wrap = document.getElementById("ent-private-wrap");
+    if(wrap){
+      wrap.classList.remove("ph-chat-open");
+      wrap.style.display = "none";
+    }
+    document.body.classList.remove("chat-mode");
+    document.body.style.overflow = "";
+    var m = document.getElementById("ent-chat-menu");
+    if(m) m.style.display = "none";
+  }
+
+  function loadMsgs(friendPhone){
+    var box = document.getElementById("ent-private-chat");
+    if(!box) return;
+    var me = getPhone();
+    var dbRef = getDb();
+    if(!me || !friendPhone || !dbRef){
+      box.innerHTML = '<div style="color:#8696a0;text-align:center;padding:20px;font-size:13px">Chat load nahi hua</div>';
+      return;
+    }
+    var key = threadKey(me, friendPhone);
+    try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+    // try both paths used historically
+    var paths = ["entertainment/direct/"+key, "entertainment/private/"+key];
+    window._entPrivateRef = dbRef.ref(paths[0]).limitToLast(120);
+    window._entPrivateRef.on("value", function(snap){
+      var rows = [];
+      var seen = {};
+      function ingest(s){
+        if(!s || !s.exists()) return;
+        s.forEach(function(c){
+          var v = Object.assign({}, c.val()||{});
+          v._id = c.key;
+          if(seen[c.key]) return;
+          var sig = String(v.from||"")+"|"+String(v.text||v.message||"")+"|"+String(Math.floor((v.ts||0)/2000));
+          if(seen[sig]) return;
+          seen[c.key]=1; seen[sig]=1;
+          rows.push(v);
+        });
+      }
+      ingest(snap);
+      if(!rows.length){
+        // fallback old path once
+        dbRef.ref(paths[1]).limitToLast(80).once("value", function(s2){
+          ingest(s2);
+          paint(rows);
+        });
+        paint(rows);
+        return;
+      }
+      paint(rows);
+    });
+
+    function paint(rows){
+      rows.sort(function(a,b){ return (a.ts||0)-(b.ts||0); });
+      if(!rows.length){
+        box.innerHTML = '<div style="color:#8696a0;text-align:center;padding:24px;font-size:13px">No messages yet. Salam likho 👋</div>';
+        return;
+      }
+      box.innerHTML = rows.map(function(m){
+        var mine = m.from === me;
+        var time = m.ts ? new Date(m.ts).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "";
+        var uname = mine ? "" : '<div style="font-size:11px;font-weight:800;color:#53bdeb;margin-bottom:2px">'+esc(m.username||"User")+'</div>';
+        var reply = "";
+        if(m.replyTo && (m.replyTo.text||m.replyTo.message)){
+          reply = '<div style="border-left:3px solid #00a884;background:rgba(0,0,0,.25);border-radius:6px;padding:4px 8px;margin-bottom:4px;font-size:12px;color:#8696a0">'+esc((m.replyTo.text||"").slice(0,80))+'</div>';
+        }
+        return '<div style="display:flex;justify-content:'+(mine?"flex-end":"flex-start")+';margin:4px 0">'+
+          '<div style="max-width:78%;padding:7px 10px 5px;border-radius:10px;background:'+(mine?"#005c4b":"#202c33")+';color:#e9edef">'+
+          uname+reply+
+          '<div style="font-size:14px;line-height:1.35;word-break:break-word">'+esc(m.text||m.message||"")+'</div>'+
+          '<div style="text-align:right;font-size:10px;color:#8696a0;margin-top:3px">'+time+(mine?' ✓':'')+'</div></div></div>';
+      }).join("");
+      try{ box.scrollTop = box.scrollHeight; }catch(e){}
+    }
+  }
+
+  window.openPrivateChat = function(friendPhone, friendName){
+    try{
+      if(!friendPhone){
+        alert("Friend not found");
+        return;
+      }
+      window._privateChatWith = String(friendPhone);
+      window._privateChatName = friendName || "User";
+      showChatUI();
+      var nameEl = document.getElementById("ent-private-name");
+      if(nameEl) nameEl.textContent = friendName || "User";
+      var dpEl = document.getElementById("ent-chat-dp");
+      if(dpEl) dpEl.src = defaultDp();
+      var st = document.getElementById("ent-chat-status");
+      if(st){ st.textContent = "…"; st.style.color = "#8696a0"; }
+      var dbRef = getDb();
+      if(dbRef){
+        dbRef.ref("users/"+friendPhone).once("value", function(snap){
+          var u = snap.val()||{};
+          var nm = u.username || friendName || "User";
+          if(/^(03\d{9}|\d{10,})$/.test(String(nm))) nm = friendName || "User";
+          window._privateChatName = nm;
+          if(nameEl) nameEl.textContent = nm;
+          var dp = u.photoURL || u.dp || "";
+          if(dpEl && dp) dpEl.src = dp;
+          var online = !!u.online || (u.lastActive && (Date.now()-Number(u.lastActive)) < 120000);
+          var dot = document.getElementById("ent-chat-online-dot");
+          if(dot) dot.style.background = online ? "#25d366" : "#64748b";
+          if(st){
+            st.textContent = online ? "online" : "offline";
+            st.style.color = online ? "#25d366" : "#8696a0";
+          }
+        });
+      }
+      loadMsgs(friendPhone);
+      setTimeout(function(){
+        var input = document.getElementById("ent-private-input");
+        if(input) try{ input.focus(); }catch(e){}
+      }, 200);
+    }catch(err){
+      console.error("openPrivateChat", err);
+      alert("Chat open error: "+(err && err.message ? err.message : err));
+    }
+  };
+
+  window.closePrivateChat = function(){
+    try{
+      window._privateChatWith = null;
+      try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+      hideChatUI();
+      // restore friends panel if present
+      var main = document.getElementById("ent-friends-main");
+      var sub = document.getElementById("ent-friends-subtabs");
+      if(main) main.style.display = "";
+      if(sub) sub.style.display = "";
+    }catch(e){ console.error(e); }
+  };
+
+  window.sendPrivateChat = function(){
+    try{
+      var input = document.getElementById("ent-private-input");
+      var textMsg = (input && input.value || "").trim();
+      if(!textMsg) return;
+      if(!window._privateChatWith){ alert("No chat open"); return; }
+      var me = getPhone();
+      if(!me){ alert("Login required"); return; }
+      var dbRef = getDb();
+      if(!dbRef){ alert("Database not ready"); return; }
+      if(window._privSendLock) return;
+      window._privSendLock = true;
+      var key = threadKey(me, window._privateChatWith);
+      var payload = {
+        from: me,
+        to: window._privateChatWith,
+        username: (window.sessionUser && sessionUser.username) || me,
+        text: textMsg,
+        ts: Date.now(),
+        dp: (window.sessionUser && (sessionUser.photoURL||sessionUser.dp)) || ""
+      };
+      dbRef.ref("entertainment/direct/"+key).push(payload, function(err){
+        window._privSendLock = false;
+        if(err){ alert("Send failed"); return; }
+        if(input) input.value = "";
+      });
+    }catch(e){
+      window._privSendLock = false;
+      console.error(e);
+    }
+  };
+
+  // Event delegation: ANY Chat button works
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest && e.target.closest(".ph-open-chat-btn, [data-ph][data-nm], button");
+    if(!btn) return;
+    // ph-open-chat-btn
+    if(btn.classList && btn.classList.contains("ph-open-chat-btn")){
+      e.preventDefault();
+      openPrivateChat(btn.getAttribute("data-ph"), btn.getAttribute("data-nm"));
+      return;
+    }
+    // onclick attribute fallback already handles openPrivateChat calls
+  }, true);
+
+  // also expose global for inline onclick
+  window.openPrivateChat = window.openPrivateChat;
+
+  console.log("[PH] hard chat open fix loaded");
+})();
+</script>
+
+
+<script>
+/* Chat open reinforcement — friends list + name + no syntax issues */
+(function(){
+  function getPhone(){ return localStorage.getItem("ph_session_phone")||""; }
+  function getDb(){ try{ return window.db || firebase.database(); }catch(e){ return null; } }
+
+  // When any element with text "Chat" is clicked inside friends list, open chat
+  document.addEventListener("click", function(e){
+    var t = e.target;
+    if(!t) return;
+    var btn = t.closest ? t.closest("button, a, div.ph-friend-row") : null;
+    if(!btn) return;
+
+    // data attributes preferred
+    if(btn.classList && btn.classList.contains("ph-open-chat-btn")){
+      e.preventDefault();
+      e.stopPropagation();
+      var ph = btn.getAttribute("data-ph");
+      var nm = btn.getAttribute("data-nm") || "User";
+      if(ph && typeof openPrivateChat === "function") openPrivateChat(ph, nm);
+      return;
+    }
+
+    // Chat button without data-ph: look at parent row
+    var label = (btn.textContent||"").trim();
+    if(/^Chat$/i.test(label) || (btn.querySelector && btn.querySelector(".ph-open-chat-btn"))){
+      var row = btn.closest(".ph-friend-row") || btn.parentElement;
+      var ph2 = btn.getAttribute("data-ph") || (row && row.getAttribute("data-ph"));
+      var nm2 = btn.getAttribute("data-nm") || (row && row.getAttribute("data-nm"));
+      if(ph2 && typeof openPrivateChat === "function"){
+        e.preventDefault();
+        e.stopPropagation();
+        openPrivateChat(ph2, nm2 || "User");
+      }
+    }
+  }, true);
+
+  // After friends render, stamp data-ph on rows if missing
+  var _rmf = window.renderMyFriendsVerified;
+  window.renderMyFriendsVerified = function(){
+    if(typeof _rmf === "function"){
+      try{ _rmf(); }catch(err){ console.warn("renderMyFriendsVerified", err); }
+    }
+    setTimeout(function(){
+      var box = document.getElementById("ent-my-friends");
+      if(!box) return;
+      box.querySelectorAll("button").forEach(function(b){
+        var oc = b.getAttribute("onclick")||"";
+        var m = oc.match(/openPrivateChat\('([^']+)'\s*,\s*'([^']*)'/);
+        if(m){
+          b.setAttribute("data-ph", m[1]);
+          b.setAttribute("data-nm", m[2]||"User");
+          b.classList.add("ph-open-chat-btn");
+          // neutralize broken inline onclick
+          b.removeAttribute("onclick");
+          b.onclick = function(ev){
+            ev.preventDefault();
+            openPrivateChat(b.getAttribute("data-ph"), b.getAttribute("data-nm"));
+          };
+        }
+      });
+    }, 400);
+  };
+
+  console.log("[PH] chat reinforcement ready");
+})();
+</script>
+
+
+<script>
+/* ===== FINAL: Entertainment friends UI + chat only on user click ===== */
+(function(){
+  "use strict";
+
+  function hideChatOverlay(){
+    var wrap = document.getElementById("ent-private-wrap");
+    if(wrap){
+      wrap.classList.remove("ph-chat-open", "open-chat", "hidden");
+      wrap.style.display = "none";
+      wrap.style.visibility = "hidden";
+      wrap.style.pointerEvents = "none";
+      wrap.style.zIndex = "-1";
+    }
+    document.body.classList.remove("chat-mode");
+    document.body.style.overflow = "";
+    // restore friends UI
+    var sub = document.getElementById("ent-friends-subtabs");
+    var main = document.getElementById("ent-friends-main");
+    var panel = document.getElementById("ent-panel-friends");
+    if(sub){ sub.style.display = "flex"; sub.style.visibility = "visible"; }
+    if(main){ main.style.display = "block"; main.style.visibility = "visible"; }
+    if(panel){ panel.style.display = "flex"; }
+    document.querySelectorAll("#screen-entertainment .ent-tab-btn").forEach(function(t){
+      t.style.display = "";
+    });
+    var hello = document.getElementById("ent-hello");
+    if(hello) hello.style.display = "";
+  }
+
+  function showChatOverlay(){
+    var wrap = document.getElementById("ent-private-wrap");
+    if(!wrap) return null;
+    // keep inside DOM but force overlay
+    wrap.classList.add("ph-chat-open");
+    wrap.classList.remove("hidden");
+    wrap.style.cssText = "display:flex;position:fixed;inset:0;z-index:9990;flex-direction:column;background:#0b141a;width:100%;max-width:28rem;height:100dvh;max-height:100dvh;margin:0 auto;left:0;right:0;visibility:visible;pointer-events:auto;";
+    document.body.classList.add("chat-mode");
+    document.body.style.overflow = "hidden";
+    return wrap;
+  }
+
+  // On page load: NEVER show chat
+  hideChatOverlay();
+
+  // Override open — only when user picks a friend
+  var prevOpen = window.openPrivateChat;
+  window.openPrivateChat = function(phone, name){
+    if(!phone) return;
+    window._privateChatWith = String(phone);
+    window._privateChatName = name || "User";
+    showChatOverlay();
+    var nameEl = document.getElementById("ent-private-name");
+    if(nameEl) nameEl.textContent = name || "User";
+    // call previous loaders if any (messages etc) without letting them break UI
+    try{
+      if(typeof prevOpen === "function" && prevOpen !== window.openPrivateChat){
+        // only call if it won't recurse
+      }
+    }catch(e){}
+    // load messages via existing hard-fix if present
+    try{
+      var box = document.getElementById("ent-private-chat");
+      var me = localStorage.getItem("ph_session_phone");
+      var dbRef = window.db;
+      if(box && me && dbRef){
+        var key = [me, String(phone)].sort().join("_");
+        try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+        window._entPrivateRef = dbRef.ref("entertainment/direct/"+key).limitToLast(100);
+        window._entPrivateRef.on("value", function(snap){
+          var rows = [];
+          if(snap.exists()) snap.forEach(function(c){ rows.push(Object.assign({_id:c.key}, c.val()||{})); });
+          rows.sort(function(a,b){ return (a.ts||0)-(b.ts||0); });
+          if(!rows.length){
+            box.innerHTML = '<div style="color:#8696a0;text-align:center;padding:24px;font-size:13px">No messages yet</div>';
+            return;
+          }
+          var esc = function(s){ return String(s||"").replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); };
+          box.innerHTML = rows.map(function(m){
+            var mine = m.from === me;
+            var time = m.ts ? new Date(m.ts).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "";
+            return '<div style="display:flex;justify-content:'+(mine?"flex-end":"flex-start")+';margin:4px 0">'+
+              '<div style="max-width:78%;padding:8px 10px;border-radius:10px;background:'+(mine?"#005c4b":"#202c33")+';color:#e9edef">'+
+              (!mine?'<div style="font-size:11px;font-weight:800;color:#53bdeb">'+(esc(m.username||"User"))+'</div>':'')+
+              '<div style="font-size:14px;word-break:break-word">'+esc(m.text||m.message||"")+'</div>'+
+              '<div style="text-align:right;font-size:10px;color:#8696a0;margin-top:2px">'+time+'</div></div></div>';
+          }).join("");
+          try{ box.scrollTop = box.scrollHeight; }catch(e){}
+        });
+      }
+      // load friend profile for header
+      if(dbRef){
+        dbRef.ref("users/"+phone).once("value", function(snap){
+          var u = snap.val()||{};
+          var nm = u.username || name || "User";
+          if(nameEl) nameEl.textContent = nm;
+          var dp = document.getElementById("ent-chat-dp");
+          if(dp && (u.photoURL||u.dp)) dp.src = u.photoURL||u.dp;
+          var st = document.getElementById("ent-chat-status");
+          var online = !!u.online || (u.lastActive && (Date.now()-Number(u.lastActive))<120000);
+          if(st){ st.textContent = online?"online":"offline"; st.style.color = online?"#25d366":"#8696a0"; }
+          var dot = document.getElementById("ent-chat-online-dot");
+          if(dot) dot.style.background = online?"#25d366":"#64748b";
+        });
+      }
+    }catch(e){ console.warn(e); }
+  };
+
+  window.closePrivateChat = function(){
+    try{ if(window._entPrivateRef) window._entPrivateRef.off(); }catch(e){}
+    window._privateChatWith = null;
+    hideChatOverlay();
+    // ensure friends tab content visible
+    try{
+      if(typeof entFriendsSub === "function") entFriendsSub("friends");
+      if(typeof renderMyFriendsVerified === "function") renderMyFriendsVerified();
+    }catch(e){}
+  };
+
+  // When opening Entertainment friends tab, always hide chat and show lists
+  var _et = window.entTab;
+  window.entTab = function(name){
+    hideChatOverlay();
+    if(typeof _et === "function"){
+      try{ _et(name); }catch(e){}
+    }
+    if(name === "friends"){
+      setTimeout(function(){
+        hideChatOverlay();
+        var sub = document.getElementById("ent-friends-subtabs");
+        var main = document.getElementById("ent-friends-main");
+        if(sub) sub.style.display = "flex";
+        if(main) main.style.display = "block";
+        try{ if(typeof entFriendsSub==="function") entFriendsSub("friends"); }catch(e){}
+        try{ if(typeof renderMyFriendsVerified==="function") renderMyFriendsVerified(); }catch(e){}
+        try{ if(typeof loadFriendsPanel==="function") loadFriendsPanel(); }catch(e){}
+      }, 100);
+    }
+  };
+
+  var _oe = window.openEntertainment;
+  window.openEntertainment = function(tab){
+    hideChatOverlay();
+    if(typeof _oe === "function"){
+      try{ _oe(tab); }catch(e){}
+    }
+    setTimeout(function(){
+      hideChatOverlay();
+      // default to friends panel
+      var t = tab || "friends";
+      try{ if(typeof entTab==="function") entTab(t === "money" ? "money" : "friends"); }catch(e){}
+      var sub = document.getElementById("ent-friends-subtabs");
+      if(sub) sub.style.display = "flex";
+      var main = document.getElementById("ent-friends-main");
+      if(main) main.style.display = "block";
+      try{ if(typeof entFriendsSub==="function") entFriendsSub("friends"); }catch(e){}
+      try{ if(typeof renderMyFriendsVerified==="function") renderMyFriendsVerified(); }catch(e){}
+    }, 250);
+  };
+
+  // bind back button
+  document.addEventListener("click", function(e){
+    var t = e.target;
+    if(!t) return;
+    if(t.id === "ent-chat-back" || (t.closest && t.closest("#ent-chat-back"))){
+      e.preventDefault();
+      closePrivateChat();
+    }
+  }, true);
+
+  // safety: every 2s if not in active private chat, keep overlay hidden
+  setInterval(function(){
+    if(!window._privateChatWith){
+      var wrap = document.getElementById("ent-private-wrap");
+      if(wrap && wrap.classList.contains("ph-chat-open")) return; // user is in chat
+      if(wrap && wrap.style.display !== "none" && !wrap.classList.contains("ph-chat-open")){
+        hideChatOverlay();
+      }
+    }
+  }, 2000);
+
+  // initial
+  setTimeout(hideChatOverlay, 300);
+  setTimeout(hideChatOverlay, 1000);
+
+  console.log("[PH] entertainment friends UI restored; chat only on user open");
 })();
 </script>
 
